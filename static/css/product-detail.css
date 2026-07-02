@@ -1,0 +1,329 @@
+/* ============================================================
+   SoulStones — Product Detail page overrides
+   Reuses design tokens, .product-card, .btn, .shell, .section,
+   .promise-list / .promise-icon, .portrait-slot from styles.css.
+   Only detail-page-specific layout lives here.
+   ============================================================ */
+
+/* -----------------------------------------------------------
+   Section spacing: styles.css collapses top padding on adjacent
+   .section elements (shared spacing unit). This page's sections
+   change background on every transition, so each one needs its
+   own full top + bottom padding to avoid looking stuck together.
+   ----------------------------------------------------------- */
+.section.pd-tabs-section,
+.section.pd-related,
+.section.pd-faq {
+  padding-top: clamp(36px, 5vw, 76px) !important;
+}
+
+/* ----------------------------- Breadcrumb ----------------------------- */
+.pd-breadcrumb-nav { background: var(--surface); border-bottom: 1px solid var(--hairline); }
+.pd-breadcrumb-list {
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px;
+  margin: 0; padding: 16px 0;
+  font-family: var(--font-body); font-size: 0.8125rem;
+}
+.pd-breadcrumb-list a { color: var(--muted); transition: color .16s var(--ease); }
+.pd-breadcrumb-list a:hover { color: var(--gold-deep); }
+.pd-breadcrumb-list li[aria-current="page"] { color: var(--gold-deep); font-weight: 600; }
+.pd-breadcrumb-sep { color: var(--muted); opacity: 0.6; }
+
+/* ----------------------------- Detail layout ----------------------------- */
+.pd-detail { background: var(--surface); padding-block: clamp(28px, 5vw, 56px); }
+
+.pd-layout {
+  display: grid;
+  /*
+   * KEY FIX: minmax(0, X) lets each column shrink below its stated size.
+   * Without this, a fixed "45%" column cannot shrink and overflows the shell.
+   */
+  grid-template-columns: minmax(0, 45%) minmax(0, 1fr);
+  gap: clamp(20px, 4.5vw, 64px);
+  align-items: start;
+}
+
+/* ----------------------------- Gallery ----------------------------- */
+.pd-gallery {
+  /*
+   * min-width: 0 is critical — without it a flex/grid child won't shrink
+   * below the intrinsic size of its content (the fixed-width thumb strip).
+   */
+  min-width: 0;
+  display: flex;
+  gap: 16px;
+  position: sticky;
+  top: 24px;
+}
+
+.pd-gallery-main {
+  flex: 1;
+  min-width: 0;      /* allow image to shrink */
+  order: 2;
+  aspect-ratio: 1;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--bg);
+  box-shadow: var(--sh-rest);
+}
+.pd-gallery-main img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  display: block;
+  opacity: 1; transition: opacity .28s var(--ease);
+}
+.pd-gallery-main img.pd-fade { opacity: 0; }
+
+.pd-thumbs {
+  order: 1; flex-shrink: 0;
+  display: flex; flex-direction: column; gap: 10px;
+  width: 80px;
+  max-height: clamp(380px, 56vw, 520px);
+  overflow-y: auto; overflow-x: hidden;
+  scrollbar-width: thin;
+}
+.pd-thumb {
+  width: 72px; height: 72px; flex-shrink: 0;
+  border-radius: 10px; overflow: hidden;
+  border: 2px solid transparent; background: var(--bg);
+  padding: 0; cursor: pointer;
+  opacity: 0.72;
+  transition: border-color .16s var(--ease), opacity .16s var(--ease), transform .16s var(--ease);
+}
+.pd-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pd-thumb:hover { opacity: 1; transform: translateY(-1px); }
+.pd-thumb.is-active { border-color: var(--gold); opacity: 1; }
+
+/* ----------------------------- Info column ----------------------------- */
+.pd-info {
+  display: flex; flex-direction: column;
+  min-width: 0;   /* prevent info column from overflowing grid cell */
+}
+
+.pd-badges { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 16px; }
+.pd-badge {
+  display: inline-flex; align-items: center; gap: 6px;
+  border-radius: var(--r-pill); padding: 6px 14px;
+  font-family: var(--font-body); font-size: 0.75rem; font-weight: 600;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.pd-badge-category { background: var(--bg); color: var(--gold-deep); border: 1px solid var(--hairline-gold); }
+.pd-badge-cert { background: var(--black); color: var(--gold); }
+
+.pd-name {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: clamp(1.8rem, 3.4vw, 2.8rem);
+  letter-spacing: -0.02em; line-height: 1.08;
+  color: var(--ink); margin: 0 0 12px;
+  word-break: break-word;  /* prevents long names from overflowing */
+}
+
+.pd-availability {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 0.9375rem; font-weight: 500; color: var(--muted); margin: 0 0 18px;
+}
+.pd-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); flex-shrink: 0; }
+.pd-availability.is-in-stock { color: var(--ink); }
+.pd-availability.is-in-stock .pd-dot { background: #4C8B5B; }
+
+.pd-price-row { display: flex; align-items: baseline; flex-wrap: wrap; gap: 12px; margin-bottom: 18px; }
+.pd-price { font-family: var(--font-body); font-weight: 700; font-size: 1.75rem; color: var(--ink); }
+.pd-price-original { font-size: 1.125rem; color: var(--muted); text-decoration: line-through; }
+.pd-price-save {
+  font-size: 0.75rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase;
+  color: var(--gold-deep); background: var(--gold-soft);
+  border-radius: var(--r-badge); padding: 4px 9px;
+}
+
+.pd-desc {
+  font-size: 1.0625rem; line-height: 1.65; color: var(--ink);
+  opacity: 0.86; max-width: 100%; margin: 0 0 28px;
+}
+
+/* ----------------------------- Purchase section ----------------------------- */
+.pd-purchase { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; margin-bottom: 24px; }
+.pd-qty {
+  display: inline-flex; align-items: center;
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  background: var(--bg); overflow: hidden;
+}
+.pd-qty-btn {
+  width: 42px; height: 46px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: none; border: 0; color: var(--ink); font-size: 1.125rem; line-height: 1;
+  transition: background .16s var(--ease), color .16s var(--ease);
+}
+.pd-qty-btn:hover { background: var(--gold-soft); color: var(--ink); }
+.pd-qty-val { min-width: 36px; text-align: center; font-family: var(--font-body); font-weight: 600; font-size: 1rem; }
+.pd-add-btn, .pd-buy-btn { white-space: nowrap; }
+.pd-add-btn.added { background: var(--black) !important; color: var(--gold) !important; }
+
+.pd-reassurance {
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px;
+  margin: 4px 0 0; padding-top: 22px; border-top: 1px solid var(--hairline);
+}
+.pd-reassurance li { display: flex; align-items: center; gap: 9px; font-size: 0.875rem; font-weight: 500; color: var(--ink); }
+.pd-reassurance svg { color: var(--gold-deep); flex-shrink: 0; }
+
+/* ----------------------------- Gemstone information tabs ----------------------------- */
+.pd-tabs-section { background: var(--surface); }
+.pd-tabs {
+  display: flex; flex-wrap: nowrap; gap: clamp(20px, 3vw, 40px);
+  overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none;
+  -webkit-overflow-scrolling: touch;
+  border-bottom: 1px solid var(--hairline);
+  margin-bottom: clamp(28px, 4vw, 40px);
+}
+.pd-tabs::-webkit-scrollbar { display: none; }
+.pd-tab {
+  flex-shrink: 0;
+  background: none; border: none; border-bottom: 2px solid transparent;
+  padding: 4px 2px 16px;
+  font-family: var(--font-body); font-weight: 600; font-size: 0.9375rem; color: var(--muted);
+  white-space: nowrap; cursor: pointer;
+  transition: color .18s var(--ease), border-color .18s var(--ease);
+}
+.pd-tab:hover { color: var(--gold-deep); }
+.pd-tab.is-active { color: var(--gold-deep); border-bottom-color: var(--gold); }
+
+.pd-tab-panels { position: relative; }
+.pd-tab-panel { max-width: 78ch; opacity: 0; transition: opacity .22s var(--ease); }
+.pd-tab-panel.is-active { opacity: 1; }
+.pd-tab-panel:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; border-radius: 4px; }
+
+/* Rich-text container */
+.pd-richtext { font-size: 1.0625rem; line-height: 1.7; color: var(--ink); }
+.pd-richtext h3 { font-family: var(--font-body); font-weight: 600; font-size: 1.25rem; color: var(--gold-deep); letter-spacing: normal; margin: 0 0 14px; }
+.pd-richtext h4 { font-family: var(--font-body); font-weight: 600; font-size: 1.0625rem; color: var(--gold-deep); letter-spacing: normal; margin: 28px 0 10px; }
+.pd-richtext > :first-child { margin-top: 0; }
+.pd-richtext p { margin: 0 0 16px; opacity: 0.88; }
+.pd-richtext ul, .pd-richtext ol { margin: 0 0 16px; padding-left: 1.25em; }
+.pd-richtext li { margin-bottom: 8px; opacity: 0.88; }
+.pd-richtext li:last-child { margin-bottom: 0; }
+.pd-richtext strong { font-weight: 700; color: var(--ink); opacity: 1; }
+.pd-richtext em { font-style: italic; }
+.pd-richtext a { color: var(--gold-deep); text-decoration: underline !important; text-underline-offset: 3px; transition: color .16s var(--ease); }
+.pd-richtext a:hover { color: var(--ink); }
+
+/* ----------------------------- Related products ----------------------------- */
+.pd-related { background: var(--bg); }
+#relatedGrid { grid-template-columns: repeat(4, 1fr); }
+@media (max-width: 979px) {
+  #relatedGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ----------------------------- FAQ accordion ----------------------------- */
+.pd-faq { background: var(--surface); }
+.pd-faq .section-head { max-width: 78ch; margin-inline: auto; }
+.pd-faq-list { max-width: 78ch; margin-inline: auto; display: flex; flex-direction: column; }
+.pd-faq-item { border-bottom: 1px solid var(--hairline); padding-block: 18px; }
+.pd-faq-item:first-child { padding-top: 0; }
+.pd-faq-item summary {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  cursor: pointer; list-style: none;
+  font-family: var(--font-body); font-weight: 600; font-size: 1.0625rem; color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+}
+.pd-faq-item summary::-webkit-details-marker { display: none; }
+.pd-faq-item summary::after {
+  content: "+";
+  flex-shrink: 0; width: 24px; height: 24px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; border: 1px solid var(--hairline-gold); color: var(--gold-deep);
+  font-size: 1rem; line-height: 1;
+  transition: transform .2s var(--ease), background .16s var(--ease);
+}
+.pd-faq-item[open] summary { color: var(--gold-deep); }
+.pd-faq-item[open] summary::after { transform: rotate(135deg); background: var(--gold-soft); }
+.pd-faq-item p { margin: 14px 0 0; max-width: 68ch; color: var(--muted); line-height: 1.6; }
+
+/* ============================================================
+   RESPONSIVE
+   ============================================================ */
+
+/* --- Tablet (≤979px): stack gallery above info, single column --- */
+@media (max-width: 979px) {
+  .pd-layout {
+    /* Single column — gallery stacks above info */
+    grid-template-columns: 1fr;
+  }
+  /* Un-stick the gallery inside the stacked layout */
+  .pd-gallery { position: static; }
+}
+
+/* --- Mobile (≤768px): full-width, column-oriented gallery --- */
+@media (max-width: 768px) {
+  .pd-detail { padding-block: clamp(20px, 5vw, 36px); }
+
+  /* Gallery: column layout — main image on top, thumb strip below */
+  .pd-gallery {
+    flex-direction: column;
+    gap: 10px;
+    width: 100%;
+  }
+
+  /* Main image: full container width */
+  .pd-gallery-main {
+    order: 1;
+    width: 100%;
+    aspect-ratio: 1;
+  }
+
+  /* Thumb strip: horizontal scrolling row with no visible scrollbar */
+  .pd-thumbs {
+    order: 2;
+    flex-direction: row;
+    width: 100%;
+    height: 72px;
+    max-height: none;   /* reset desktop clamp */
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding-bottom: 0;
+    gap: 8px;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;  /* Firefox */
+  }
+  .pd-thumbs::-webkit-scrollbar { display: none; }  /* Chrome/Safari */
+
+  .pd-thumb {
+    width: 64px; height: 64px;
+    flex-shrink: 0;   /* do NOT let thumbs squish */
+    scroll-snap-align: start;
+  }
+
+  /* Product name: scale down on very small screens */
+  .pd-name { font-size: clamp(1.5rem, 6vw, 2.2rem); }
+
+  /* Purchase controls: stack vertically, buttons full width */
+  .pd-purchase { flex-direction: column; align-items: stretch; }
+  .pd-qty { align-self: flex-start; }
+  .pd-add-btn, .pd-buy-btn { width: 100%; text-align: center; justify-content: center; }
+
+  /* Reassurance list: single column on mobile */
+  .pd-reassurance {
+grid-template-columns: repeat(2, 1fr);    gap: 10px;
+    padding-top: 18px;
+    /* border: 1px solid red !important; */
+    list-style: none !important;
+    padding: 20px 2px !important;
+  }
+
+  /* .pd-reassurance li{  
+    border: 1px solid red !important;
+    font-size: 16px;
+    list-style: none !important;
+    margin: 0px !important;
+    padding: 0px !important;
+
+
+  } */
+
+
+
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pd-gallery-main img { transition-duration: .001ms; }
+}

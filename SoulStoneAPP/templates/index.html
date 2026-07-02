@@ -1,0 +1,348 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · Certified Natural Gemstones</title>
+  <meta name="description" content="Loose, lab-certified natural gemstones for planetary remedies, birthstones, and fine collecting. Sourced with care, honestly described, guidance without pressure." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+
+  {% include 'nav.html' %}
+
+  <main id="main">
+    <!-- ============================ HERO ============================ -->
+    <section class="hero" id="top">
+      <div class="hero-media" role="img" aria-label="A row of luminous faceted gemstones resting on a soft, light surface"></div>
+      <div class="shell hero-inner">
+        <div class="hero-copy reveal">
+          <p class="hero-accent">Chosen with certainty</p>
+          <h1 class="hero-title">The right gemstone, sourced and certified for you.</h1>
+          <p class="hero-sub">Loose, lab-certified natural stones for planetary remedies, birthstones, and the quiet pleasure of owning something rare.</p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#top-styles">Shop Gemstones</a>
+            <a class="btn btn-secondary" href="#consult">Talk to an Astrologer</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TRUST STRIP ============================ -->
+    <section class="trust-strip" aria-label="Why buy from SoulStones">
+      <div class="shell trust-inner">
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+          <span>Lab-certified, every stone</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-11.9 7.6L3 21l1.9-6.1A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+          <span>Free astrologer guidance</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 13l2-6h10l4 4h2v4h-2"/><circle cx="7.5" cy="17" r="1.8"/><circle cx="17" cy="17" r="1.8"/></svg>
+          <span>Insured worldwide shipping</span>
+        </div>
+        <div class="trust-item">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 12a8 8 0 1 1 2.3 5.6"/><path d="M4 20v-4h4"/></svg>
+          <span>30-day clarity guarantee</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ SHOP BY CATEGORY ============================ -->
+    <section class="section categories" id="categories">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title">Find your stone</h2>
+          <p class="section-lede">Browse by the gem itself, or by what it is meant to do. Each one is photographed as it really is, weighed, and certified before it reaches you.</p>
+        </header>
+
+        <div class="category-grid">
+          <a class="cat-tile cat-tile--lead" href="#top-styles" data-filter="Saturn">
+            <span class="cat-media"><img src="static/images/Blue_Saphire.webp" alt="Loose blue sapphire, emerald cut, viewed from the front" loading="lazy" /></span>
+            <span class="cat-label"><span class="cat-name">Blue Sapphire</span><span class="cat-planet">Saturn · Neelam</span></span>
+          </a>
+          <a class="cat-tile" href="#top-styles" data-filter="Sun">
+            <span class="cat-media"><img src="static/images/Ruby.webp" alt="Loose ruby viewed from the front" loading="lazy" /></span>
+            <span class="cat-label"><span class="cat-name">Ruby</span><span class="cat-planet">Sun · Manik</span></span>
+          </a>
+          <a class="cat-tile" href="#top-styles" data-filter="Mercury">
+            <span class="cat-media"><img src="static/images/Emerald.jpg" alt="Loose emerald viewed from the front" loading="lazy" /></span>
+            <span class="cat-label"><span class="cat-name">Emerald</span><span class="cat-planet">Mercury · Panna</span></span>
+          </a>
+          <a class="cat-tile" href="#top-styles" data-filter="Jupiter">
+            <span class="cat-media"><img src="static/images/Yellow-Sapphire-2-jpg.webp" alt="Loose yellow sapphire viewed from the front" loading="lazy" /></span>
+            <span class="cat-label"><span class="cat-name">Yellow Sapphire</span><span class="cat-planet">Jupiter · Pukhraj</span></span>
+          </a>
+        </div>
+
+        <div class="intent-row">
+          <span class="intent-row-title">Or shop by intent</span>
+          <div class="intent-links">
+            <a href="#top-styles">Planetary remedies</a>
+            <a href="#top-styles">Birthstones</a>
+            <a href="#top-styles">By zodiac sign</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ NEW ARRIVALS ============================ -->
+    <section class="section new-arrivals" id="new" aria-label="New arrivals">
+      <div class="shell new-head">
+        <h2 class="section-title">Just arrived</h2>
+        <div class="rail-controls">
+          <button class="rail-nav" data-rail-prev aria-label="Scroll new arrivals left">‹</button>
+          <button class="rail-nav" data-rail-next aria-label="Scroll new arrivals right">›</button>
+        </div>
+      </div>
+      <div class="rail-viewport">
+        <ul class="rail" id="newArrivalsRail"></ul>
+      </div>
+    </section>
+
+    <!-- ============================ STATS BAR ============================ -->
+    <section class="stats-band" aria-label="SoulStones by the numbers">
+      <div class="shell stats-inner">
+        <div class="stat">
+          <span class="stat-figure">12,400<span class="stat-plus">+</span></span>
+          <span class="stat-label">stones placed in trusting hands</span>
+        </div>
+        <div class="stat">
+          <span class="stat-figure">4.9<span class="stat-unit">/5</span></span>
+          <span class="stat-label">average rating across 2,100 reviews</span>
+        </div>
+        <div class="stat">
+          <span class="stat-figure">32</span>
+          <span class="stat-label">years sourcing natural gems</span>
+        </div>
+        <div class="stat">
+          <span class="stat-figure">100<span class="stat-unit">%</span></span>
+          <span class="stat-label">independently lab-certified</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ TOP STYLES + FILTERS ============================ -->
+    <section class="section top-styles" id="top-styles">
+      <div class="shell">
+        <header class="section-head section-head--row">
+          <div>
+            <h2 class="section-title">The collection</h2>
+            <p class="section-lede">Filter by the planet a stone serves, then sort to taste. Every price includes its lab certificate.</p>
+          </div>
+        </header>
+
+        <div class="filter-bar">
+          <div class="chips" id="planetChips" role="group" aria-label="Filter by planet"></div>
+          <label class="sort-field">
+            <span class="sort-label">Sort</span>
+            <select id="sortSelect" aria-label="Sort gemstones">
+              <option value="featured">Featured</option>
+              <option value="price-asc">Price, low to high</option>
+              <option value="price-desc">Price, high to low</option>
+              <option value="carat-desc">Carat, high to low</option>
+            </select>
+          </label>
+        </div>
+
+        <ul class="product-grid" id="productGrid" aria-live="polite"></ul>
+
+        <div class="empty-state" id="emptyState" hidden>
+          <p class="empty-title">No stones match that filter yet.</p>
+          <p class="empty-sub">Tell us what was recommended and we will help you find it.</p>
+          <a class="btn btn-secondary" href="#consult">Talk to an Astrologer</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CONSULTATION CTA ============================ -->
+    <section class="consult-band" id="consult">
+      <div class="shell consult-inner">
+        <div class="consult-copy">
+          <p class="consult-kicker">Not sure which stone is right for you?</p>
+          <h2 class="consult-title">Speak with a gem advisor before you buy.</h2>
+          <p class="consult-body">Share your birth details or your astrologer's recommendation. We will help you choose a certified stone that genuinely fits, with no pressure to purchase.</p>
+          <a class="btn btn-whatsapp" href="https://wa.me/91XXXXXXXXXX?text=Hi%20SoulStones%2C%20I%27d%20like%20guidance%20choosing%20a%20gemstone." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.03.79.81-2.95-.2-.31A8.2 8.2 0 1 1 12 20.2Zm4.5-6.13c-.25-.13-1.46-.72-1.69-.8-.23-.08-.39-.13-.56.13-.16.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.71-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48a.93.93 0 0 0-.66.31c-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.66-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+            Speak with us on WhatsApp
+          </a>
+          <p class="consult-hours">Advisors reply within a few hours, 7 days a week.</p>
+        </div>
+        <!-- PLACEHOLDER: replace with a real photo of an advisor / hand presenting a stone -->
+        <figure class="consult-portrait" aria-hidden="true">
+          <div class="portrait-slot">
+            <span class="portrait-tag">Advisor portrait</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ============================ VIDEO TESTIMONIALS ============================ -->
+    <section class="section video-testimonials" id="stories" aria-label="Customer stories">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title">In their words</h2>
+          <p class="section-lede">Short stories from people who found their stone with us.</p>
+        </header>
+        <ul class="video-grid" id="videoGrid"></ul>
+      </div>
+    </section>
+
+    <!-- ============================ CUSTOMER REVIEWS ============================ -->
+    <section class="section reviews" id="reviews">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title">Trusted by thousands</h2>
+        </header>
+        <div class="review-columns" id="reviewColumns"></div>
+      </div>
+    </section>
+
+    <!-- ============================ OUR PROMISE ============================ -->
+    <section class="section promise" id="promise">
+      <div class="shell promise-inner">
+        <div class="promise-lead">
+          <h2 class="section-title">Our promise</h2>
+          <p class="section-lede">A gemstone is only as good as the trust behind it. Here is what we hold ourselves to, on every single order.</p>
+          <figure class="promise-figure">
+            <img src="static/images/GM09798_BACK_10d467d5-6723-43aa-9e1c-6b73714b4a69.webp" alt="A natural gemstone photographed in close detail" loading="lazy" />
+          </figure>
+        </div>
+        <ul class="promise-list">
+          <li>
+            <span class="promise-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+            </span>
+            <div><h3>Certified, always</h3><p>Every stone ships with an independent laboratory report. No exceptions, no upgrades to pay for.</p></div>
+          </li>
+          <li>
+            <span class="promise-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="12" r="3.2"/><path d="M2.5 12S5.5 5.5 12 5.5 21.5 12 21.5 12 18.5 18.5 12 18.5 2.5 12 2.5 12Z"/></svg>
+            </span>
+            <div><h3>Honestly described</h3><p>Real photographs, real weights, real origins. We never retouch the truth of a stone.</p></div>
+          </li>
+          <li>
+            <span class="promise-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-4.4-7-10a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 19 11c0 5.6-7 10-7 10Z"/></svg>
+            </span>
+            <div><h3>Sourced with care</h3><p>Direct relationships and fair stones. We never sell a synthetic as natural.</p></div>
+          </li>
+          <li>
+            <span class="promise-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 5h16v11H7l-3 3V5Z"/><path d="M8 10h8M8 13h5"/></svg>
+            </span>
+            <div><h3>Guidance, not pressure</h3><p>Advice whenever you want it, and never a hard sell. The decision is always yours.</p></div>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============================ HOW IT WORKS ============================ -->
+    <section class="section how" id="how">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title">How it works</h2>
+        </header>
+        <ol class="steps">
+          <li class="step">
+            <span class="step-num">01</span>
+            <h3 class="step-title">Choose</h3>
+            <p>Browse by planet or by stone, or simply tell us what was recommended to you.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">02</span>
+            <h3 class="step-title">Consult</h3>
+            <p>Confirm the right weight, quality, and budget with a gem advisor over WhatsApp.</p>
+          </li>
+          <li class="step">
+            <span class="step-num">03</span>
+            <h3 class="step-title">Receive</h3>
+            <p>Your certified stone arrives insured, with its laboratory report in the box.</p>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- ============================ CERTIFICATIONS STRIP ============================ -->
+    <section class="certs" id="certs" aria-label="Certification partners">
+      <div class="shell certs-inner">
+        <p class="certs-note">Independently certified by leading gemmological laboratories</p>
+        <!-- PLACEHOLDER lab marks: replace with official certified logo assets -->
+        <ul class="cert-logos">
+          <li class="cert-logo">GIA</li>
+          <li class="cert-logo">IGI</li>
+          <li class="cert-logo">GII</li>
+          <li class="cert-logo">GTL</li>
+          <li class="cert-logo">GRS</li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+{% include 'footer.html' %}
+
+
+  <!-- ============================ CART DRAWER ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="#top-styles" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">₹0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
+</svg>        Checkout 
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================ VIDEO DIALOG ============================ -->
+  <div class="video-overlay" id="videoOverlay" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-label="Customer story video" id="videoDialog" tabindex="-1">
+      <button class="video-close" id="videoClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="video-frame" id="videoFrame">
+        <!-- PLACEHOLDER: a real <video> or embed is injected here when assets exist -->
+        <p class="video-placeholder-msg">Video coming soon. Real customer stories will play here.</p>
+      </div>
+    </div>
+  </div>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
+  <script src="static/js/main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,335 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · My Orders</title>
+  <meta name="description" content="View and track your previous SoulStones gemstone orders." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <!-- Django note: {% static 'css/my-orders.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/my-orders.css' %}" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+ {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="section mo-hero" aria-label="My orders">
+      <div class="shell">
+        <!-- Django note: {{ user.first_name }} could personalise this -->
+        <p class="mo-hero-eyebrow">My Account</p>
+        <h1 class="mo-hero-title">My Orders</h1>
+        <p class="mo-hero-lede">Track your orders and review your previous gemstone purchases.</p>
+      </div>
+    </section>
+
+    <!-- ============================ ORDERS ============================ -->
+    <section class="section mo-orders-section" aria-label="Order history">
+      <div class="shell">
+
+        <!-- ---- Empty state (shown when there are no orders) ---- -->
+        <!-- Django note: {% if not orders %}...{% endif %} — add hidden attr when orders exist -->
+        <div class="mo-empty" id="moEmpty" hidden>
+          <div class="mo-empty-icon" aria-hidden="true">
+            <svg viewBox="0 0 64 64" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="10" y="18" width="44" height="36" rx="4"/>
+              <path d="M22 18v-4a10 10 0 0 1 20 0v4"/>
+              <path d="M22 34h20M22 42h12"/>
+            </svg>
+          </div>
+          <h2 class="mo-empty-title">No Orders Yet</h2>
+          <p class="mo-empty-desc">You haven&rsquo;t placed any orders yet. Explore our premium gemstone collection.</p>
+          <a class="btn btn-primary" href="product.html">Browse Gemstones</a>
+        </div>
+
+        <!-- ---- Orders list ---- -->
+        <!-- Django note: {% for order in orders %}...{% endfor %} -->
+        <div class="mo-orders-list pt-5" id="moOrdersList" aria-label="Your orders">
+
+          <!-- ================================================
+               ORDER 1 — Processing
+               Django note: {{ order.id }}, {{ order.date }}, {{ order.total }}, {{ order.status }}
+               ================================================ -->
+          <article class="mo-order-card" aria-label="Order #SS102458">
+            <details class="mo-order-item">
+              <summary class="mo-order-header">
+                <div class="mo-order-meta">
+                  <span class="mo-order-id">#SS102458</span>
+                  <span class="mo-order-date">15 July 2026</span>
+                </div>
+                <div class="mo-order-right">
+                  <span class="mo-order-amount">&#8377;62,000</span>
+                  <span class="mo-status mo-status--processing">Processing</span>
+                  <span class="mo-chevron" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </div>
+              </summary>
+
+              <div class="mo-order-body">
+
+                <!-- Products -->
+                <h3 class="mo-section-label">Order Summary</h3>
+                <!-- Django note: {% for item in order.items.all %} -->
+                <ul class="mo-product-list">
+                  <li class="mo-product-item">
+                    <img
+                      src="static/images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp"
+                      alt="Burmese Ruby"
+                      width="64" height="64"
+                      loading="lazy"
+                    />
+                    <div class="mo-product-info">
+                      <!-- Django note: {{ item.product.name }} -->
+                      <span class="mo-product-name">Burmese Ruby</span>
+                      <!-- Django note: {{ item.product.weight }} · {{ item.product.treatment }} -->
+                      <span class="mo-product-detail">5.25 Carat &middot; Unheated</span>
+                      <!-- Django note: Qty: {{ item.quantity }} -->
+                      <span class="mo-product-qty">Qty: 1</span>
+                    </div>
+                    <!-- Django note: {{ item.price|intcomma }} -->
+                    <span class="mo-product-price">&#8377;62,000</span>
+                  </li>
+                </ul>
+                <!-- Django note: {% endfor %} -->
+
+                <!-- Order details grid -->
+                <h3 class="mo-section-label" style="margin-top: 28px;">Order Details</h3>
+                <!-- Django note: {{ order.shipping_address }}, {{ order.payment_method }}, etc. -->
+                <div class="mo-details-grid">
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Shipping Address</span>
+                    <span class="mo-detail-value">24 Lotus Lane, Bandra West,<br />Mumbai, Maharashtra 400050</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Payment Method</span>
+                    <span class="mo-detail-value">UPI &mdash; Google Pay</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Payment Status</span>
+                    <span class="mo-detail-value mo-detail-value--paid">Paid</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Estimated Delivery</span>
+                    <span class="mo-detail-value">3&ndash;5 Business Days</span>
+                  </div>
+                </div>
+
+                <!-- Actions -->
+                <div class="mo-order-actions">
+                  <!-- Django note: href="{% url 'order_detail' order.id %}" -->
+                  <a class="btn btn-primary" href="#">View Order Details</a>
+                  <a class="btn btn-secondary" href="product.html">Continue Shopping</a>
+                </div>
+
+              </div>
+            </details>
+          </article>
+
+          <!-- ================================================
+               ORDER 2 — Delivered
+               ================================================ -->
+          <article class="mo-order-card" aria-label="Order #SS102391">
+            <details class="mo-order-item">
+              <summary class="mo-order-header">
+                <div class="mo-order-meta">
+                  <span class="mo-order-id">#SS102391</span>
+                  <span class="mo-order-date">28 June 2026</span>
+                </div>
+                <div class="mo-order-right">
+                  <span class="mo-order-amount">&#8377;48,000</span>
+                  <span class="mo-status mo-status--delivered">Delivered</span>
+                  <span class="mo-chevron" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </div>
+              </summary>
+
+              <div class="mo-order-body">
+
+                <h3 class="mo-section-label">Order Summary</h3>
+                <ul class="mo-product-list">
+                  <li class="mo-product-item">
+                    <img
+                      src="static/images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp"
+                      alt="Ceylon Blue Sapphire"
+                      width="64" height="64"
+                      loading="lazy"
+                    />
+                    <div class="mo-product-info">
+                      <span class="mo-product-name">Ceylon Blue Sapphire</span>
+                      <span class="mo-product-detail">4.10 Carat &middot; Natural, Unheated</span>
+                      <span class="mo-product-qty">Qty: 1</span>
+                    </div>
+                    <span class="mo-product-price">&#8377;48,000</span>
+                  </li>
+                </ul>
+
+                <h3 class="mo-section-label" style="margin-top: 28px;">Order Details</h3>
+                <div class="mo-details-grid">
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Shipping Address</span>
+                    <span class="mo-detail-value">7 Raj Bhavan Road, Sadashivanagar,<br />Bengaluru, Karnataka 560080</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Payment Method</span>
+                    <span class="mo-detail-value">Net Banking &mdash; HDFC</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Payment Status</span>
+                    <span class="mo-detail-value mo-detail-value--paid">Paid</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Delivered On</span>
+                    <span class="mo-detail-value">5 July 2026</span>
+                  </div>
+                </div>
+
+                <div class="mo-order-actions">
+                  <a class="btn btn-primary" href="#">View Order Details</a>
+                  <a class="btn btn-secondary" href="product.html">Continue Shopping</a>
+                </div>
+
+              </div>
+            </details>
+          </article>
+
+          <!-- ================================================
+               ORDER 3 — Shipped
+               ================================================ -->
+          <article class="mo-order-card" aria-label="Order #SS102290">
+            <details class="mo-order-item">
+              <summary class="mo-order-header">
+                <div class="mo-order-meta">
+                  <span class="mo-order-id">#SS102290</span>
+                  <span class="mo-order-date">2 June 2026</span>
+                </div>
+                <div class="mo-order-right">
+                  <span class="mo-order-amount">&#8377;36,500</span>
+                  <span class="mo-status mo-status--shipped">Shipped</span>
+                  <span class="mo-chevron" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                  </span>
+                </div>
+              </summary>
+
+              <div class="mo-order-body">
+
+                <h3 class="mo-section-label">Order Summary</h3>
+                <ul class="mo-product-list">
+                  <li class="mo-product-item">
+                    <img
+                      src="static/images/Emerald.jpg"
+                      alt="Columbian Emerald"
+                      width="64" height="64"
+                      loading="lazy"
+                    />
+                    <div class="mo-product-info">
+                      <span class="mo-product-name">Columbian Emerald</span>
+                      <span class="mo-product-detail">3.80 Carat &middot; GII Certified</span>
+                      <span class="mo-product-qty">Qty: 1</span>
+                    </div>
+                    <span class="mo-product-price">&#8377;36,500</span>
+                  </li>
+                </ul>
+
+                <h3 class="mo-section-label" style="margin-top: 28px;">Order Details</h3>
+                <div class="mo-details-grid">
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Shipping Address</span>
+                    <span class="mo-detail-value">15 Civil Lines,<br />New Delhi 110054</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Payment Method</span>
+                    <span class="mo-detail-value">Credit Card &mdash; ICICI</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Payment Status</span>
+                    <span class="mo-detail-value mo-detail-value--paid">Paid</span>
+                  </div>
+                  <div class="mo-detail-item">
+                    <span class="mo-detail-label">Estimated Delivery</span>
+                    <span class="mo-detail-value">18&ndash;20 June 2026</span>
+                  </div>
+                </div>
+
+                <div class="mo-order-actions">
+                  <a class="btn btn-primary" href="#">View Order Details</a>
+                  <a class="btn btn-secondary" href="product.html">Continue Shopping</a>
+                </div>
+
+              </div>
+            </details>
+          </article>
+
+        </div><!-- /mo-orders-list -->
+
+      </div>
+    </section>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+
+  <!-- ============================ CART DRAWER (main.js compatibility) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="product.html" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">&#8377;0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" href="checkout.html" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/></svg>
+        Checkout
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================ VIDEO DIALOG (main.js compatibility) ============================ -->
+  <div class="video-overlay" id="videoOverlay" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-label="Customer story video" id="videoDialog" tabindex="-1">
+      <button class="video-close" id="videoClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="video-frame" id="videoFrame">
+        <p class="video-placeholder-msg">Video coming soon.</p>
+      </div>
+    </div>
+  </div>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <!-- Django note: {% static 'js/main.js' %} -->
+  <script src="static/js/main.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwxZxFDsf4x0xIM+B07jRMkzPo0GkRvVt5FejpJ7Y7hMsKhZT4hW" crossorigin="anonymous"></script>
+
+
+</body>
+</html>

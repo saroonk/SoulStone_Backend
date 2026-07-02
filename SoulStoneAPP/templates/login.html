@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · Sign In</title>
+  <meta name="description" content="Sign in or create a SoulStones account to track orders, save your collection, and speak with a gem advisor." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="static/css/styles.css" />
+  <!-- Django note: in templates, swap this href for {% static 'css/login.css' %} -->
+  <link rel="stylesheet" href="static/css/login.css" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="auth-body">
+  <a class="skip-link" href="#authStage">Skip to sign in form</a>
+
+  <main class="auth-shell" id="main">
+
+    <!-- ============================ LEFT BRAND PANEL ============================ -->
+    <section class="auth-brand" aria-hidden="false">
+      <!-- PLACEHOLDER: temporary Pexels photography, replace with real SoulStones photography before launch -->
+      <div class="auth-brand-media" style="background-image:url('https://images.pexels.com/photos/5276885/pexels-photo-5276885.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1600')" role="img" aria-label="A faceted diamond catching light on a dark surface"></div>
+      <div class="auth-brand-overlay" aria-hidden="true"></div>
+
+      <div class="auth-brand-inner">
+        <a class="wordmark auth-brand-logo" href="index.html" aria-label="SoulStones home">
+          <span class="wordmark-mark">Soul</span><span class="wordmark-mark wordmark-stones">Stones</span>
+        </a>
+
+        <div class="auth-brand-copy">
+          <p class="hero-accent auth-brand-accent">Chosen with certainty</p>
+          <h1 class="auth-brand-title">Every gemstone tells a story.<br />Begin yours with SoulStones.</h1>
+          <p class="auth-brand-sub">Certified natural gemstones, sourced with care and offered with honesty &mdash; an account here is the start of a relationship with a gem advisor, not just a login.</p>
+        </div>
+
+        <div class="auth-brand-switch mt-md-3 mt-3">
+          <p class="auth-brand-switch-text" id="authSwitchText">Don&rsquo;t have an account?</p>
+          <button type="button" class="auth-brand-switch-btn" id="authSwitchBtn" aria-controls="authStage">Register</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ RIGHT FORM PANEL ============================ -->
+    <section class="auth-panel" aria-label="Sign in or create an account">
+      <div class="auth-panel-inner">
+
+        <div class="auth-form-stage" id="authStage">
+
+          <!-- ============================ LOGIN FORM ============================ -->
+          <!-- Django note: replace fields/action with {{ form }} from a Django AuthenticationForm -->
+          <form class="auth-form is-active" id="loginForm" novalidate aria-labelledby="loginHeading">
+            <h2 class="auth-form-title" id="loginHeading">Welcome Back</h2>
+            <p class="auth-form-sub">Sign in to continue exploring SoulStones.</p>
+
+            <div class="auth-field">
+              <label for="loginIdentifier">Username or Email</label>
+              <input type="text" id="loginIdentifier" name="identifier" autocomplete="username" required />
+            </div>
+
+            <div class="auth-field">
+              <label for="loginPassword">Password</label>
+              <div class="auth-password-row">
+                <input type="password" id="loginPassword" name="password" autocomplete="current-password" required />
+                <button type="button" class="auth-password-toggle" data-toggle-for="loginPassword" aria-label="Show password" aria-pressed="false">
+                  <svg class="auth-eye-on" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="auth-eye-off" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 5.2A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a16.6 16.6 0 0 1-3.3 4.3M6.6 6.6C4 8.3 2 12 2 12s3.5 7 10 7c1.4 0 2.7-.3 3.8-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <!-- <a class="auth-forgot" href="#">Forgot Password?</a> -->
+
+            <button type="submit" class="btn btn-primary auth-submit">Login</button>
+
+            <p class="auth-form-msg" id="loginMsg" role="status" aria-live="polite"></p>
+
+            <p class="auth-switch-inline" >Don't have an account? <button type="button" class="auth-switch-link" id="loginSwitchLink">Sign up</button></p>
+
+            <!-- <div class="auth-divider"><span>OR</span></div> -->
+
+            <!-- <button type="button" class="btn btn-secondary auth-google-btn" id="loginGoogleBtn">
+              <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.81.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.96v2.33A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.16.28-1.7V4.97H.96A9 9 0 0 0 0 9c0 1.45.35 2.83.96 4.03l2.99-2.33Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.97L3.95 7.3C4.66 5.17 6.65 3.58 9 3.58Z"/></svg>
+              Continue with Google
+            </button> -->
+          </form>
+
+          <!-- ============================ REGISTER FORM ============================ -->
+          <!-- Django note: replace fields/action with {{ form }} from a Django UserCreationForm -->
+          <form class="auth-form" id="registerForm" novalidate aria-labelledby="registerHeading" hidden>
+            <h2 class="auth-form-title" id="registerHeading">Create Your Account</h2>
+            <p class="auth-form-sub">Join SoulStones and discover certified natural gemstones.</p>
+
+            <div class="auth-field">
+              <label for="registerName">Full Name</label>
+              <input type="text" id="registerName" name="fullName" autocomplete="name" required />
+            </div>
+
+            <div class="auth-field">
+              <label for="registerEmail">Email Address</label>
+              <input type="email" id="registerEmail" name="email" autocomplete="email" required />
+            </div>
+
+            <div class="auth-field">
+              <label for="registerMobile">Mobile Number</label>
+              <input type="tel" id="registerMobile" name="mobile" autocomplete="tel" required />
+            </div>
+
+            <div class="auth-field">
+              <label for="registerPassword">Password</label>
+              <div class="auth-password-row">
+                <input type="password" id="registerPassword" name="password" autocomplete="new-password" required />
+                <button type="button" class="auth-password-toggle" data-toggle-for="registerPassword" aria-label="Show password" aria-pressed="false">
+                  <svg class="auth-eye-on" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg>
+                  <svg class="auth-eye-off" viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" hidden><path d="M3 3l18 18"/><path d="M10.6 5.2A10.4 10.4 0 0 1 12 5c6.5 0 10 7 10 7a16.6 16.6 0 0 1-3.3 4.3M6.6 6.6C4 8.3 2 12 2 12s3.5 7 10 7c1.4 0 2.7-.3 3.8-.8"/><path d="M9.9 9.9a3 3 0 0 0 4.2 4.2"/></svg>
+                </button>
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary auth-submit">Register</button>
+
+            <p class="auth-form-msg" id="registerMsg" role="status" aria-live="polite"></p>
+
+            <p class="auth-switch-inline">Already have an account? <button type="button" class="auth-switch-link" id="registerSwitchLink">Login</button></p>
+          </form>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Django note: in templates, swap this src for {% static 'js/login.js' %} -->
+  <script src="static/js/login.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

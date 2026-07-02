@@ -1,0 +1,281 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · Contact Us</title>
+  <meta name="description" content="Get in touch with SoulStones. Speak to a gem advisor, ask about a stone, or visit our showroom." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <!-- Django note: in templates, swap this href for {% static 'css/contact.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/contact.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ CONTACT HERO ============================ -->
+    <section class="contact-hero" aria-labelledby="contactTitle">
+      <div class="shell">
+        <div class="contact-hero-inner">
+          <div class="contact-hero-copy">
+            <p class="hero-accent">We are here to help</p>
+            <h1 class="hero-title" id="contactTitle">Contact Us</h1>
+            <p class="hero-sub">Have a question about a stone, need guidance on which gemstone suits you best, or wish to visit our showroom? Write to us and a gem advisor will respond within a few hours.</p>
+          </div>
+          <!-- <div class="contact-hero-visual" aria-hidden="true">
+            <img src="static/images/zodiac-banner.webp" alt="Astrology and gemstone-themed illustration" />
+          </div> -->
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CONTACT BODY ============================ -->
+    <section class="contact-body" aria-label="Contact form and company details">
+      <div class="shell">
+        <div class="contact-grid">
+
+          <!-- Contact form -->
+          <div>
+            <div class="contact-form-card">
+              <h2 class="form-title">Send us a message</h2>
+              <p class="form-lede">Fill in your details and one of our gem advisors will reach out to you personally.</p>
+
+              <form id="contactForm" novalidate>
+                <div class="row g-3">
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="fullName">Full Name</label>
+                    <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Your full name" autocomplete="name" required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="emailAddress">Email Address</label>
+                    <input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="you@example.com" autocomplete="email" required />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="phoneNumber">Phone Number</label>
+                    <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="+91 98765 43210" autocomplete="tel" />
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label" for="subject">Subject</label>
+                    <select class="form-select" id="subject" name="subject">
+                      <option value="" disabled selected>Select a topic</option>
+                      <option value="general">General inquiry</option>
+                      <option value="stone-guidance">Stone guidance</option>
+                      <option value="existing-order">Existing order</option>
+                      <option value="wholesale">Wholesale enquiry</option>
+                      <option value="other">Other</option>
+                    </select>
+                  </div>
+
+                  <div class="col-12">
+                    <label class="form-label" for="message">Message</label>
+                    <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you need help with…" required></textarea>
+                  </div>
+
+                  <div class="col-12">
+                    <button type="submit" class="btn-submit">
+                      Send Message
+                      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M5 12h14M13 5l7 7-7 7"/></svg>
+                    </button>
+                  </div>
+
+                </div>
+              </form>
+
+            </div>
+          </div>
+
+          <!-- Info sidebar -->
+          <div class="contact-sidebar">
+
+            <!-- Company information card -->
+            <div class="info-card info-card--featured">
+              <div class="info-card-head">
+                <span class="info-icon-circle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+                </span>
+                <div class="info-card-head-text">
+                  <h3>Company Information</h3>
+                  <p>SoulStones India</p>
+                </div>
+              </div>
+              <div class="info-card-body">
+
+                <div class="info-row">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-11.9 7.6L3 21l1.9-6.1A8.5 8.5 0 1 1 21 11.5Z"/></svg>
+                  <span>+91 98765 43210<br><span style="color: var(--muted); font-size: 0.875rem;">Mon–Sat, 10 am – 7 pm IST</span></span>
+                </div>
+
+                <div class="info-row">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+                  <a href="mailto:care@soulstones.in">care@soulstones.in</a>
+                </div>
+
+                <div class="info-row">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 2a8 8 0 0 0-8 8c0 5.4 7 12 8 12s8-6.6 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>
+                  <span>42 Gemstone Lane,<br>Jaipur, Rajasthan 302001, India</span>
+                </div>
+
+                <div class="info-row">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                  <span>Monday – Saturday<br><span style="color: var(--muted); font-size: 0.875rem;">10:00 am – 7:00 pm IST</span></span>
+                </div>
+
+              </div>
+            </div>
+
+            <!-- WhatsApp card -->
+            <div class="info-card">
+              <div class="info-card-head">
+                <span class="info-icon-circle" style="background: rgba(37, 211, 102, 0.1); color: #25D366;" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.03.79.81-2.95-.2-.31A8.2 8.2 0 1 1 12 20.2Zm4.5-6.13c-.25-.13-1.46-.72-1.69-.8-.23-.08-.39-.13-.56.13-.16.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.71-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48a.93.93 0 0 0-.66.31c-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.66-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+                </span>
+                <div class="info-card-head-text">
+                  <h3>WhatsApp Advisor</h3>
+                  <p>Quick replies, 7 days a week</p>
+                </div>
+              </div>
+              <div class="info-card-body">
+                <a class="btn btn-whatsapp btn-block" href="https://wa.me/91XXXXXXXXXX?text=Hi%20SoulStones%2C%20I%27d%20like%20some%20guidance." target="_blank" rel="noopener">
+                  <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Z"/></svg>
+                  Chat with us on WhatsApp
+                </a>
+                <p style="margin: 12px 0 0; font-size: 0.8125rem; color: var(--muted);">Typical response: under 2 hours during business hours.</p>
+              </div>
+            </div>
+
+            <!-- Map card -->
+            <div class="map-card">
+              <div class="map-card-head">
+                <span class="info-icon-circle" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2a8 8 0 0 0-8 8c0 5.4 7 12 8 12s8-6.6 8-12a8 8 0 0 0-8-8Z"/><circle cx="12" cy="10" r="3"/></svg>
+                </span>
+                <h3>Our Location</h3>
+              </div>
+              <!-- Replace src with your actual Google Maps embed URL -->
+              <iframe
+                class="map-embed"
+                title="SoulStones showroom location"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.9!2d75.8!3d26.9!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDU0JzEwLjAiTiA3NcKwNDUnMjguMCJF!5e0!3m2!1sen!2sin!4v1700000000000"
+                allowfullscreen=""
+                loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade">
+              </iframe>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CONTACT BAND ============================ -->
+    <section class="contact-band" aria-label="Quick contact options">
+      <div class="shell">
+        <div class="contact-band-grid">
+
+          <div class="band-item">
+            <span class="band-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M22 11.5a8.4 8.4 0 0 1-11.9 7.6L3 21l1.9-6.1A8.5 8.5 0 1 1 22 11.5Z"/></svg>
+            </span>
+            <div>
+              <h4>Call us</h4>
+              <p><a href="tel:+919876543210">+91 98765 43210</a><br><span style="font-size:0.8125rem; color:rgba(244,238,225,0.55);">Mon–Sat, 10 am – 7 pm IST</span></p>
+            </div>
+          </div>
+
+          <div class="band-item">
+            <span class="band-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>
+            </span>
+            <div>
+              <h4>Email us</h4>
+              <p><a href="mailto:care@soulstones.in">care@soulstones.in</a><br><span style="font-size:0.8125rem; color:rgba(244,238,225,0.55);">We reply within 4 business hours</span></p>
+            </div>
+          </div>
+
+          <div class="band-item">
+            <span class="band-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+            </span>
+            <div>
+              <h4>Business hours</h4>
+              <p>Monday – Saturday<br>10:00 am – 7:00 pm IST<br><span style="font-size:0.8125rem; color:rgba(244,238,225,0.55);">Closed Sundays &amp; public holidays</span></p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+ {% include 'footer.html' %}
+
+
+  <!-- ============================ CART DRAWER (reused structure, driven by main.js) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="/#top-styles" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">₹0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
+</svg>        Checkout 
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================ VIDEO DIALOG (reused structure for main.js compatibility; unused on this page) ============================ -->
+  <div class="video-overlay" id="videoOverlay" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-label="Customer story video" id="videoDialog" tabindex="-1">
+      <button class="video-close" id="videoClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="video-frame" id="videoFrame">
+        <p class="video-placeholder-msg">Video coming soon. Real customer stories will play here.</p>
+      </div>
+    </div>
+  </div>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
+  <script src="static/js/main.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+
+</body>
+</html>

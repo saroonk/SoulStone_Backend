@@ -1,0 +1,299 @@
+/* ============================================================
+   SoulStones — Track Order page
+   Reuses design tokens, .btn, .shell, .section, .sr-only from styles.css.
+   Reuses .mo-* accordion styles from my-orders.css (loaded before this file).
+   Only track-order-specific layout lives here.
+   ============================================================ */
+
+/* ============================================================
+   FADE-UP ANIMATION
+   ============================================================ */
+@keyframes toFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ============================================================
+   HERO — full bleed image, dark overlay, vertically centered
+   ============================================================ */
+.to-hero {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-image: url('../images/hero_section_banner.webp');
+  background-size: cover;
+  background-position: center;
+  min-height: clamp(480px, 58vw, 680px);
+  padding-block: clamp(48px, 6vw, 72px) !important; /* overrides styles.css .section */
+}
+
+/* Dark overlay — sits above the background-image */
+.to-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(22, 18, 11, 0.72);
+}
+
+/* Lifts hero content above the overlay */
+.to-hero-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  max-width: 780px;
+  margin-inline: auto;
+}
+
+/* Script accent — One Script Rule: Cormorant Garamond italic, once per page */
+.to-hero-script {
+  font-family: var(--font-script);
+  font-style: italic;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 2.4vw, 1.65rem);
+  color: var(--gold); /* Two-Golds Rule: --gold on dark ground */
+  line-height: 1.2;
+  letter-spacing: normal;
+  margin: 0 0 12px;
+}
+
+.to-hero-title {
+  font-family: var(--font-display);
+  font-weight: 400; /* Gloock 400 only */
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  color: #fff;
+  margin: 0 0 16px;
+}
+
+.to-hero-lede {
+  font-family: var(--font-body);
+  font-size: clamp(0.9375rem, 1.4vw, 1.0625rem);
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.72);
+  max-width: 48ch;
+  margin: 0 auto;
+}
+
+/* ============================================================
+   HERO SEARCH FORM
+   ============================================================ */
+.to-hero-form {
+  margin-top: 36px;
+}
+
+/* ============================================================
+   GLASSMORPHISM SEARCH PILL — frosted glass on dark hero
+   Two-Golds Rule: gold button on dark → --gold (btn-primary)
+   ============================================================ */
+.to-hero-pill {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 720px;
+  margin-inline: auto;
+  height: 62px;
+  background: rgba(255, 255, 255, 0.12);
+  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 999px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.24),
+    0 2px 8px  rgba(0, 0, 0, 0.12);
+  padding: 6px 6px 6px 24px;
+  animation: toFadeUp 0.5s var(--ease) 0.1s both;
+  transition: border-color 0.2s var(--ease), box-shadow 0.2s var(--ease);
+}
+
+.to-hero-pill:focus-within {
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.24),
+    0 0 0 3px rgba(201, 162, 75, 0.3);
+}
+
+/* Error state — pill border turns warm red when input is invalid */
+.to-hero-pill:has(.to-lookup-input[aria-invalid="true"]) {
+  border-color: rgba(255, 120, 100, 0.7);
+  box-shadow: 0 0 0 3px rgba(255, 100, 80, 0.2);
+}
+
+/* ---- Email icon ---- */
+.to-search-icon {
+  flex-shrink: 0;
+  color: rgba(255, 255, 255, 0.65);
+}
+
+/* ---- Input — transparent on dark, white text ---- */
+.to-lookup-input {
+  flex: 1;
+  min-width: 0;
+  align-self: stretch;
+  padding: 0;
+  border: none;
+  background: transparent;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  color: #fff;
+  outline: none;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+.to-lookup-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+  opacity: 1;
+}
+
+/* ---- Gold button — Two-Golds Rule: --gold via .btn-primary on dark ---- */
+.to-search-btn {
+  flex-shrink: 0;
+  height: 50px;
+  padding-inline: 28px;
+  border-radius: 999px !important;
+  white-space: nowrap;
+  display: inline-flex !important;
+  align-items: center;
+  font-size: 0.8125rem !important;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: box-shadow 0.18s var(--ease), transform 0.18s var(--ease);
+}
+
+.to-search-btn:hover {
+  box-shadow: 0 4px 20px rgba(201, 162, 75, 0.45);
+  transform: translateY(-1px);
+}
+
+/* ---- Validation message — light on dark hero ---- */
+.to-form-msg {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: rgba(255, 160, 150, 0.95);
+  margin-top: 14px;
+  min-height: 1.2em;
+  line-height: 1.4;
+  text-align: center;
+}
+
+/* ============================================================
+   BOOTSTRAP RESET — neutralise ul/li defaults that shift the product list
+   Bootstrap's `ul { padding-left: 2rem }` (tag specificity 0,0,1) loses
+   to class selectors (0,1,0), so these overrides win without !important.
+   ============================================================ */
+.mo-product-list {
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 0;
+}
+
+.mo-product-item {
+  list-style-type: none;
+}
+
+/* ============================================================
+   RESULTS OUTER WRAPPER — on var(--bg), revealed by JS
+   ============================================================ */
+.to-results-outer {
+  background: var(--bg);
+  padding-block: clamp(40px, 5vw, 64px);
+}
+
+.to-results-outer:not([hidden]) {
+  animation: toFadeUp 0.4s var(--ease) both;
+}
+
+/* ---- Results heading ---- */
+.to-results-heading {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 20px;
+}
+
+/* ============================================================
+   EMPTY STATE OUTER WRAPPER — revealed by JS
+   ============================================================ */
+.to-empty-outer {
+  background: var(--bg);
+}
+
+.to-empty-outer:not([hidden]) {
+  animation: toFadeUp 0.4s var(--ease) both;
+}
+
+/* ============================================================
+   EMPTY STATE (no orders found)
+   Uses .to-* prefix to avoid conflict with .mo-empty in my-orders.css.
+   ============================================================ */
+.to-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(48px, 6vw, 80px) 24px;
+  max-width: 440px;
+  margin-inline: auto;
+}
+
+.to-empty-icon {
+  color: var(--muted);
+  opacity: 0.5;
+  margin-bottom: 28px;
+}
+
+.to-empty-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.to-empty-desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 38ch;
+  margin: 0 0 28px;
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile (≤ 600px)
+   Button stays INSIDE the pill — no stacking.
+   ============================================================ */
+@media (max-width: 600px) {
+  .to-hero-pill {
+    height: 56px;
+    max-width: 95%;
+    padding: 5px 5px 5px 18px;
+    gap: 8px;
+  }
+
+  .to-search-btn {
+    height: 46px;
+    padding-inline: 16px;
+    font-size: 0.75rem !important;
+  }
+
+  .to-hero-form {
+    margin-top: 28px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .to-hero-pill                        { animation: none; transition: none; }
+  .to-search-btn                       { transition: none; }
+  .to-search-btn:hover                 { box-shadow: none; transform: none; }
+  .to-results-outer:not([hidden]),
+  .to-empty-outer:not([hidden])        { animation: none; }
+}

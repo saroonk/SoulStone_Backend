@@ -1,0 +1,499 @@
+/* ============================================================
+   SoulStones — My Orders page
+   Reuses design tokens, .btn, .shell, .section, .sr-only from styles.css.
+   Only orders-page-specific layout lives here.
+   ============================================================ */
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.mo-hero {
+  background: var(--surface);
+  border-bottom: 1px solid var(--hairline);
+  padding-block: clamp(40px, 5vw, 64px) !important;
+}
+
+.mo-hero-eyebrow {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.75rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin: 0 0 14px;
+}
+
+.mo-hero-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: -0.025em;
+  line-height: 1.06;
+  color: var(--gold-deep);
+  margin: 0 0 14px;
+}
+
+.mo-hero-lede {
+  font-family: var(--font-body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 52ch;
+  margin: 0;
+}
+
+/* ============================================================
+   ORDERS SECTION
+   Restore top padding — styles.css collapses it when adjacent
+   .section elements share the same background.
+   ============================================================ */
+.mo-orders-section {
+  background: var(--bg);
+  padding-top: var(--section) !important;
+}
+
+/* ============================================================
+   EMPTY STATE
+   ============================================================ */
+.mo-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: clamp(48px, 6vw, 80px) 24px;
+  max-width: 440px;
+  margin-inline: auto;
+}
+
+.mo-empty-icon {
+  color: var(--gold-deep);
+  opacity: 0.38;
+  margin-bottom: 28px;
+}
+
+.mo-empty-title {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 0 0 14px;
+}
+
+.mo-empty-desc {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.65;
+  color: var(--muted);
+  max-width: 38ch;
+  margin: 0 0 28px;
+}
+
+/* ============================================================
+   ORDERS LIST
+   ============================================================ */
+.mo-orders-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ============================================================
+   ACCORDION CARD
+   ============================================================ */
+.mo-order-card {
+  background: var(--surface);
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-card);
+  box-shadow: var(--sh-rest);
+  overflow: hidden;
+  transition: box-shadow 0.2s var(--ease);
+}
+
+.mo-order-card:has(.mo-order-item[open]) {
+  box-shadow: var(--sh-hover);
+}
+
+
+.mo-order-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: clamp(18px, 2.4vw, 24px) clamp(20px, 2.8vw, 28px);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.16s var(--ease);
+}
+
+/* Remove native disclosure marker in all browsers */
+.mo-order-header::-webkit-details-marker { display: none; }
+.mo-order-header::marker { display: none; content: ""; }
+
+.mo-order-header:hover {
+  background: var(--bg);
+}
+
+/* ---- Left meta ---- */
+.mo-order-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+}
+
+.mo-order-id {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 1rem;
+  color: var(--ink);
+  letter-spacing: 0.01em;
+}
+
+.mo-order-date {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+/* ---- Right side ---- */
+.mo-order-right {
+  display: flex;
+  align-items: center;
+  gap: clamp(10px, 2vw, 20px);
+  flex-shrink: 0;
+}
+
+.mo-order-amount {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.0625rem;
+  color: var(--ink);
+  white-space: nowrap;
+}
+
+/* ---- Status badges ---- */
+.mo-status {
+  display: inline-flex;
+  align-items: center;
+  padding: 4px 12px;
+  border-radius: var(--r-pill);
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.mo-status--processing     { background: var(--gold-soft);    color: var(--gold-deep); }
+.mo-status--confirmed      { background: #EEE8DC;             color: #7A5C20;          }
+.mo-status--packed         { background: #ECEAE6;             color: var(--muted);     }
+.mo-status--shipped        { background: #E8EEF8;             color: #3B5F96;          }
+.mo-status--out-for-delivery { background: #FEF2E2;           color: #7A4A18;          }
+.mo-status--delivered      { background: #E8F4EC;             color: #3A7A4A;          }
+.mo-status--cancelled      { background: #FAE8E8;             color: #8B2E2E;          }
+
+/* ---- Chevron icon ---- */
+.mo-chevron {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--muted);
+}
+
+.mo-chevron svg {
+  transition: transform 0.22s var(--ease);
+}
+
+.mo-order-item[open] .mo-chevron svg {
+  transform: rotate(180deg);
+}
+
+/* ---- Separator between header and body ---- */
+.mo-order-item[open] .mo-order-header {
+  border-bottom: 1px solid var(--hairline);
+}
+
+/* ============================================================
+   ACCORDION BODY (expanded content)
+   Animates in on open; instant on close (native <details> behaviour).
+   ============================================================ */
+.mo-order-body {
+  padding: clamp(22px, 3vw, 32px) clamp(20px, 2.8vw, 28px) clamp(26px, 3.2vw, 36px);
+  animation: moBodyIn 0.2s var(--ease) both;
+}
+
+@keyframes moBodyIn {
+  from { opacity: 0; transform: translateY(-6px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---- Section sub-label (Order Summary / Order Details) ---- */
+.mo-section-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gold-deep);
+  margin: 0 0 16px;
+}
+
+/* ============================================================
+   PRODUCT LIST
+   Bootstrap's `ul { padding-left: 2rem }` (tag specificity 0,0,1) is
+   overridden here by the class selector (0,1,0) — no !important needed.
+   ============================================================ */
+.mo-product-list {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--bg);
+  padding-left: 0;
+  list-style: none;
+  margin-bottom: 0;
+}
+
+.mo-product-item {
+  list-style-type: none;
+}
+
+.mo-product-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.mo-product-item:last-child {
+  border-bottom: none;
+}
+
+.mo-product-item img {
+  width: 64px;
+  height: 64px;
+  border-radius: 10px;
+  object-fit: cover;
+  flex-shrink: 0;
+  background: var(--surface);
+}
+
+.mo-product-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.mo-product-name {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--ink);
+}
+
+.mo-product-detail {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.mo-product-qty {
+  font-family: var(--font-body);
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+
+.mo-product-price {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--gold-deep);
+  flex-shrink: 0;
+  white-space: nowrap;
+  align-self: flex-start;
+}
+
+/* ============================================================
+   ORDER DETAILS GRID
+   ============================================================ */
+.mo-details-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  border: 1px solid var(--hairline);
+  border-radius: var(--r-card);
+  overflow: hidden;
+  background: var(--bg);
+}
+
+.mo-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+  border-bottom: 1px solid var(--hairline);
+  border-right: 1px solid var(--hairline);
+}
+
+/* Remove right border from even items (right column) */
+.mo-detail-item:nth-child(even) {
+  border-right: none;
+}
+
+/* Remove bottom border from last row */
+.mo-detail-item:nth-last-child(-n+2) {
+  border-bottom: none;
+}
+
+.mo-detail-label {
+  font-family: var(--font-body);
+  font-weight: 600;
+  font-size: 0.6875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  display: block;
+}
+
+.mo-detail-value {
+  font-family: var(--font-body);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.mo-detail-value--paid {
+  color: #3A7A4A;
+  font-weight: 600;
+}
+
+/* ============================================================
+   ORDER ACTIONS
+   ============================================================ */
+.mo-order-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 24px;
+  border-top: 1px solid var(--hairline);
+}
+
+/* ============================================================
+   RESPONSIVE — Tablet (≤ 768px)
+   ============================================================ */
+@media (max-width: 768px) {
+  .mo-order-right {
+    gap: 10px;
+  }
+
+  .mo-order-amount {
+    font-size: 0.9375rem;
+  }
+
+  /* Hide status badge at narrow tablet — relies on accordion body for status */
+  /* Keep it visible, just reduce it */
+  .mo-status {
+    padding: 3px 9px;
+    font-size: 0.625rem;
+  }
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile (≤ 600px)
+   ============================================================ */
+@media (max-width: 600px) {
+
+  .mo-hero { padding-block: clamp(28px, 4vw, 44px) !important; }
+
+  /* Stack the header row so amount + badge sit below Order ID */
+  .mo-order-header {
+    flex-wrap: wrap;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+
+  .mo-order-meta { flex: 1 1 auto; }
+
+  .mo-order-right {
+    flex: 1 1 auto;
+    justify-content: flex-end;
+    gap: 8px;
+  }
+
+  /* Product item — image stays, text wraps naturally */
+  .mo-product-item {
+    gap: 12px;
+    padding: 14px 16px;
+    align-items: flex-start;
+  }
+
+  .mo-product-item img {
+    width: 52px;
+    height: 52px;
+  }
+
+  .mo-product-price {
+    font-size: 0.875rem;
+  }
+
+  /* Order details grid: single column on mobile */
+  .mo-details-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mo-detail-item {
+    border-right: none;
+    border-bottom: 1px solid var(--hairline);
+    padding: 14px 16px;
+  }
+
+  .mo-detail-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Restore bottom border on last two (overrides the 2-col rule) */
+  .mo-detail-item:nth-last-child(-n+2) {
+    border-bottom: 1px solid var(--hairline);
+  }
+
+  .mo-detail-item:last-child {
+    border-bottom: none;
+  }
+
+  /* Full-width stacked buttons on mobile */
+  .mo-order-actions {
+    flex-direction: column;
+    margin-top: 22px;
+    padding-top: 20px;
+    gap: 10px;
+  }
+
+  .mo-order-actions .btn {
+    width: 100%;
+  }
+
+  /* Order body padding */
+  .mo-order-body {
+    padding: 20px 18px 24px;
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .mo-order-body     { animation: none; }
+  .mo-chevron svg    { transition: none; }
+  .mo-order-card     { transition: none; }
+  .mo-order-header   { transition: none; }
+}

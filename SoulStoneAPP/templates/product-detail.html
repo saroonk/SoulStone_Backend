@@ -1,0 +1,322 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · Burmese Ruby</title>
+  <meta name="description" content="Certified Natural Burmese Ruby — 4.1 carat, Mogok provenance, independently lab-certified. Selected for colour, authenticity, and astrological significance." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <!-- Django note: in templates, swap this href for {% static 'css/product-detail.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/product-detail.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+ {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ BREADCRUMB ============================ -->
+    <!-- Django note: each crumb / the leaf label would come from product/category context -->
+    <nav class="pd-breadcrumb-nav" aria-label="Breadcrumb">
+      <div class="shell">
+        <ol class="pd-breadcrumb-list">
+          <li><a href="index.html">Home</a></li>
+          <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li><a href="product.html">Collections</a></li>
+          <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li><a href="product.html?category=Ruby">Ruby</a></li>
+          <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li aria-current="page">Burmese Ruby</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ============================ PRODUCT DETAIL ============================ -->
+    <section class="pd-detail" aria-label="Product detail">
+      <div class="shell pd-layout">
+
+        <!-- Gallery -->
+        <div class="pd-gallery">
+          <div class="pd-gallery-main">
+            <img id="pdMainImage" src="static/images/Ruby.webp" alt="Burmese Ruby, 4.1 carat loose natural ruby, front view" />
+          </div>
+          <div class="pd-thumbs" id="pdThumbs" role="group" aria-label="Product images">
+            <button type="button" class="pd-thumb is-active" data-full="static/images/Ruby.webp" data-alt="Burmese Ruby, front view" aria-current="true" aria-label="Image 1 of 6">
+              <img src="static/images/Ruby.webp" alt="" loading="lazy" />
+            </button>
+            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/32700204/pexels-photo-32700204.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Burmese Ruby held with gemmological tweezers under studio light" aria-label="Image 2 of 6">
+              <img src="https://images.pexels.com/photos/32700204/pexels-photo-32700204.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
+            </button>
+            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/32700209/pexels-photo-32700209.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Burmese Ruby held with tweezers, natural daylight" aria-label="Image 3 of 6">
+              <img src="https://images.pexels.com/photos/32700209/pexels-photo-32700209.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
+            </button>
+            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/13307186/pexels-photo-13307186.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="A parcel of natural ruby crystals" aria-label="Image 4 of 6">
+              <img src="https://images.pexels.com/photos/13307186/pexels-photo-13307186.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
+            </button>
+            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/13307185/pexels-photo-13307185.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Three natural ruby crystals on a reflective surface" aria-label="Image 5 of 6">
+              <img src="https://images.pexels.com/photos/13307185/pexels-photo-13307185.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
+            </button>
+            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/35497311/pexels-photo-35497311.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="A ruby crystal in its natural matrix" aria-label="Image 6 of 6">
+              <img src="https://images.pexels.com/photos/35497311/pexels-photo-35497311.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
+            </button>
+
+
+
+
+          </div>
+        </div>
+
+        <!-- Info + purchase -->
+        <div class="pd-info">
+          <div class="pd-badges">
+            <span class="pd-badge pd-badge-category">Ruby &middot; Manik</span>
+            <span class="pd-badge pd-badge-cert">
+              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+              Lab Certified
+            </span>
+          </div>
+
+          <h1 class="pd-name">Burmese Ruby</h1>
+
+          <p class="pd-availability is-in-stock"><span class="pd-dot" aria-hidden="true"></span>In Stock &mdash; ships in 2&ndash;4 business days</p>
+
+          <div class="pd-price-row">
+            <span class="pd-price">&#8377;62,000</span>
+            <span class="pd-price-original">&#8377;68,000</span>
+            <span class="pd-price-save">Save 9%</span>
+          </div>
+
+          <p class="pd-desc">Certified Natural Burmese Ruby selected for exceptional colour, authenticity, and astrological significance. A 4.1&nbsp;carat stone of deep, saturated red, sourced from the Mogok valley and independently lab-certified.</p>
+
+          <!-- ============================ PURCHASE SECTION ============================ -->
+          <div class="pd-purchase">
+            <div class="pd-qty" role="group" aria-label="Quantity">
+              <button type="button" class="pd-qty-btn" id="pdQtyMinus" aria-label="Decrease quantity">&minus;</button>
+              <span class="pd-qty-val" id="pdQtyVal" aria-live="polite">1</span>
+              <button type="button" class="pd-qty-btn" id="pdQtyPlus" aria-label="Increase quantity">+</button>
+            </div>
+            <button type="button" class="btn btn-primary pd-add-btn" id="pdAddToCart">Add to Cart</button>
+            <!-- <button type="button" class="btn btn-secondary pd-buy-btn" id="pdBuyNow">Buy Now</button> -->
+          </div>
+
+          <!-- Hidden bridge into main.js's existing cart/drawer system (same product id, so the cart stays accurate) -->
+          <button type="button" class="sr-only" id="pdCartBridge" data-add="manik" tabindex="-1" aria-hidden="true">Add Burmese Ruby to cart</button>
+
+          <ul class="pd-reassurance">
+            <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Secure Shopping</li>
+            <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Premium Packaging</li>
+            <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Expert Consultation</li>
+            <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Authentic Certified Stone</li>
+          </ul>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ============================ GEMSTONE INFORMATION TABS ============================ -->
+    <!-- Django note: each panel's inner .pd-richtext markup is a stand-in for
+         CKEditor-generated HTML (product.description_html / .certification_html
+         / .origin_html). Keep these panels as plain rich-text containers. -->
+    <section class="section pd-tabs-section" aria-label="Gemstone information">
+      <div class="shell">
+        <div class="pd-tabs" role="tablist" aria-label="Gemstone information">
+          <button type="button" class="pd-tab is-active" id="pdTabBtnDescription" role="tab" aria-selected="true" aria-controls="pdTabPanelDescription">Description &amp; Benefits</button>
+          <button type="button" class="pd-tab" id="pdTabBtnCertification" role="tab" aria-selected="false" aria-controls="pdTabPanelCertification" tabindex="-1">Certification &amp; Authenticity</button>
+          <button type="button" class="pd-tab" id="pdTabBtnOrigin" role="tab" aria-selected="false" aria-controls="pdTabPanelOrigin" tabindex="-1">Stone Origin</button>
+        </div>
+
+        <div class="pd-tab-panels">
+
+          <div class="pd-tab-panel pd-richtext is-active" id="pdTabPanelDescription" role="tabpanel" aria-labelledby="pdTabBtnDescription" tabindex="0">
+            <h3>About This Gemstone</h3>
+            <p>This <strong>Burmese Ruby</strong> is a loose, unset natural corundum prized for its deep, saturated red and fine clarity. Each stone in this listing is individually inspected before it is offered, weighed, and matched to its laboratory report.</p>
+            <p>Rubies form deep within marble deposits under immense heat and pressure, a process spanning millions of years. Trace amounts of chromium give the stone its characteristic red, with the finest examples showing the glow Mogok stones are <em>historically</em> known for.</p>
+
+            <h4>Specifications</h4>
+            <ul>
+              <li><strong>Origin:</strong> Mogok, Myanmar (Burma)</li>
+              <li><strong>Treatment:</strong> Heat-treated &mdash; traditional, fully disclosed</li>
+              <li><strong>Weight:</strong> 4.1 carats</li>
+              <li><strong>Dimensions:</strong> 9.8 &times; 7.6 &times; 5.2&nbsp;mm</li>
+              <li><strong>Shape:</strong> Oval mixed cut</li>
+              <li><strong>Colour:</strong> Deep, saturated red</li>
+              <li><strong>Clarity:</strong> Eye-clean, minor natural inclusions</li>
+              <li><strong>Birthstone month:</strong> July</li>
+            </ul>
+
+            <h4>Astrological Significance</h4>
+            <p>Ruby has long been associated with the <strong>Sun</strong> and worn in pursuit of vitality, leadership, and confidence. This is offered as educational context &mdash; for guidance specific to your chart, <a href="#consult">speak with one of our gem advisors</a>.</p>
+            <ul>
+              <li><strong>Planet:</strong> Sun (Surya)</li>
+              <li><strong>Recommended metal:</strong> Gold or copper</li>
+              <li><strong>Recommended finger:</strong> Ring finger, right hand</li>
+              <li><strong>Recommended day:</strong> Sunday morning, at sunrise</li>
+            </ul>
+
+            <h4>Care Instructions</h4>
+            <p>Clean gently with lukewarm water and a soft brush; avoid harsh chemicals and ultrasonic cleaners if the stone has been treated. Store separately from harder gems to avoid surface scratching, and remove before swimming, exercise, or manual work.</p>
+          </div>
+
+          <div class="pd-tab-panel pd-richtext" id="pdTabPanelCertification" role="tabpanel" aria-labelledby="pdTabBtnCertification" tabindex="0" hidden>
+            <h3>Certified &amp; Authentic</h3>
+            <p>Every SoulStones gemstone ships with independent laboratory certification. This stone's report confirms it is a <strong>natural ruby</strong>, discloses any treatment, and records its weight, measurements, and identifying characteristics.</p>
+
+            <h4>What We Verify Before Listing</h4>
+            <ol>
+              <li>Independent gemmological testing to confirm natural origin</li>
+              <li>Full disclosure of any treatment &mdash; never hidden, never assumed</li>
+              <li>Colour, clarity, and cut checked against our internal quality standard</li>
+              <li>A final review by our gem advisors for astrological accuracy</li>
+            </ol>
+
+            <p><em>Certificate preview placeholder &mdash; a scan of the actual laboratory report will appear here.</em></p>
+
+            <p>The laboratory certificate ships in the box with your stone. If you would like to see a sample report before you buy, <a href="#consult">ask an advisor on WhatsApp</a>.</p>
+          </div>
+
+          <div class="pd-tab-panel pd-richtext" id="pdTabPanelOrigin" role="tabpanel" aria-labelledby="pdTabBtnOrigin" tabindex="0" hidden>
+            <h3>Where This Stone Comes From</h3>
+            <p>We source rubies directly from established mining regions, with provenance and quality verified at every step before a stone reaches certification.</p>
+
+            <h4>Mogok, Myanmar</h4>
+            <p>The historic <em>"Valley of Rubies,"</em> prized for its vivid red and natural fluorescence &mdash; this stone's origin.</p>
+
+            <h4>Other Sourcing Regions</h4>
+            <ul>
+              <li><strong>Sri Lanka</strong> &mdash; softer, pinkish-red rubies with excellent natural clarity</li>
+              <li><strong>Mozambique</strong> &mdash; strong, consistent colour and good size</li>
+              <li><strong>Madagascar</strong> &mdash; vivid, well-saturated stones from alluvial deposits</li>
+            </ul>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ RELATED PRODUCTS ============================ -->
+    <section class="section pd-related" aria-label="Related products">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title">You May Also Like</h2>
+        </header>
+        <ul class="product-grid" id="relatedGrid" aria-live="polite"></ul>
+      </div>
+    </section>
+
+    <!-- ============================ FAQ ============================ -->
+    <section class="section pd-faq" aria-label="Frequently asked questions">
+      <div class="shell">
+        <header class="section-head">
+          <h2 class="section-title text-center">Common Questions</h2>
+        </header>
+        <div class="pd-faq-list">
+          <details class="pd-faq-item">
+            <summary>How do I know this gemstone is natural?</summary>
+            <p>Every stone ships with an independent gemmological laboratory report confirming it is a natural stone, with any treatment disclosed in full &mdash; never sold as natural if it is synthetic or simulated.</p>
+          </details>
+          <details class="pd-faq-item">
+            <summary>Does it include certification?</summary>
+            <p>Yes. A laboratory certificate is included with every purchase at no extra cost, detailing weight, measurements, colour, and treatment.</p>
+          </details>
+          <details class="pd-faq-item">
+            <summary>How should I wear this gemstone?</summary>
+            <p>This stone ships loose so it can be set by a jeweller of your choosing. See the Description &amp; Benefits tab above for traditional guidance on finger, metal, and day.</p>
+          </details>
+          <details class="pd-faq-item">
+            <summary>Can I consult before purchasing?</summary>
+            <p>Yes. Our gem advisors are available over WhatsApp to help you confirm carat, quality, and suitability before you buy &mdash; with no pressure to purchase.</p>
+          </details>
+          <details class="pd-faq-item">
+            <summary>How should I care for the gemstone?</summary>
+            <p>Clean gently with lukewarm water and a soft brush, avoid harsh chemicals, and store separately from harder gems. Full guidance is in the Care Instructions heading of the Description &amp; Benefits tab above.</p>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CONSULTATION CTA ============================ -->
+    <section class="consult-band" id="consult">
+      <div class="shell consult-inner">
+        <div class="consult-copy">
+          <p class="consult-kicker">Not sure which stone is right for you?</p>
+          <h2 class="consult-title">Speak with a gem advisor before you buy.</h2>
+          <p class="consult-body">Share your birth details or your astrologer's recommendation. We will help you choose a certified stone that genuinely fits, with no pressure to purchase.</p>
+          <a class="btn btn-whatsapp" href="https://wa.me/91XXXXXXXXXX?text=Hi%20SoulStones%2C%20I%27d%20like%20guidance%20choosing%20a%20gemstone." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.03.79.81-2.95-.2-.31A8.2 8.2 0 1 1 12 20.2Zm4.5-6.13c-.25-.13-1.46-.72-1.69-.8-.23-.08-.39-.13-.56.13-.16.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.71-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48a.93.93 0 0 0-.66.31c-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.66-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+            Speak with us on WhatsApp
+          </a>
+          <p class="consult-hours">Advisors reply within a few hours, 7 days a week.</p>
+        </div>
+        <!-- PLACEHOLDER: replace with a real photo of an advisor / hand presenting a stone -->
+        <figure class="consult-portrait" aria-hidden="true">
+          <div class="portrait-slot">
+            <span class="portrait-tag">Advisor portrait</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+  <!-- ============================ CART DRAWER (reused structure, driven by main.js) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="product.html" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">₹0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
+</svg>        Checkout 
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================ VIDEO DIALOG (reused structure for main.js compatibility; unused on this page) ============================ -->
+  <div class="video-overlay" id="videoOverlay" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-label="Customer story video" id="videoDialog" tabindex="-1">
+      <button class="video-close" id="videoClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="video-frame" id="videoFrame">
+        <p class="video-placeholder-msg">Video coming soon. Real customer stories will play here.</p>
+      </div>
+    </div>
+  </div>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
+  <script src="static/js/main.js" defer></script>
+  <!-- Django note: in templates, swap this src for {% static 'js/product-detail.js' %} -->
+  <script src="static/js/product-detail.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

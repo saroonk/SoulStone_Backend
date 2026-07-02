@@ -1,0 +1,250 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · Our Collection</title>
+  <meta name="description" content="Browse SoulStones' full catalogue of loose, lab-certified natural gemstones — ruby, emerald, blue sapphire, yellow sapphire, pearl, coral, hessonite, cat's eye, and opal." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <!-- Django note: in templates, swap this href for {% static 'css/product.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/product.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ CATALOGUE HERO ============================ -->
+    <section class="catalogue-hero" aria-labelledby="catalogueHeroTitle">
+      <!-- PLACEHOLDER: temporary Unsplash photography, replace with real SoulStones photography before launch -->
+      <div class="catalogue-hero-media" style="background-image:url('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?auto=format&amp;fit=crop&amp;w=1920&amp;h=1080&amp;q=80')" role="img" aria-label="A gold necklace with a faceted blue gemstone pendant"></div>
+      <div class="catalogue-hero-overlay" aria-hidden="true"></div>
+      <div class="shell catalogue-hero-inner">
+        <p class="hero-accent catalogue-hero-accent">Curated Natural Gemstones</p>
+        <h1 class="catalogue-hero-title" id="catalogueHeroTitle">Our Collection</h1>
+        <p class="catalogue-hero-sub">Explore our carefully selected certified natural gemstones, chosen for authenticity, beauty, and timeless significance.</p>
+      </div>
+      <div class="catalogue-hero-fade" aria-hidden="true"></div>
+    </section>
+
+    <!-- ============================ CATALOGUE LISTING ============================ -->
+    <section class="section catalogue-section" aria-label="Gemstone catalogue">
+      <div class="shell catalogue-layout">
+
+        <!-- Filter backdrop (mobile only) -->
+        <button type="button" class="filter-backdrop" id="filterBackdrop" aria-hidden="true" tabindex="-1" hidden></button>
+
+        <!-- ============================ FILTER SIDEBAR / MOBILE PANEL ============================ -->
+        <aside class="filter-panel" id="filterPanel" aria-label="Filter products">
+          <div class="filter-panel-head">
+            <h2 class="filter-panel-title">Filters</h2>
+            <button type="button" class="filter-close" id="filterCloseBtn" aria-label="Close filters">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+            </button>
+          </div>
+
+          <div class="filter-panel-body">
+
+            <details class="filter-group filter-category" open>
+              <summary>Category</summary>
+              <div class="filter-options" id="filterCategoryOptions" role="group" aria-label="Filter by category">
+                <label class="filter-check"><input type="checkbox" name="category" value="Ruby" /><span>Ruby</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Emerald" /><span>Emerald</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Blue Sapphire" /><span>Blue Sapphire</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Yellow Sapphire" /><span>Yellow Sapphire</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Pearl" /><span>Pearl</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Coral" /><span>Coral</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Hessonite" /><span>Hessonite</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Cat's Eye" /><span>Cat's Eye</span></label>
+                <label class="filter-check"><input type="checkbox" name="category" value="Opal" /><span>Opal</span></label>
+              </div>
+            </details>
+
+            <details class="filter-group" open>
+              <summary>Availability</summary>
+              <div class="filter-options" role="group" aria-label="Filter by availability">
+                <label class="filter-check"><input type="checkbox" name="availability" value="in-stock" /><span>In Stock</span></label>
+                <label class="filter-check"><input type="checkbox" name="availability" value="out-of-stock" /><span>Out of Stock</span></label>
+              </div>
+            </details>
+
+            <details class="filter-group" open>
+              <summary>Price Range</summary>
+              <div class="filter-options" role="group" aria-label="Filter by price range">
+                <label class="filter-check"><input type="checkbox" name="price" value="0-5000" /><span>Under &#8377;5,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="5000-10000" /><span>&#8377;5,000 &ndash; &#8377;10,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="10000-15000" /><span>&#8377;10,000 &ndash; &#8377;15,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="15000-25000" /><span>&#8377;15,000 &ndash; &#8377;25,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="25000-999999" /><span>Above &#8377;25,000</span></label>
+              </div>
+            </details>
+
+            <details class="filter-group" id="filterSortGroup" open>
+              <summary>Sort By</summary>
+              <div class="filter-options" role="group" aria-label="Sort products">
+                <label class="filter-radio"><input type="radio" name="sortBy" value="featured" checked /><span>Featured</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="popularity" /><span>Popularity</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="price-asc" /><span>Price: Low to High</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="price-desc" /><span>Price: High to Low</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="newest" /><span>Newest</span></label>
+              </div>
+            </details>
+
+          </div>
+
+          <div class="filter-panel-foot">
+            <button type="button" class="btn btn-secondary" id="resetFiltersBtn">Reset Filters</button>
+            <button type="button" class="btn btn-primary" id="applyFiltersBtn">Apply Filters</button>
+          </div>
+        </aside>
+
+        <!-- ============================ PRODUCT GRID + TOOLBAR ============================ -->
+        <div class="catalogue-main">
+
+          <div class="catalogue-toolbar">
+            <div class="toolbar-left">
+              <button type="button" class="toolbar-mobile-btn" id="mobileFilterBtn" aria-haspopup="true" aria-controls="filterPanel">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M4 6h16M7 12h10M10 18h4"/></svg>
+                Filter
+              </button>
+              <button type="button" class="toolbar-mobile-btn" id="mobileSortBtn" aria-haspopup="true" aria-controls="filterPanel">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M3 7h8M3 12h5M3 17h2M14 4v16m0 0 3.5-3.5M14 20l-3.5-3.5"/></svg>
+                Sort
+              </button>
+              <p class="toolbar-count" id="toolbarCount" aria-live="polite">Showing 11 Products</p>
+            </div>
+
+            <div class="toolbar-right">
+              <label class="toolbar-search">
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+                <input type="search" id="toolbarSearch" placeholder="Search products" autocomplete="off" aria-label="Search products" />
+              </label>
+
+              <label class="toolbar-sort-field">
+                <span class="sr-only">Sort by</span>
+                <select id="toolbarSort" aria-label="Sort gemstones">
+                  <option value="featured">Featured</option>
+                  <option value="popularity">Popularity</option>
+                  <option value="price-asc">Price: Low to High</option>
+                  <option value="price-desc">Price: High to Low</option>
+                  <option value="newest">Newest</option>
+                </select>
+              </label>
+
+              <div class="view-toggle" role="group" aria-label="Grid or list view">
+                <button type="button" class="view-toggle-btn" id="viewGridBtn" aria-pressed="true" aria-label="Grid view">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1.2"/><rect x="14" y="3" width="7" height="7" rx="1.2"/><rect x="3" y="14" width="7" height="7" rx="1.2"/><rect x="14" y="14" width="7" height="7" rx="1.2"/></svg>
+                </button>
+                <button type="button" class="view-toggle-btn" id="viewListBtn" aria-pressed="false" aria-label="List view">
+                  <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <ul class="product-grid" id="catalogueGrid" aria-live="polite"></ul>
+
+          <div class="empty-state" id="catalogueEmpty" hidden>
+            <svg class="empty-illustration" viewBox="0 0 96 96" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
+              <path d="M48 14 18 34l30 48 30-48-30-20Z" />
+              <path d="M18 34h60M33 34 48 14l15 20M33 34l15 48M63 34 48 82" />
+            </svg>
+            <p class="empty-title">No gemstones found</p>
+            <p class="empty-sub">Try adjusting your filters or browse another collection.</p>
+            <button type="button" class="btn btn-secondary" id="emptyResetBtn">Reset Filters</button>
+          </div>
+
+          <nav class="pagination" id="paginationNav" aria-label="Catalogue pagination" hidden></nav>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================ CONSULTATION CTA ============================ -->
+    <section class="consult-band" id="consult">
+      <div class="shell consult-inner">
+        <div class="consult-copy">
+          <p class="consult-kicker">Not sure which stone is right for you?</p>
+          <h2 class="consult-title">Speak with a gem advisor before you buy.</h2>
+          <p class="consult-body">Share your birth details or your astrologer's recommendation. We will help you choose a certified stone that genuinely fits, with no pressure to purchase.</p>
+          <a class="btn btn-whatsapp" href="https://wa.me/91XXXXXXXXXX?text=Hi%20SoulStones%2C%20I%27d%20like%20guidance%20choosing%20a%20gemstone." target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.03.79.81-2.95-.2-.31A8.2 8.2 0 1 1 12 20.2Zm4.5-6.13c-.25-.13-1.46-.72-1.69-.8-.23-.08-.39-.13-.56.13-.16.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.71-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48a.93.93 0 0 0-.66.31c-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.66-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
+            Speak with us on WhatsApp
+          </a>
+          <p class="consult-hours">Advisors reply within a few hours, 7 days a week.</p>
+        </div>
+        <!-- PLACEHOLDER: replace with a real photo of an advisor / hand presenting a stone -->
+        <figure class="consult-portrait" aria-hidden="true">
+          <div class="portrait-slot">
+            <span class="portrait-tag">Advisor portrait</span>
+          </div>
+        </figure>
+      </div>
+    </section>
+
+  </main>
+
+ {% include 'footer.html' %}
+
+
+  <!-- ============================ CART DRAWER (reused structure, driven by main.js) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="#catalogueGrid" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">₹0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
+</svg>        Checkout 
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================ VIDEO DIALOG (reused structure for main.js compatibility; unused on this page) ============================ -->
+  <div class="video-overlay" id="videoOverlay" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-label="Customer story video" id="videoDialog" tabindex="-1">
+      <button class="video-close" id="videoClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="video-frame" id="videoFrame">
+        <p class="video-placeholder-msg">Video coming soon. Real customer stories will play here.</p>
+      </div>
+    </div>
+  </div>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
+  <script src="static/js/main.js" defer></script>
+  <!-- Django note: in templates, swap this src for {% static 'js/product.js' %} -->
+  <script src="static/js/product.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

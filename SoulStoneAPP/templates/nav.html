@@ -1,0 +1,76 @@
+<header class="site-header" id="siteHeader" data-elevated="false">
+
+  <!-- Announcement bar -->
+  <div class="announcement-bar" id="announcementBar">
+    <p class="announcement-text">✦ Free lab certification report included with every stone &nbsp;·&nbsp; Trusted by 12,400+ buyers across India</p>
+  </div>
+
+  <!-- Main nav row -->
+  <div class="shell header-inner">
+    <button class="nav-toggle" id="navToggle" aria-label="Open menu" aria-expanded="false" aria-controls="primaryNav">
+      <span></span><span></span><span></span>
+    </button>
+
+    <a class="wordmark" href="/" aria-label="SoulStones home">
+      <span class="wordmark-mark">Soul</span><span class="wordmark-mark wordmark-stones">Stones</span>
+    </a>
+
+    <nav class="primary-nav" id="primaryNav" aria-label="Primary">
+      <a class="nav-link" href="/">Home</a>
+
+      <div class="nav-item nav-item--has-dropdown">
+        <button class="nav-link nav-dropdown-btn" id="collectionsBtn" aria-expanded="false" aria-haspopup="true">
+          Collections
+          <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+        </button>
+        <div class="nav-dropdown-panel" id="collectionsPanel" aria-labelledby="collectionsBtn">
+          <a href="#categories" data-filter="Saturn">Blue Sapphire</a>
+          <a href="#categories" data-filter="Sun">Ruby</a>
+          <a href="#categories" data-filter="Mercury">Emerald</a>
+          <a href="#categories" data-filter="Jupiter">Yellow Sapphire</a>
+          <hr class="dropdown-divider" />
+          <a href="#top-styles" class="dropdown-all">All Stones &rarr;</a>
+        </div>
+      </div>
+
+      <a class="nav-link" href="#">Our Story</a>
+      <a class="nav-link" href="#consult">Contact</a>
+    </nav>
+
+    <div class="header-actions">
+      <!-- Search toggle -->
+      <button class="icon-btn" id="searchBtn" aria-label="Search" aria-expanded="false" aria-controls="searchBar">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+      </button>
+
+      <!-- Profile dropdown -->
+      <div class="nav-item nav-item--has-dropdown">
+        <button class="icon-btn" id="profileBtn" aria-label="My account" aria-expanded="false" aria-haspopup="true">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+        </button>
+        <div class="nav-dropdown-panel profile-panel" id="profilePanel" aria-labelledby="profileBtn">
+          <a href="#">My Orders</a>
+          <a href="#">Login / Sign up</a>
+        </div>
+      </div>
+
+      <!-- Cart -->
+      <button class="icon-btn cart-button" id="cartButton" aria-label="Open cart, 0 items">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M16 11V7a4 4 0 0 0-8 0v4"/><rect x="3" y="11" width="18" height="10" rx="2"/></svg>
+        <span class="cart-count" id="cartCount" data-empty="true">0</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Full-width search bar (shown when search is active) -->
+  <div class="search-bar" id="searchBar">
+    <div class="shell search-inner">
+      <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true" class="search-icon"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+      <input class="search-input" id="searchInput" type="search" placeholder="Search gemstones — Blue Sapphire, Ruby, Emerald…" autocomplete="off" aria-label="Search gemstones" />
+      <button class="icon-btn search-close-btn" id="searchCloseBtn" aria-label="Close search">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+  </div>
+
+</header>

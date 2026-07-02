@@ -1,0 +1,199 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SoulStones · Checkout</title>
+  <meta name="description" content="Review your order and shipping details to complete your purchase of certified natural gemstones." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <!-- Django note: in templates, swap this href for {% static 'css/checkout.css' %} -->
+  <link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+ {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ CHECKOUT ============================ -->
+    <section class="section checkout-section-wrap" aria-label="Checkout">
+      <div class="shell checkout-layout">
+
+        <!-- ============================ CHECKOUT FORM ============================ -->
+        <div class="checkout-form-col">
+          <h1 class="checkout-title">Checkout</h1>
+          <p class="checkout-lede">Complete your order by providing your shipping information and destination details for our artisans to prepare your delivery.</p>
+
+          <!-- Django note: replace fields/action with {{ form }} from a Django checkout form;
+               order_items / totals on the right stand in for {{ order.items }} / {{ order.totals }} -->
+          <form id="checkoutForm" novalidate>
+
+            <div class="checkout-divider"><span>Billing Information</span></div>
+            <div class="checkout-field-grid">
+              <div class="checkout-field checkout-field--full">
+                <label for="billingName">Full Name</label>
+                <input type="text" id="billingName" name="billingName" autocomplete="name" required />
+              </div>
+              <div class="checkout-field">
+                <label for="billingEmail">Email Address</label>
+                <input type="email" id="billingEmail" name="billingEmail" autocomplete="email" required />
+              </div>
+              <div class="checkout-field">
+                <label for="billingPhone">Phone Number</label>
+                <input type="tel" id="billingPhone" name="billingPhone" autocomplete="tel" required />
+              </div>
+            </div>
+
+            <div class="checkout-divider"><span>Shipping Information</span></div>
+            <div class="checkout-field-grid">
+              <div class="checkout-field checkout-field--full">
+                <label for="addressLine1">Address Line 1</label>
+                <input type="text" id="addressLine1" name="addressLine1" autocomplete="address-line1" required />
+              </div>
+              <div class="checkout-field checkout-field--full">
+                <label for="addressLine2">Address Line 2 <span class="checkout-optional">(Optional)</span></label>
+                <input type="text" id="addressLine2" name="addressLine2" autocomplete="address-line2" />
+              </div>
+              <div class="checkout-field">
+                <label for="city">City</label>
+                <input type="text" id="city" name="city" autocomplete="address-level2" required />
+              </div>
+              <div class="checkout-field">
+                <label for="state">State / Province</label>
+                <input type="text" id="state" name="state" autocomplete="address-level1" required />
+              </div>
+              <div class="checkout-field">
+                <label for="pinCode">PIN / ZIP Code</label>
+                <input type="text" id="pinCode" name="pinCode" inputmode="numeric" autocomplete="postal-code" required />
+              </div>
+              <div class="checkout-field">
+                <label for="country">Country</label>
+                <select id="country" name="country" autocomplete="country-name" required>
+                  <option value="India" selected>India</option>
+                </select>
+              </div>
+            </div>
+
+            <a href="order-successful.html" type="submit" class="btn btn-primary checkout-submit">Proceed to Payment</a>
+            <p class="checkout-form-msg" id="checkoutMsg" role="status" aria-live="polite"></p>
+          </form>
+        </div>
+        <!-- ============================ ORDER SUMMARY ============================ -->
+        <aside class="checkout-summary-col" aria-label="Order summary">
+          <div class="order-summary-card">
+            <h2 class="order-summary-title">Order Summary</h2>
+
+            <ul class="order-summary-items">
+              <li class="order-summary-item">
+                <img src="static/images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp" alt="Burmese Ruby" loading="lazy" />
+                <div class="order-summary-item-info">
+                  <span class="order-summary-item-name">Burmese Ruby</span>
+                  <span class="order-summary-item-meta">Qty: 1</span>
+                  <span class="order-summary-item-price">&#8377;62,000</span>
+                </div>
+              </li>
+              <li class="order-summary-item">
+                <img src="static/images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp" alt="Ceylon Blue Sapphire" loading="lazy" />
+                <div class="order-summary-item-info">
+                  <span class="order-summary-item-name">Ceylon Blue Sapphire</span>
+                  <span class="order-summary-item-meta">Qty: 1</span>
+                  <span class="order-summary-item-price">&#8377;48,000</span>
+                </div>
+              </li>
+            </ul>
+
+            <div class="order-totals">
+              <div class="order-total-row"><span>Subtotal</span><span>&#8377;1,10,000</span></div>
+              <div class="order-total-row"><span>Shipping</span><span class="order-total-complimentary">Complimentary</span></div>
+              <div class="order-total-row"><span>Tax (Calculated)</span><span>&#8377;3,300</span></div>
+              <div class="order-total-row order-total-row--grand"><span>Grand Total</span><span>&#8377;1,13,300</span></div>
+            </div>
+          </div>
+
+          <div class="checkout-trust-grid">
+            <div class="trust-mini-card">
+              <span class="trust-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg></span>
+              <span class="trust-mini-label">Secure Payment</span>
+            </div>
+            <div class="trust-mini-card">
+              <span class="trust-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 5h16v11H7l-3 3V5Z"/><path d="M8 10h8M8 13h5"/></svg></span>
+              <span class="trust-mini-label">Premium Packaging</span>
+            </div>
+            <div class="trust-mini-card">
+              <span class="trust-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg></span>
+              <span class="trust-mini-label">Certified Natural</span>
+            </div>
+            <div class="trust-mini-card">
+              <span class="trust-mini-icon" aria-hidden="true"><svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></span>
+              <span class="trust-mini-label">24/7 Support</span>
+            </div>
+          </div>
+        </aside>
+
+      </div>
+    </section>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+  <!-- ============================ CART DRAWER (reused structure, driven by main.js) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="product.html" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">₹0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+<svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+  <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
+</svg>        Checkout 
+      </a>
+    </div>
+  </aside>
+
+  <!-- ============================ VIDEO DIALOG (reused structure for main.js compatibility; unused on this page) ============================ -->
+  <div class="video-overlay" id="videoOverlay" hidden>
+    <div class="video-dialog" role="dialog" aria-modal="true" aria-label="Customer story video" id="videoDialog" tabindex="-1">
+      <button class="video-close" id="videoClose" aria-label="Close video">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <div class="video-frame" id="videoFrame">
+        <p class="video-placeholder-msg">Video coming soon. Real customer stories will play here.</p>
+      </div>
+    </div>
+  </div>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
+  <script src="static/js/main.js" defer></script>
+  <!-- Django note: in templates, swap this src for {% static 'js/checkout.js' %} -->
+  <script src="static/js/checkout.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>
