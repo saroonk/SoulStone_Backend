@@ -11,7 +11,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 
-  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  {% comment %} Django note: in templates, swap this href for {% static 'css/styles.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -71,19 +71,19 @@
 
         <div class="category-grid">
           <a class="cat-tile cat-tile--lead" href="#top-styles" data-filter="Saturn">
-            <span class="cat-media"><img src="static/images/Blue_Saphire.webp" alt="Loose blue sapphire, emerald cut, viewed from the front" loading="lazy" /></span>
+            <span class="cat-media"><img src="{% static 'images/Blue_Saphire.webp' %}" alt="Loose blue sapphire, emerald cut, viewed from the front" loading="lazy" /></span>
             <span class="cat-label"><span class="cat-name">Blue Sapphire</span><span class="cat-planet">Saturn · Neelam</span></span>
           </a>
           <a class="cat-tile" href="#top-styles" data-filter="Sun">
-            <span class="cat-media"><img src="static/images/Ruby.webp" alt="Loose ruby viewed from the front" loading="lazy" /></span>
+            <span class="cat-media"><img src="{% static 'images/Ruby.webp' %}" alt="Loose ruby viewed from the front" loading="lazy" /></span>
             <span class="cat-label"><span class="cat-name">Ruby</span><span class="cat-planet">Sun · Manik</span></span>
           </a>
           <a class="cat-tile" href="#top-styles" data-filter="Mercury">
-            <span class="cat-media"><img src="static/images/Emerald.jpg" alt="Loose emerald viewed from the front" loading="lazy" /></span>
+            <span class="cat-media"><img src="{% static 'images/Emerald.jpg' %}" alt="Loose emerald viewed from the front" loading="lazy" /></span>
             <span class="cat-label"><span class="cat-name">Emerald</span><span class="cat-planet">Mercury · Panna</span></span>
           </a>
           <a class="cat-tile" href="#top-styles" data-filter="Jupiter">
-            <span class="cat-media"><img src="static/images/Yellow-Sapphire-2-jpg.webp" alt="Loose yellow sapphire viewed from the front" loading="lazy" /></span>
+            <span class="cat-media"><img src="{% static 'images/Yellow-Sapphire-2-jpg.webp' %}" alt="Loose yellow sapphire viewed from the front" loading="lazy" /></span>
             <span class="cat-label"><span class="cat-name">Yellow Sapphire</span><span class="cat-planet">Jupiter · Pukhraj</span></span>
           </a>
         </div>
@@ -218,7 +218,7 @@
           <h2 class="section-title">Our promise</h2>
           <p class="section-lede">A gemstone is only as good as the trust behind it. Here is what we hold ourselves to, on every single order.</p>
           <figure class="promise-figure">
-            <img src="static/images/GM09798_BACK_10d467d5-6723-43aa-9e1c-6b73714b4a69.webp" alt="A natural gemstone photographed in close detail" loading="lazy" />
+            <img src="{% static 'images/GM09798_BACK_10d467d5-6723-43aa-9e1c-6b73714b4a69.webp' %}" alt="A natural gemstone photographed in close detail" loading="lazy" />
           </figure>
         </div>
         <ul class="promise-list">
@@ -317,7 +317,7 @@
         <span id="drawerSubtotal">₹0</span>
       </div>
       <p class="drawer-note">Click checkout and confirm your order</p>
-      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+      <a class="btn btn-whatsapp btn-block" id="" href="{% url 'checkout' %}" target="_blank" rel="noopener">
 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
   <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
 </svg>        Checkout 
@@ -340,8 +340,8 @@
 
   <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
 
-  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
-  <script src="static/js/main.js" defer></script>
+  {% comment %} Django note: in templates, swap this src for {% static 'js/main.js' %} {% endcomment %}
+  <script src="{% static 'js/main.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

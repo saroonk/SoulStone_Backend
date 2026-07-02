@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,10 +11,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 
-  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
-  <link rel="stylesheet" href="static/css/styles.css" />
-  <!-- Django note: in templates, swap this href for {% static 'css/login.css' %} -->
-  <link rel="stylesheet" href="static/css/login.css" />
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body class="auth-body">
@@ -28,7 +27,7 @@
       <div class="auth-brand-overlay" aria-hidden="true"></div>
 
       <div class="auth-brand-inner">
-        <a class="wordmark auth-brand-logo" href="index.html" aria-label="SoulStones home">
+        <a class="wordmark auth-brand-logo" href="{% url 'index' %}" aria-label="SoulStones home">
           <span class="wordmark-mark">Soul</span><span class="wordmark-mark wordmark-stones">Stones</span>
         </a>
 
@@ -52,7 +51,7 @@
         <div class="auth-form-stage" id="authStage">
 
           <!-- ============================ LOGIN FORM ============================ -->
-          <!-- Django note: replace fields/action with {{ form }} from a Django AuthenticationForm -->
+          {% comment %} Django note: replace fields/action with {{ form }} from a Django AuthenticationForm {% endcomment %}
           <form class="auth-form is-active" id="loginForm" novalidate aria-labelledby="loginHeading">
             <h2 class="auth-form-title" id="loginHeading">Welcome Back</h2>
             <p class="auth-form-sub">Sign in to continue exploring SoulStones.</p>
@@ -90,7 +89,7 @@
           </form>
 
           <!-- ============================ REGISTER FORM ============================ -->
-          <!-- Django note: replace fields/action with {{ form }} from a Django UserCreationForm -->
+          {% comment %} Django note: replace fields/action with {{ form }} from a Django UserCreationForm {% endcomment %}
           <form class="auth-form" id="registerForm" novalidate aria-labelledby="registerHeading" hidden>
             <h2 class="auth-form-title" id="registerHeading">Create Your Account</h2>
             <p class="auth-form-sub">Join SoulStones and discover certified natural gemstones.</p>
@@ -134,8 +133,7 @@
 
   </main>
 
-  <!-- Django note: in templates, swap this src for {% static 'js/login.js' %} -->
-  <script src="static/js/login.js" defer></script>
+  <script src="{% static 'js/login.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

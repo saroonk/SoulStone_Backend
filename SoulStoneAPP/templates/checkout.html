@@ -11,9 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 
-  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  {% comment %} Django note: in templates, swap this href for {% static 'css/styles.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  <!-- Django note: in templates, swap this href for {% static 'css/checkout.css' %} -->
+  {% comment %} Django note: in templates, swap this href for {% static 'css/checkout.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/checkout.css' %}" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -33,8 +33,8 @@
           <h1 class="checkout-title">Checkout</h1>
           <p class="checkout-lede">Complete your order by providing your shipping information and destination details for our artisans to prepare your delivery.</p>
 
-          <!-- Django note: replace fields/action with {{ form }} from a Django checkout form;
-               order_items / totals on the right stand in for {{ order.items }} / {{ order.totals }} -->
+          {% comment %} Django note: replace fields/action with {{ form }} from a Django checkout form;
+               order_items / totals on the right stand in for {{ order.items }} / {{ order.totals }} {% endcomment %}
           <form id="checkoutForm" novalidate>
 
             <div class="checkout-divider"><span>Billing Information</span></div>
@@ -83,7 +83,7 @@
               </div>
             </div>
 
-            <a href="order-successful.html" type="submit" class="btn btn-primary checkout-submit">Proceed to Payment</a>
+            <a href="{% url 'order_successful' %}" type="submit" class="btn btn-primary checkout-submit">Proceed to Payment</a>
             <p class="checkout-form-msg" id="checkoutMsg" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -94,7 +94,7 @@
 
             <ul class="order-summary-items">
               <li class="order-summary-item">
-                <img src="static/images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp" alt="Burmese Ruby" loading="lazy" />
+                <img src="{% static 'images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp' %}" alt="Burmese Ruby" loading="lazy" />
                 <div class="order-summary-item-info">
                   <span class="order-summary-item-name">Burmese Ruby</span>
                   <span class="order-summary-item-meta">Qty: 1</span>
@@ -102,7 +102,7 @@
                 </div>
               </li>
               <li class="order-summary-item">
-                <img src="static/images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp" alt="Ceylon Blue Sapphire" loading="lazy" />
+                <img src="{% static 'images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp' %}" alt="Ceylon Blue Sapphire" loading="lazy" />
                 <div class="order-summary-item-info">
                   <span class="order-summary-item-name">Ceylon Blue Sapphire</span>
                   <span class="order-summary-item-meta">Qty: 1</span>
@@ -159,7 +159,7 @@
     <div class="drawer-empty" id="drawerEmpty">
       <p class="drawer-empty-title">Nothing chosen yet.</p>
       <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
-      <a class="btn btn-secondary" href="product.html" data-close-drawer>Browse gemstones</a>
+      <a class="btn btn-secondary" href="{% url 'products' %}" data-close-drawer>Browse gemstones</a>
     </div>
     <div class="drawer-foot" id="drawerFoot" hidden>
       <div class="drawer-subtotal">
@@ -167,7 +167,7 @@
         <span id="drawerSubtotal">₹0</span>
       </div>
       <p class="drawer-note">Click checkout and confirm your order</p>
-      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+      <a class="btn btn-whatsapp btn-block" id="" href="{% url 'checkout' %}" target="_blank" rel="noopener">
 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
   <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
 </svg>        Checkout 
@@ -189,10 +189,8 @@
 
   <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
 
-  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
-  <script src="static/js/main.js" defer></script>
-  <!-- Django note: in templates, swap this src for {% static 'js/checkout.js' %} -->
-  <script src="static/js/checkout.js" defer></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="{% static 'js/checkout.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

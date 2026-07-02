@@ -11,9 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 
-  <!-- Django note: in templates, swap this href for {% static 'css/styles.css' %} -->
+  {% comment %} Django note: in templates, swap this href for {% static 'css/styles.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  <!-- Django note: in templates, swap this href for {% static 'css/product-detail.css' %} -->
+  {% comment %} Django note: in templates, swap this href for {% static 'css/product-detail.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/product-detail.css' %}" />
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -25,15 +25,15 @@
   <main id="main">
 
     <!-- ============================ BREADCRUMB ============================ -->
-    <!-- Django note: each crumb / the leaf label would come from product/category context -->
+    {% comment %} Django note: each crumb / the leaf label would come from product/category context {% endcomment %}
     <nav class="pd-breadcrumb-nav" aria-label="Breadcrumb">
       <div class="shell">
         <ol class="pd-breadcrumb-list">
-          <li><a href="index.html">Home</a></li>
+          <li><a href="{% url 'index' %}">Home</a></li>
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
-          <li><a href="product.html">Collections</a></li>
+          <li><a href="{% url 'products' %}">Collections</a></li>
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
-          <li><a href="product.html?category=Ruby">Ruby</a></li>
+          <li><a href="{% url 'products' %}?category=Ruby">Ruby</a></li>
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
           <li aria-current="page">Burmese Ruby</li>
         </ol>
@@ -47,11 +47,11 @@
         <!-- Gallery -->
         <div class="pd-gallery">
           <div class="pd-gallery-main">
-            <img id="pdMainImage" src="static/images/Ruby.webp" alt="Burmese Ruby, 4.1 carat loose natural ruby, front view" />
+            <img id="pdMainImage" src="{% static 'images/Ruby.webp' %}" alt="Burmese Ruby, 4.1 carat loose natural ruby, front view" />
           </div>
           <div class="pd-thumbs" id="pdThumbs" role="group" aria-label="Product images">
-            <button type="button" class="pd-thumb is-active" data-full="static/images/Ruby.webp" data-alt="Burmese Ruby, front view" aria-current="true" aria-label="Image 1 of 6">
-              <img src="static/images/Ruby.webp" alt="" loading="lazy" />
+            <button type="button" class="pd-thumb is-active" data-full="{% static 'images/Ruby.webp' %}" data-alt="Burmese Ruby, front view" aria-current="true" aria-label="Image 1 of 6">
+              <img src="{% static 'images/Ruby.webp' %}" alt="" loading="lazy" />
             </button>
             <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/32700204/pexels-photo-32700204.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Burmese Ruby held with gemmological tweezers under studio light" aria-label="Image 2 of 6">
               <img src="https://images.pexels.com/photos/32700204/pexels-photo-32700204.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
@@ -123,9 +123,9 @@
     </section>
 
     <!-- ============================ GEMSTONE INFORMATION TABS ============================ -->
-    <!-- Django note: each panel's inner .pd-richtext markup is a stand-in for
+    {% comment %} Django note: each panel's inner .pd-richtext markup is a stand-in for
          CKEditor-generated HTML (product.description_html / .certification_html
-         / .origin_html). Keep these panels as plain rich-text containers. -->
+         / .origin_html). Keep these panels as plain rich-text containers. {% endcomment %}
     <section class="section pd-tabs-section" aria-label="Gemstone information">
       <div class="shell">
         <div class="pd-tabs" role="tablist" aria-label="Gemstone information">
@@ -282,7 +282,7 @@
     <div class="drawer-empty" id="drawerEmpty">
       <p class="drawer-empty-title">Nothing chosen yet.</p>
       <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
-      <a class="btn btn-secondary" href="product.html" data-close-drawer>Browse gemstones</a>
+      <a class="btn btn-secondary" href="{% url 'products' %}" data-close-drawer>Browse gemstones</a>
     </div>
     <div class="drawer-foot" id="drawerFoot" hidden>
       <div class="drawer-subtotal">
@@ -290,7 +290,7 @@
         <span id="drawerSubtotal">₹0</span>
       </div>
       <p class="drawer-note">Click checkout and confirm your order</p>
-      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+      <a class="btn btn-whatsapp btn-block" id="" href="{% url 'checkout' %}" target="_blank" rel="noopener">
 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
   <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
 </svg>        Checkout 
@@ -312,10 +312,8 @@
 
   <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
 
-  <!-- Django note: in templates, swap this src for {% static 'js/main.js' %} -->
-  <script src="static/js/main.js" defer></script>
-  <!-- Django note: in templates, swap this src for {% static 'js/product-detail.js' %} -->
-  <script src="static/js/product-detail.js" defer></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="{% static 'js/product-detail.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

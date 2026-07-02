@@ -11,11 +11,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 
-  <!-- Django note: {% static 'css/styles.css' %} -->
+  {% comment %} Django note: {% static 'css/styles.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  <!-- Django note: {% static 'css/my-orders.css' %} — provides .mo-* accordion styles -->
+  {% comment %} Django note: {% static 'css/my-orders.css' %} — provides .mo-* accordion styles {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/my-orders.css' %}" />
-  <!-- Django note: {% static 'css/track-order.css' %} -->
+  {% comment %} Django note: {% static 'css/track-order.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/track-order.css' %}" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -33,11 +33,11 @@
         <div class="to-hero-content">
           <!-- Script accent — One Script Rule: Cormorant Garamond italic, once per page -->
           <p class="to-hero-script" aria-hidden="true">your gemstone journey</p>
-          <!-- Django note: static heading — no dynamic data needed here -->
+          {% comment %} Django note: static heading — no dynamic data needed here {% endcomment %}
           <h1 class="to-hero-title">Track Your Order</h1>
           <p class="to-hero-lede">Enter the email address used during checkout to view your order status and delivery updates.</p>
 
-          <!-- Django note: action="{% url 'track_order' %}" method="post" + {% csrf_token %} -->
+          {% comment %} Django note: action="{% url 'track_order' %}" method="post" + {% csrf_token %} {% endcomment %}
           <form class="to-hero-form" id="toForm" novalidate aria-label="Order lookup form">
             <div class="to-hero-pill">
               <svg class="to-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
@@ -66,17 +66,17 @@
     </section>
 
     <!-- ============================ RESULTS (shown by JS) ============================ -->
-    <!-- Django note: {% if orders %} render this block; server-side, no JS needed -->
+    {% comment %} Django note: {% if orders %} render this block; server-side, no JS needed {% endcomment %}
     <div id="toResults" class="to-results-outer" hidden>
       <div class="shell">
         <h2 class="to-results-heading">Your Orders</h2>
 
         <div class="mo-orders-list" aria-label="Your orders">
 
-          <!-- ================================================
+          {% comment %} ================================================
                ORDER 1 — Processing
                Django note: {{ order.id }}, {{ order.date }}, {{ order.total }}, {{ order.status }}
-               ================================================ -->
+               ================================================ {% endcomment %}
           <article class="mo-order-card" aria-label="Order #SS102458">
             <details class="mo-order-item">
               <summary class="mo-order-header">
@@ -96,31 +96,31 @@
               <div class="mo-order-body">
 
                 <h3 class="mo-section-label">Order Summary</h3>
-                <!-- Django note: {% for item in order.items.all %} -->
+                {% comment %} Django note: {% for item in order.items.all %} {% endcomment %}
                 <ul class="mo-product-list">
                   <li class="mo-product-item">
                     <img
-                      src="static/images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp"
+                      src="{% static 'images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp' %}"
                       alt="Burmese Ruby"
                       width="64" height="64"
                       loading="lazy"
                     />
                     <div class="mo-product-info">
-                      <!-- Django note: {{ item.product.name }} -->
+                      {% comment %} Django note: {{ item.product.name }} {% endcomment %}
                       <span class="mo-product-name">Burmese Ruby</span>
-                      <!-- Django note: {{ item.product.weight }} · {{ item.product.treatment }} -->
+                      {% comment %} Django note: {{ item.product.weight }} · {{ item.product.treatment }} {% endcomment %}
                       <span class="mo-product-detail">5.25 Carat &middot; Unheated</span>
-                      <!-- Django note: Qty: {{ item.quantity }} -->
+                      {% comment %} Django note: Qty: {{ item.quantity }} {% endcomment %}
                       <span class="mo-product-qty">Qty: 1</span>
                     </div>
-                    <!-- Django note: {{ item.price|intcomma }} -->
+                    {% comment %} Django note: {{ item.price|intcomma }} {% endcomment %}
                     <span class="mo-product-price">&#8377;62,000</span>
                   </li>
                 </ul>
-                <!-- Django note: {% endfor %} -->
+                {% comment %} Django note: {% endfor %} {% endcomment %}
 
                 <h3 class="mo-section-label" style="margin-top: 28px;">Order Details</h3>
-                <!-- Django note: {{ order.shipping_address }}, {{ order.payment_method }}, etc. -->
+                {% comment %} Django note: {{ order.shipping_address }}, {{ order.payment_method }}, etc. {% endcomment %}
                 <div class="mo-details-grid">
                   <div class="mo-detail-item">
                     <span class="mo-detail-label">Shipping Address</span>
@@ -141,9 +141,9 @@
                 </div>
 
                 <div class="mo-order-actions">
-                  <!-- Django note: href="{% url 'order_detail' order.id %}" -->
+                  {% comment %} Django note: href="{% url 'order_detail' order.id %}" {% endcomment %}
                   <a class="btn btn-primary" href="#">View Order Details</a>
-                  <a class="btn btn-secondary" href="product.html">Continue Shopping</a>
+                  <a class="btn btn-secondary" href="{% url 'products' %}">Continue Shopping</a>
                 </div>
 
               </div>
@@ -175,7 +175,7 @@
                 <ul class="mo-product-list">
                   <li class="mo-product-item">
                     <img
-                      src="static/images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp"
+                      src="{% static 'images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp' %}"
                       alt="Ceylon Blue Sapphire"
                       width="64" height="64"
                       loading="lazy"
@@ -211,7 +211,7 @@
 
                 <div class="mo-order-actions">
                   <a class="btn btn-primary" href="#">View Order Details</a>
-                  <a class="btn btn-secondary" href="product.html">Continue Shopping</a>
+                  <a class="btn btn-secondary" href="{% url 'products' %}">Continue Shopping</a>
                 </div>
 
               </div>
@@ -243,7 +243,7 @@
                 <ul class="mo-product-list">
                   <li class="mo-product-item">
                     <img
-                      src="static/images/Emerald.jpg"
+                      src="{% static 'images/Emerald.jpg' %}"
                       alt="Columbian Emerald"
                       width="64" height="64"
                       loading="lazy"
@@ -279,7 +279,7 @@
 
                 <div class="mo-order-actions">
                   <a class="btn btn-primary" href="#">View Order Details</a>
-                  <a class="btn btn-secondary" href="product.html">Continue Shopping</a>
+                  <a class="btn btn-secondary" href="{% url 'products' %}">Continue Shopping</a>
                 </div>
 
               </div>
@@ -289,10 +289,10 @@
         </div>
       </div>
     </div>
-    <!-- Django note: {% endif %} -->
+    {% comment %} Django note: {% endif %} {% endcomment %}
 
     <!-- ============================ EMPTY STATE (shown by JS) ============================ -->
-    <!-- Django note: {% if not orders %} render this block -->
+    {% comment %} Django note: {% if not orders %} render this block {% endcomment %}
     <div id="toEmpty" class="to-empty-outer" hidden>
       <div class="shell">
         <div class="to-empty">
@@ -306,11 +306,11 @@
           </div>
           <h2 class="to-empty-title">No Orders Found</h2>
           <p class="to-empty-desc">We couldn&rsquo;t find any orders linked to that email address. Please check the address and try again.</p>
-          <a class="btn btn-primary" href="product.html">Browse Gemstones</a>
+          <a class="btn btn-primary" href="{% url 'products' %}">Browse Gemstones</a>
         </div>
       </div>
     </div>
-    <!-- Django note: {% endif %} -->
+    {% comment %} Django note: {% endif %} {% endcomment %}
 
   </main>
 
@@ -338,7 +338,7 @@
         <span id="drawerSubtotal">₹0</span>
       </div>
       <p class="drawer-note">Click checkout and confirm your order</p>
-      <a class="btn btn-whatsapp btn-block" id="" href="checkout.html" target="_blank" rel="noopener">
+      <a class="btn btn-whatsapp btn-block" id="" href="{% url 'checkout' %}" target="_blank" rel="noopener">
 <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
   <path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/>
 </svg>        Checkout 
@@ -372,10 +372,8 @@
 
   <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
 
-  <!-- Django note: {% static 'js/main.js' %} -->
-  <script src="static/js/main.js" defer></script>
-  <!-- Django note: {% static 'js/track-order.js' %} — remove when handling lookup server-side -->
-  <script src="static/js/track-order.js" defer></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="{% static 'js/track-order.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwxZxFDsf4x0xIM+B07jRMkzPo0GkRvVt5FejpJ7Y7hMsKhZT4hW" crossorigin="anonymous"></script>
 
 </body>

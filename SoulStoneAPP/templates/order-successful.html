@@ -11,9 +11,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
 
-  <!-- Django note: {% static 'css/styles.css' %} -->
+  {% comment %} Django note: {% static 'css/styles.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
-  <!-- Django note: {% static 'css/order-successful.css' %} -->
+  {% comment %} Django note: {% static 'css/order-successful.css' %} {% endcomment %}
   <link rel="stylesheet" href="{% static 'css/order-successful.css' %}" />
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
 
@@ -29,8 +29,8 @@
     <section class="section os-section" aria-label="Order confirmed">
       <div class="shell os-shell">
 
-        <!-- Django note: order context vars: {{ order.number }}, {{ order.customer_name }},
-             {{ order.payment_status }}, {{ order.estimated_delivery }} -->
+        {% comment %} Django note: order context vars: {{ order.number }}, {{ order.customer_name }},
+             {{ order.payment_status }}, {{ order.estimated_delivery }} {% endcomment %}
         <div class="os-card">
 
           <!-- Animated success icon (CSS-only, respects prefers-reduced-motion) -->
@@ -49,14 +49,14 @@
           <p class="os-script" aria-hidden="true">with care &amp; certainty</p>
 
           <!-- Headline (Gloock 400) -->
-          <!-- Django note: optionally "Thank you, {{ order.customer_name|first_name }}" -->
+          {% comment %} Django note: optionally "Thank you, {{ order.customer_name|first_name }}" {% endcomment %}
           <h1 class="os-headline">Order Successfully Placed</h1>
 
           <!-- Reassurance message -->
           <p class="os-message">Your order has been successfully placed. Thank you for choosing SoulStones. We&rsquo;re preparing your certified gemstone with the utmost care and will keep you updated throughout your order journey.</p>
 
           <!-- Confirmation details -->
-          <!-- Django note: replace each dd value with {{ order.number }}, {{ order.estimated_delivery }}, {{ order.payment_status }} -->
+          {% comment %} Django note: replace each dd value with {{ order.number }}, {{ order.estimated_delivery }}, {{ order.payment_status }} {% endcomment %}
           <dl class="os-confirm-box">
             <div class="os-confirm-item">
               <dt class="os-confirm-label">Order Number</dt>
@@ -76,9 +76,8 @@
 
           <!-- Action buttons — stacked on mobile via CSS -->
           <div class="os-actions">
-            <a class="btn btn-primary" href="product.html">Continue Browsing</a>
-            <!-- Django note: href="{% url 'order_status' order.number %}" -->
-            <a class="btn btn-secondary" href="my-orders.html">View Order Status</a>
+            <a class="btn btn-primary" href="{% url 'products' %}">Continue Browsing</a>
+            <a class="btn btn-secondary" href="{% url 'my_orders' %}">View Order Status</a>
           </div>
 
         </div>
@@ -102,7 +101,7 @@
     <div class="drawer-empty" id="drawerEmpty">
       <p class="drawer-empty-title">Nothing chosen yet.</p>
       <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
-      <a class="btn btn-secondary" href="product.html" data-close-drawer>Browse gemstones</a>
+      <a class="btn btn-secondary" href="{% url 'products' %}" data-close-drawer>Browse gemstones</a>
     </div>
     <div class="drawer-foot" id="drawerFoot" hidden>
       <div class="drawer-subtotal">
@@ -110,7 +109,7 @@
         <span id="drawerSubtotal">&#8377;0</span>
       </div>
       <p class="drawer-note">Click checkout and confirm your order</p>
-      <a class="btn btn-whatsapp btn-block" href="checkout.html" rel="noopener">
+      <a class="btn btn-whatsapp btn-block" href="{% url 'checkout' %}" rel="noopener">
         <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/></svg>
         Checkout
       </a>
@@ -131,8 +130,7 @@
 
   <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
 
-  <!-- Django note: {% static 'js/main.js' %} -->
-  <script src="static/js/main.js" defer></script>
+  <script src="{% static 'js/main.js' %}" defer></script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 
