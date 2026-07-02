@@ -51,22 +51,36 @@
               <h2 class="form-title">Send us a message</h2>
               <p class="form-lede">Fill in your details and one of our gem advisors will reach out to you personally.</p>
 
-              <form id="contactForm" novalidate>
+              {% if messages %}
+                {% for message in messages %}
+                  {% if message.tags == 'success' %}
+                    <div role="status" aria-live="polite" style="margin: 0 0 20px; padding: 12px 16px; border-radius: 8px; font-size: 0.875rem; text-align: center; color: var(--gold-deep); background: rgba(255, 221, 142, 0.684);">{{ message }}</div>
+                  {% else %}
+                    <div role="status" aria-live="polite" style="margin: 0 0 20px; padding: 12px 16px; border-radius: 8px; font-size: 0.875rem; text-align: center; color: #E6A9A9; background: rgba(230,169,169,0.12);">{{ message }}</div>
+                  {% endif %}
+                {% endfor %}
+              {% endif %}
+
+              <form id="contactForm" method="POST" action="{% url 'contact' %}" novalidate>
+                {% csrf_token %}
                 <div class="row g-3">
 
                   <div class="col-md-6">
                     <label class="form-label" for="fullName">Full Name</label>
                     <input type="text" class="form-control" id="fullName" name="fullName" placeholder="Your full name" autocomplete="name" required />
+                    {% if form.fullName.errors %}<div style="color:#E6A9A9;font-size:0.8125rem;margin-top:6px;">{{ form.fullName.errors.0 }}</div>{% endif %}
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label" for="emailAddress">Email Address</label>
                     <input type="email" class="form-control" id="emailAddress" name="emailAddress" placeholder="you@example.com" autocomplete="email" required />
+                    {% if form.emailAddress.errors %}<div style="color:#E6A9A9;font-size:0.8125rem;margin-top:6px;">{{ form.emailAddress.errors.0 }}</div>{% endif %}
                   </div>
 
                   <div class="col-md-6">
                     <label class="form-label" for="phoneNumber">Phone Number</label>
                     <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" placeholder="+91 98765 43210" autocomplete="tel" />
+                    {% if form.phoneNumber.errors %}<div style="color:#E6A9A9;font-size:0.8125rem;margin-top:6px;">{{ form.phoneNumber.errors.0 }}</div>{% endif %}
                   </div>
 
                   <div class="col-md-6">
@@ -79,11 +93,13 @@
                       <option value="wholesale">Wholesale enquiry</option>
                       <option value="other">Other</option>
                     </select>
+                    {% if form.subject.errors %}<div style="color:#E6A9A9;font-size:0.8125rem;margin-top:6px;">{{ form.subject.errors.0 }}</div>{% endif %}
                   </div>
 
                   <div class="col-12">
                     <label class="form-label" for="message">Message</label>
                     <textarea class="form-control" id="message" name="message" rows="5" placeholder="Tell us what you need help with…" required></textarea>
+                    {% if form.message.errors %}<div style="color:#E6A9A9;font-size:0.8125rem;margin-top:6px;">{{ form.message.errors.0 }}</div>{% endif %}
                   </div>
 
                   <div class="col-12">
