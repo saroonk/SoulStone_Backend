@@ -28,8 +28,6 @@
     { id: "manik2",  name: "Old Mine Ruby",        stone: "Manik",    planet: "Sun",     carat: 2.9, price: 44000, img: "GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp", isNew: false }
   ];
 
-  var PLANET_ORDER = ["All", "Sun", "Moon", "Mars", "Mercury", "Jupiter", "Venus", "Saturn", "Rahu", "Ketu"];
-
   var REVIEWS = [
     { stars: 5, quote: "The certificate matched the stone exactly. First time I have trusted an online gem seller.", author: "Ananya R.", stone: "Blue Sapphire" },
     { stars: 5, quote: "An advisor talked me through carat and quality on WhatsApp for twenty minutes. No pressure at all.", author: "Vikram S.", stone: "Yellow Sapphire" },
@@ -48,6 +46,7 @@
 
   /* ---------------------------- Helpers ---------------------------- */
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
   function el(tag, cls, html) {
     var n = document.createElement(tag);
     if (cls) n.className = cls;
@@ -57,28 +56,6 @@
   function inr(n) { return "₹" + n.toLocaleString("en-IN"); }
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var WA_ICON = '<svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Z"/></svg>';
-
-  /* ---------------------------- Product card ---------------------------- */
-  function productCard(p) {
-    var li = el("li");
-    var badge = p.isNew ? '<span class="badge-new">New</span>' : "";
-    li.innerHTML =
-      '<article class="product-card">' +
-        '<a class="product-media" href="#consult" aria-label="View ' + p.name + '">' + badge +
-          '<img src="' + IMG + p.img + '" alt="' + p.name + ', ' + p.carat + ' carat loose ' + p.stone + '" loading="lazy" />' +
-        '</a>' +
-        '<div class="product-body">' +
-          '<span class="product-planet">' + p.planet + '</span>' +
-          '<span class="product-name">' + p.name + '</span>' +
-          '<span class="product-meta">' + p.stone + ' · ' + p.carat.toFixed(1) + ' ct · certified</span>' +
-          '<div class="product-foot">' +
-            '<span class="product-price">' + inr(p.price) + '</span>' +
-            '<button class="add-btn" type="button" data-add="' + p.id + '">Add</button>' +
-          '</div>' +
-        '</div>' +
-      '</article>';
-    return li;
-  }
 
   /* ---------------------------- New arrivals rail ---------------------------- */
   // Card markup for this rail is now server-rendered by Django (see index.html /
@@ -101,66 +78,57 @@
     update();
   }
 
-  /* ---------------------------- Filters + grid ---------------------------- */
-  var activePlanet = "All";
+  /* ---------------------------- Filters + grid (Collections section) ---------------------------- */
+  // Category chips and product cards here are server-rendered by Django
+  // (see index.html / product_card.html) with data-category / data-featured /
+  // data-created / data-price attributes. This just filters and reorders
+  // those existing DOM nodes in place, so switching a tab or the sort
+  // order never reloads the page.
+  var activeCategory = "all";
   var activeSort = "featured";
 
-  function renderChips() {
+  function bindChips() {
     var wrap = $("#planetChips");
     if (!wrap) return;
-    var present = PRODUCTS.reduce(function (acc, p) { acc[p.planet] = true; return acc; }, {});
-    PLANET_ORDER.filter(function (pl) { return pl === "All" || present[pl]; }).forEach(function (pl) {
-      var b = el("button", "chip", pl);
-      b.type = "button";
-      b.setAttribute("aria-pressed", pl === activePlanet ? "true" : "false");
-      b.dataset.planet = pl;
-      b.addEventListener("click", function () {
-        activePlanet = pl;
-        wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", c.dataset.planet === pl ? "true" : "false"); });
+    $$(".chip", wrap).forEach(function (chip) {
+      chip.addEventListener("click", function () {
+        activeCategory = chip.dataset.category;
+        $$(".chip", wrap).forEach(function (c) { c.setAttribute("aria-pressed", c === chip ? "true" : "false"); });
         renderGrid();
       });
-      wrap.appendChild(b);
     });
   }
 
-  function sortList(list) {
-    var l = list.slice();
-    if (activeSort === "price-asc") l.sort(function (a, b) { return a.price - b.price; });
-    else if (activeSort === "price-desc") l.sort(function (a, b) { return b.price - a.price; });
-    else if (activeSort === "carat-desc") l.sort(function (a, b) { return b.carat - a.carat; });
-    return l;
+  function sortCards(cards) {
+    var list = cards.slice();
+    if (activeSort === "price-asc") list.sort(function (a, b) { return Number(a.dataset.price) - Number(b.dataset.price); });
+    else if (activeSort === "price-desc") list.sort(function (a, b) { return Number(b.dataset.price) - Number(a.dataset.price); });
+    else if (activeSort === "newest") list.sort(function (a, b) { return Number(b.dataset.created) - Number(a.dataset.created); });
+    else if (activeSort === "oldest") list.sort(function (a, b) { return Number(a.dataset.created) - Number(b.dataset.created); });
+    else if (activeSort === "featured") list.sort(function (a, b) { return Number(b.dataset.featured) - Number(a.dataset.featured); });
+    return list;
   }
 
   function renderGrid() {
     var grid = $("#productGrid"), empty = $("#emptyState");
     if (!grid) return;
-    var list = PRODUCTS.filter(function (p) { return activePlanet === "All" || p.planet === activePlanet; });
-    list = sortList(list);
-    grid.innerHTML = "";
-    if (!list.length) {
-      grid.hidden = true; empty.hidden = false; return;
-    }
-    grid.hidden = false; empty.hidden = true;
-    list.forEach(function (p) { grid.appendChild(productCard(p)); });
+    var cards = $$("li[data-category]", grid);
+    var visible = cards.filter(function (li) { return activeCategory === "all" || li.dataset.category === activeCategory; });
+    var toHide = cards.filter(function (li) { return visible.indexOf(li) === -1; });
+
+    toHide.forEach(function (li) { li.hidden = true; });
+    sortCards(visible).forEach(function (li) {
+      li.hidden = false;
+      grid.appendChild(li);
+    });
+
+    grid.hidden = !visible.length;
+    if (empty) empty.hidden = !!visible.length;
   }
 
   function bindSort() {
     var sel = $("#sortSelect");
     if (sel) sel.addEventListener("change", function () { activeSort = sel.value; renderGrid(); });
-  }
-
-  // Category tiles deep-link into a filter
-  function bindCategoryFilters() {
-    document.querySelectorAll("[data-filter]").forEach(function (a) {
-      a.addEventListener("click", function () {
-        var pl = a.dataset.filter;
-        if (PLANET_ORDER.indexOf(pl) === -1) return;
-        activePlanet = pl;
-        var wrap = $("#planetChips");
-        if (wrap) wrap.querySelectorAll(".chip").forEach(function (c) { c.setAttribute("aria-pressed", c.dataset.planet === pl ? "true" : "false"); });
-        renderGrid();
-      });
-    });
   }
 
   /* ---------------------------- Reviews ---------------------------- */
@@ -517,7 +485,7 @@
   /* ---------------------------- Init ---------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
     var yr = $("#year"); if (yr) yr.textContent = new Date().getFullYear();
-    renderChips();
+    bindChips();
     renderGrid();
     renderRail();
     renderReviews();
@@ -525,7 +493,6 @@
     renderDrawer();
     updateCartBadge(false);
     bindSort();
-    bindCategoryFilters();
     bindHeaderScroll();
     bindMobileNav();
     bindDropdowns();

@@ -58,7 +58,15 @@ def send_contact_email(form_data):
 
 def index(request):
     latest_products = Product.objects.filter(is_active=True).order_by('-created_at')[:12]
-    return render(request, 'index.html', {'latest_products': latest_products})
+    collection_products = (
+        Product.objects.filter(is_active=True)
+        .select_related('category')
+        .order_by('?')
+    )
+    return render(request, 'index.html', {
+        'latest_products': latest_products,
+        'collection_products': collection_products,
+    })
 
 
 def login(request):

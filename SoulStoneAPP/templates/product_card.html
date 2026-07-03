@@ -1,9 +1,11 @@
 {% comment %}
 Shared product card, used on the homepage "Just arrived" rail, the
-catalogue grid, and the "You May Also Like" related products rail.
-Expects a `product` variable in context.
+homepage "Collections" grid, the catalogue grid, and the "You May Also
+Like" related products rail. Expects a `product` variable in context.
+The data-* attributes are read by the homepage Collections section's
+client-side category filter/sort (main.js); they add no visible markup.
 {% endcomment %}
-<li>
+<li data-category="{{ product.category.slug }}" data-featured="{% if product.is_featured %}1{% else %}0{% endif %}" data-created="{{ product.created_at|date:'U' }}" data-price="{{ product.new_price }}">
   <article class="product-card{% if not product.in_stock %} out-of-stock{% endif %}">
     <a class="product-media" href="{% url 'product_detail' product.slug %}" aria-label="View {{ product.name }}">
       {% if product.is_new %}<span class="badge-new">New</span>{% endif %}

@@ -142,19 +142,29 @@
         </header>
 
         <div class="filter-bar">
-          <div class="chips" id="planetChips" role="group" aria-label="Filter by planet"></div>
+          <div class="chips" id="planetChips" role="group" aria-label="Filter by category">
+            <button type="button" class="chip" data-category="all" aria-pressed="true">All</button>
+            {% for category in categories %}
+              <button type="button" class="chip" data-category="{{ category.slug }}" aria-pressed="false">{{ category.name }}</button>
+            {% endfor %}
+          </div>
           <label class="sort-field">
             <span class="sort-label">Sort</span>
             <select id="sortSelect" aria-label="Sort gemstones">
-              <option value="featured">Featured</option>
-              <option value="price-asc">Price, low to high</option>
-              <option value="price-desc">Price, high to low</option>
-              <option value="carat-desc">Carat, high to low</option>
+              <option value="featured">Featured Products</option>
+              <option value="newest">Newest Products</option>
+              <option value="oldest">Oldest Products</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
             </select>
           </label>
         </div>
 
-        <ul class="product-grid" id="productGrid" aria-live="polite"></ul>
+        <ul class="product-grid" id="productGrid" aria-live="polite">
+          {% for product in collection_products %}
+            {% include 'product_card.html' %}
+          {% endfor %}
+        </ul>
 
         <div class="empty-state" id="emptyState" hidden>
           <p class="empty-title">No stones match that filter yet.</p>
