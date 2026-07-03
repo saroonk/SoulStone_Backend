@@ -11,3 +11,10 @@ class ContactAdmin(ModelAdmin):
     search_fields = ("full_name", "email", "phone_number", "message")
     ordering = ("-created_at",)
     readonly_fields = ("created_at",)
+
+
+@admin.register(Category)
+class CategoryAdmin(ModelAdmin):
+    list_display = ("name", "slug", "description")
+    search_fields = ("name", "description")
+    prepopulated_fields = {"slug": ("name",)}

@@ -24,3 +24,29 @@ class Contact(models.Model):
 
     def __str__(self):
         return f"{self.full_name} ({self.email})"
+
+
+
+
+
+
+from django.utils.text import slugify
+
+
+class Category(models.Model):
+    image = models.ImageField(upload_to="categories/")
+    name = models.CharField(max_length=100, unique=True)
+    description = models.TextField(blank=True)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
+    def save(self, *args, **kwargs):
+        self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name

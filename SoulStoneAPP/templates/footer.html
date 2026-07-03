@@ -23,10 +23,9 @@
 
     <nav class="footer-col" aria-label="Gemstones">
       <h4>Gemstones</h4>
-      <a href="#categories" data-filter="Saturn">Blue Sapphire</a>
-      <a href="#categories" data-filter="Sun">Ruby</a>
-      <a href="#categories" data-filter="Mercury">Emerald</a>
-      <a href="#categories" data-filter="Jupiter">Yellow Sapphire</a>
+      {% for category in categories %}
+        <a href="{% url 'products' %}?category={{ category.slug }}">{{ category.name }}</a>
+      {% endfor %}
       <a href="{% url 'products' %}">All Stones</a>
     </nav>
 
