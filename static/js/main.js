@@ -400,6 +400,37 @@
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape" && isOpen()) close();
     });
+
+    // Submitting sends the keyword to the Products page, which already
+    // implements search (same `search` query param / AJAX filtering used
+    // there). This is just another entry point into that existing search.
+    var submitting = false;
+    function submitSearch() {
+      if (!input) return;
+      var value = input.value.trim();
+      if (!value) {
+        input.focus();
+        return;
+      }
+      if (submitting) return;
+      submitting = true;
+      var productsUrl = bar.dataset.productsUrl || "/products/";
+      window.location.href = productsUrl + "?search=" + encodeURIComponent(value);
+    }
+
+    if (input) {
+      input.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          submitSearch();
+        }
+      });
+    }
+    var searchIcon = bar.querySelector(".search-icon");
+    if (searchIcon) {
+      searchIcon.style.cursor = "pointer";
+      searchIcon.addEventListener("click", submitSearch);
+    }
   }
 
   function bindAnnouncement() {
