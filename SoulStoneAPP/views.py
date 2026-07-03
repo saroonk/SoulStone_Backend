@@ -1,6 +1,11 @@
+from decimal import Decimal, InvalidOperation
+
 from django.contrib import messages
 from django.core.paginator import Paginator
+from django.db.models import Q
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 
 from .forms import ContactForm
 from .models import Contact, Product
@@ -11,15 +16,14 @@ from django.conf import settings
 # Create your views here.
 
 
-PRODUCTS_PER_PAGE = 12
+PRODUCTS_PER_PAGE = 20
 
 SORT_OPTIONS = {
-    "newest": "-created_at",
-    "oldest": "created_at",
-    "price_low": "new_price",
-    "price_high": "-new_price",
-    "name_asc": "name",
-    "name_desc": "-name",
+    "featured": ("-is_featured", "-created_at"),
+    "newest": ("-created_at",),
+    "oldest": ("created_at",),
+    "price_low": ("new_price",),
+    "price_high": ("-new_price",),
 }
 
 
@@ -137,19 +141,63 @@ def product_detail(request, slug):
     return render(request, 'product-detail.html', context)
 
 
+def _parse_price_range(value):
+    try:
+        low, high = value.split('-', 1)
+        return Decimal(low), Decimal(high)
+    except (ValueError, InvalidOperation):
+        return None
+
+
 def products(request):
-    sort = request.GET.get('sort', 'newest')
+    search_query = request.GET.get('search', '').strip()
+    selected_categories = request.GET.getlist('category')
+    selected_availability = request.GET.getlist('availability')
+    selected_price = request.GET.getlist('price')
+
+    sort = request.GET.get('sort', 'featured')
     if sort not in SORT_OPTIONS:
-        sort = 'newest'
+        sort = 'featured'
 
-    products_qs = (
-        Product.objects.filter(is_active=True)
-        .select_related('category')
-        .order_by(SORT_OPTIONS[sort])
-    )
+    products_qs = Product.objects.filter(is_active=True).select_related('category')
 
-    paginator = Paginator(products_qs, 20)
+    if search_query:
+        products_qs = products_qs.filter(
+            Q(name__icontains=search_query) | Q(subtitle__icontains=search_query)
+        )
+
+    if selected_categories:
+        products_qs = products_qs.filter(category__slug__in=selected_categories)
+
+    if selected_availability:
+        availability_q = Q()
+        if 'in_stock' in selected_availability:
+            availability_q |= Q(stock__gt=0)
+        if 'out_of_stock' in selected_availability:
+            availability_q |= Q(stock=0)
+        products_qs = products_qs.filter(availability_q)
+
+    if selected_price:
+        price_q = Q()
+        has_valid_range = False
+        for raw_range in selected_price:
+            parsed = _parse_price_range(raw_range)
+            if parsed is None:
+                continue
+            low, high = parsed
+            price_q |= Q(new_price__gte=low, new_price__lte=high)
+            has_valid_range = True
+        if has_valid_range:
+            products_qs = products_qs.filter(price_q)
+
+    products_qs = products_qs.order_by(*SORT_OPTIONS[sort])
+
+    paginator = Paginator(products_qs, PRODUCTS_PER_PAGE)
     page_obj = paginator.get_page(request.GET.get('page'))
+
+    base_query = request.GET.copy()
+    base_query.pop('page', None)
+    base_querystring = base_query.urlencode()
 
     context = {
         'products': page_obj.object_list,
@@ -157,7 +205,19 @@ def products(request):
         'paginator': paginator,
         'is_paginated': page_obj.has_other_pages(),
         'sort': sort,
+        'base_querystring': base_querystring,
     }
+
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        html = render_to_string('partials/product_grid.html', context, request=request)
+        return JsonResponse({'html': html, 'count': paginator.count})
+
+    context.update({
+        'search_query': search_query,
+        'selected_categories': selected_categories,
+        'selected_availability': selected_availability,
+        'selected_price': selected_price,
+    })
     return render(request, 'product.html', context)
 
 

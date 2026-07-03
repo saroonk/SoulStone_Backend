@@ -1,11 +1,11 @@
 /* ============================================================
    SoulStones — Our Collection (catalogue) page
-   Plain JS, no dependencies. The product grid, sort, and
-   pagination are now server-rendered by Django (see product.html
-   and views.products). This file only wires up UI chrome that
-   has no backend counterpart yet: the mobile filter panel, the
-   grid/list view toggle, and forwarding sort changes to the
-   backend via query-string navigation.
+   Plain JS, no dependencies. Filtering, search, sort, and
+   pagination all run through the Fetch API against views.products,
+   which returns a rendered HTML partial (product grid + pagination)
+   for AJAX requests. The page never reloads; the URL is kept in
+   sync with history.pushState so results stay shareable and the
+   browser Back/Forward buttons work.
    ============================================================ */
 (function () {
   "use strict";
@@ -14,67 +14,184 @@
   function $(sel, ctx) { return (ctx || document).querySelector(sel); }
   function $$(sel, ctx) { return Array.prototype.slice.call((ctx || document).querySelectorAll(sel)); }
   var prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var PRODUCTS_URL = window.location.pathname;
 
-  /* ---------------------------- Sort (backend-driven) ---------------------------- */
-  // The sort UI predates the backend's sort keys, so map the existing
-  // option values to the ones views.products understands.
-  var SORT_MAP = {
-    featured: "newest",
-    popularity: "newest",
-    "price-asc": "price_low",
-    "price-desc": "price_high",
-    newest: "newest"
-  };
-
-  function navigateWithSort(uiValue) {
-    var backendSort = SORT_MAP[uiValue] || "newest";
-    var url = new URL(window.location.href);
-    url.searchParams.set("sort", backendSort);
-    url.searchParams.set("page", "1");
-    window.location.href = url.toString();
+  /* ---------------------------- Filter state ---------------------------- */
+  function readStateFromLocation() {
+    var params = new URLSearchParams(window.location.search);
+    return {
+      search: params.get("search") || "",
+      category: params.getAll("category"),
+      availability: params.getAll("availability"),
+      price: params.getAll("price"),
+      sort: params.get("sort") || "featured",
+      page: params.get("page") || "1"
+    };
   }
 
-  /* ---------------------------- Filter panel (staged: Apply / Reset) ---------------------------- */
-  // Category/availability/price filtering isn't implemented on the backend
-  // yet, so these controls only manage the panel UI for now.
+  var state = readStateFromLocation();
+
+  function buildParams(s) {
+    var params = new URLSearchParams();
+    if (s.search) params.set("search", s.search);
+    s.category.forEach(function (c) { params.append("category", c); });
+    s.availability.forEach(function (a) { params.append("availability", a); });
+    s.price.forEach(function (p) { params.append("price", p); });
+    if (s.sort) params.set("sort", s.sort);
+    if (s.page && s.page !== "1") params.set("page", s.page);
+    return params;
+  }
+
+  function collectStateFromForm(resetPage) {
+    var search = $("#toolbarSearch");
+    state.search = search ? search.value.trim() : "";
+    state.category = $$('input[name="category"]:checked').map(function (i) { return i.value; });
+    state.availability = $$('input[name="availability"]:checked').map(function (i) { return i.value; });
+    state.price = $$('input[name="price"]:checked').map(function (i) { return i.value; });
+    if (resetPage !== false) state.page = "1";
+  }
+
+  function syncFormFromState() {
+    var search = $("#toolbarSearch");
+    if (search) search.value = state.search;
+
+    $$('input[name="category"]').forEach(function (cb) { cb.checked = state.category.indexOf(cb.value) !== -1; });
+    $$('input[name="availability"]').forEach(function (cb) { cb.checked = state.availability.indexOf(cb.value) !== -1; });
+    $$('input[name="price"]').forEach(function (cb) { cb.checked = state.price.indexOf(cb.value) !== -1; });
+
+    syncSortControls();
+  }
+
+  function syncSortControls() {
+    var toolbarSort = $("#toolbarSort");
+    if (toolbarSort) toolbarSort.value = state.sort;
+    $$('input[name="sortBy"]').forEach(function (radio) { radio.checked = radio.value === state.sort; });
+  }
+
+  /* ---------------------------- Fetch + render ---------------------------- */
+  function setLoading(isLoading) {
+    var grid = $("#catalogueGrid");
+    if (grid) grid.setAttribute("aria-busy", isLoading ? "true" : "false");
+  }
+
+  function fetchProducts(pushHistory) {
+    var params = buildParams(state);
+    var queryString = params.toString();
+    var url = PRODUCTS_URL + (queryString ? "?" + queryString : "");
+
+    setLoading(true);
+    fetch(url, { headers: { "X-Requested-With": "XMLHttpRequest" } })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        var results = $("#catalogueResults");
+        if (results) results.innerHTML = data.html;
+
+        var countEl = $("#toolbarCount");
+        if (countEl) countEl.textContent = "Showing " + data.count + (data.count === 1 ? " Product" : " Products");
+
+        if (pushHistory) window.history.pushState(null, "", url || PRODUCTS_URL);
+      })
+      .catch(function () { /* keep whatever is currently on screen if the request fails */ })
+      .finally(function () { setLoading(false); });
+  }
+
+  /* ---------------------------- Filter panel: Apply / Reset ---------------------------- */
   function applyFilters() {
+    collectStateFromForm();
+    fetchProducts(true);
     closeMobilePanel();
   }
 
   function resetFilters() {
-    $$('input[name="category"], input[name="availability"], input[name="price"]').forEach(function (i) { i.checked = false; });
-    var featured = $('input[name="sortBy"][value="featured"]');
-    if (featured) featured.checked = true;
-    var toolbarSort = $("#toolbarSort");
-    if (toolbarSort) toolbarSort.value = "featured";
+    state = { search: "", category: [], availability: [], price: [], sort: "featured", page: "1" };
+    syncFormFromState();
+    fetchProducts(true);
     closeMobilePanel();
   }
 
   function bindFilterPanel() {
-    var applyBtn = $("#applyFiltersBtn"), resetBtn = $("#resetFiltersBtn"), emptyResetBtn = $("#emptyResetBtn");
+    var applyBtn = $("#applyFiltersBtn");
     if (applyBtn) applyBtn.addEventListener("click", applyFilters);
-    if (resetBtn) resetBtn.addEventListener("click", resetFilters);
-    if (emptyResetBtn) emptyResetBtn.addEventListener("click", resetFilters);
 
-    // Sort applies instantly and stays in sync between sidebar and toolbar.
+    // Reset/empty-state buttons: bound via delegation since #emptyResetBtn is
+    // re-created on every AJAX render.
+    document.addEventListener("click", function (e) {
+      if (e.target.closest("#resetFiltersBtn") || e.target.closest("#emptyResetBtn")) {
+        resetFilters();
+      }
+    });
+  }
+
+  /* ---------------------------- Search ---------------------------- */
+  function bindSearch() {
+    var search = $("#toolbarSearch");
+    if (search) {
+      search.addEventListener("keydown", function (e) {
+        if (e.key === "Enter") {
+          e.preventDefault();
+          collectStateFromForm();
+          fetchProducts(true);
+        }
+      });
+    }
+    var searchBtn = $("#toolbarSearchBtn");
+    if (searchBtn) {
+      searchBtn.style.cursor = "pointer";
+      searchBtn.addEventListener("click", function () {
+        collectStateFromForm();
+        fetchProducts(true);
+      });
+    }
+  }
+
+  /* ---------------------------- Sort (desktop select + mobile radios, synced) ---------------------------- */
+  function bindSort() {
+    var toolbarSort = $("#toolbarSort");
+    if (toolbarSort) {
+      toolbarSort.addEventListener("change", function () {
+        state.sort = toolbarSort.value;
+        state.page = "1";
+        syncSortControls();
+        fetchProducts(true);
+      });
+    }
+
     $$('input[name="sortBy"]').forEach(function (radio) {
       radio.addEventListener("change", function () {
-        var toolbarSort = $("#toolbarSort");
-        if (toolbarSort) toolbarSort.value = radio.value;
-        navigateWithSort(radio.value);
+        state.sort = radio.value;
+        state.page = "1";
+        syncSortControls();
+        fetchProducts(true);
       });
     });
   }
 
-  /* ---------------------------- Toolbar ---------------------------- */
-  function bindToolbar() {
-    var toolbarSort = $("#toolbarSort");
-    if (toolbarSort) toolbarSort.addEventListener("change", function () {
-      var radio = $('input[name="sortBy"][value="' + toolbarSort.value + '"]');
-      if (radio) radio.checked = true;
-      navigateWithSort(toolbarSort.value);
+  /* ---------------------------- Pagination (event delegation; grid is replaced on every fetch) ---------------------------- */
+  function bindPagination() {
+    var main = $(".catalogue-main");
+    if (!main) return;
+    main.addEventListener("click", function (e) {
+      var link = e.target.closest("#paginationNav a.page-btn[data-page]");
+      if (!link) return;
+      e.preventDefault();
+      state.page = link.dataset.page;
+      fetchProducts(true);
+      var grid = $("#catalogueGrid");
+      if (grid) grid.scrollIntoView({ behavior: prefersReduced ? "auto" : "smooth", block: "start" });
     });
+  }
 
+  /* ---------------------------- Browser Back / Forward ---------------------------- */
+  function bindPopState() {
+    window.addEventListener("popstate", function () {
+      state = readStateFromLocation();
+      syncFormFromState();
+      fetchProducts(false);
+    });
+  }
+
+  /* ---------------------------- Toolbar (view toggle only; unrelated to filtering) ---------------------------- */
+  function bindToolbar() {
     var gridBtn = $("#viewGridBtn"), listBtn = $("#viewListBtn");
     function setView(mode) {
       var grid = $("#catalogueGrid");
@@ -126,20 +243,14 @@
     });
   }
 
-  /* ---------------------------- Deep-link: ?category=Ruby ---------------------------- */
-  function initFromQuery() {
-    var params = new URLSearchParams(window.location.search);
-    var cat = params.get("category");
-    if (!cat) return;
-    $$('input[name="category"]').forEach(function (cb) {
-      if (cb.value === cat) cb.checked = true;
-    });
-  }
-
   /* ---------------------------- Init ---------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
-    initFromQuery();
+    syncFormFromState();
     bindFilterPanel();
+    bindSearch();
+    bindSort();
+    bindPagination();
+    bindPopState();
     bindToolbar();
     bindMobilePanel();
   });

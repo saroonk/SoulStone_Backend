@@ -58,45 +58,39 @@
             <details class="filter-group filter-category" open>
               <summary>Category</summary>
               <div class="filter-options" id="filterCategoryOptions" role="group" aria-label="Filter by category">
-                <label class="filter-check"><input type="checkbox" name="category" value="Ruby" /><span>Ruby</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Emerald" /><span>Emerald</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Blue Sapphire" /><span>Blue Sapphire</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Yellow Sapphire" /><span>Yellow Sapphire</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Pearl" /><span>Pearl</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Coral" /><span>Coral</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Hessonite" /><span>Hessonite</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Cat's Eye" /><span>Cat's Eye</span></label>
-                <label class="filter-check"><input type="checkbox" name="category" value="Opal" /><span>Opal</span></label>
+                {% for category in categories %}
+                  <label class="filter-check"><input type="checkbox" name="category" value="{{ category.slug }}" {% if category.slug in selected_categories %}checked{% endif %} /><span>{{ category.name }}</span></label>
+                {% endfor %}
               </div>
             </details>
 
             <details class="filter-group" open>
               <summary>Availability</summary>
               <div class="filter-options" role="group" aria-label="Filter by availability">
-                <label class="filter-check"><input type="checkbox" name="availability" value="in-stock" /><span>In Stock</span></label>
-                <label class="filter-check"><input type="checkbox" name="availability" value="out-of-stock" /><span>Out of Stock</span></label>
+                <label class="filter-check"><input type="checkbox" name="availability" value="in_stock" {% if 'in_stock' in selected_availability %}checked{% endif %} /><span>In Stock</span></label>
+                <label class="filter-check"><input type="checkbox" name="availability" value="out_of_stock" {% if 'out_of_stock' in selected_availability %}checked{% endif %} /><span>Out of Stock</span></label>
               </div>
             </details>
 
             <details class="filter-group" open>
               <summary>Price Range</summary>
               <div class="filter-options" role="group" aria-label="Filter by price range">
-                <label class="filter-check"><input type="checkbox" name="price" value="0-5000" /><span>Under &#8377;5,000</span></label>
-                <label class="filter-check"><input type="checkbox" name="price" value="5000-10000" /><span>&#8377;5,000 &ndash; &#8377;10,000</span></label>
-                <label class="filter-check"><input type="checkbox" name="price" value="10000-15000" /><span>&#8377;10,000 &ndash; &#8377;15,000</span></label>
-                <label class="filter-check"><input type="checkbox" name="price" value="15000-25000" /><span>&#8377;15,000 &ndash; &#8377;25,000</span></label>
-                <label class="filter-check"><input type="checkbox" name="price" value="25000-999999" /><span>Above &#8377;25,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="0-5000" {% if '0-5000' in selected_price %}checked{% endif %} /><span>Under &#8377;5,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="5000-10000" {% if '5000-10000' in selected_price %}checked{% endif %} /><span>&#8377;5,000 &ndash; &#8377;10,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="10000-15000" {% if '10000-15000' in selected_price %}checked{% endif %} /><span>&#8377;10,000 &ndash; &#8377;15,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="15000-25000" {% if '15000-25000' in selected_price %}checked{% endif %} /><span>&#8377;15,000 &ndash; &#8377;25,000</span></label>
+                <label class="filter-check"><input type="checkbox" name="price" value="25000-999999" {% if '25000-999999' in selected_price %}checked{% endif %} /><span>Above &#8377;25,000</span></label>
               </div>
             </details>
 
             <details class="filter-group" id="filterSortGroup" open>
               <summary>Sort By</summary>
               <div class="filter-options" role="group" aria-label="Sort products">
-                <label class="filter-radio"><input type="radio" name="sortBy" value="featured" {% if sort == 'newest' %}checked{% endif %} /><span>Featured</span></label>
-                <label class="filter-radio"><input type="radio" name="sortBy" value="popularity" /><span>Popularity</span></label>
-                <label class="filter-radio"><input type="radio" name="sortBy" value="price-asc" {% if sort == 'price_low' %}checked{% endif %} /><span>Price: Low to High</span></label>
-                <label class="filter-radio"><input type="radio" name="sortBy" value="price-desc" {% if sort == 'price_high' %}checked{% endif %} /><span>Price: High to Low</span></label>
-                <label class="filter-radio"><input type="radio" name="sortBy" value="newest" /><span>Newest</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="featured" {% if sort == 'featured' %}checked{% endif %} /><span>Featured Products</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="newest" {% if sort == 'newest' %}checked{% endif %} /><span>Newest Products</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="oldest" {% if sort == 'oldest' %}checked{% endif %} /><span>Oldest Products</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="price_low" {% if sort == 'price_low' %}checked{% endif %} /><span>Price: Low to High</span></label>
+                <label class="filter-radio"><input type="radio" name="sortBy" value="price_high" {% if sort == 'price_high' %}checked{% endif %} /><span>Price: High to Low</span></label>
               </div>
             </details>
 
@@ -126,18 +120,18 @@
 
             <div class="toolbar-right">
               <label class="toolbar-search">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
-                <input type="search" id="toolbarSearch" placeholder="Search products" autocomplete="off" aria-label="Search products" />
+                <svg id="toolbarSearchBtn" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m16.5 16.5 4 4"/></svg>
+                <input type="search" id="toolbarSearch" value="{{ search_query }}" placeholder="Search products" autocomplete="off" aria-label="Search products" />
               </label>
 
               <label class="toolbar-sort-field">
                 <span class="sr-only">Sort by</span>
                 <select id="toolbarSort" aria-label="Sort gemstones">
-                  <option value="featured" {% if sort == 'newest' %}selected{% endif %}>Featured</option>
-                  <option value="popularity">Popularity</option>
-                  <option value="price-asc" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
-                  <option value="price-desc" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
-                  <option value="newest">Newest</option>
+                  <option value="featured" {% if sort == 'featured' %}selected{% endif %}>Featured Products</option>
+                  <option value="newest" {% if sort == 'newest' %}selected{% endif %}>Newest Products</option>
+                  <option value="oldest" {% if sort == 'oldest' %}selected{% endif %}>Oldest Products</option>
+                  <option value="price_low" {% if sort == 'price_low' %}selected{% endif %}>Price: Low to High</option>
+                  <option value="price_high" {% if sort == 'price_high' %}selected{% endif %}>Price: High to Low</option>
                 </select>
               </label>
 
@@ -152,43 +146,9 @@
             </div>
           </div>
 
-          <ul class="product-grid" id="catalogueGrid" aria-live="polite" {% if not products %}hidden{% endif %}>
-            {% for product in products %}
-              {% include 'product_card.html' %}
-            {% endfor %}
-          </ul>
-
-          <div class="empty-state" id="catalogueEmpty" {% if products %}hidden{% endif %}>
-            <svg class="empty-illustration" viewBox="0 0 96 96" width="72" height="72" fill="none" stroke="currentColor" stroke-width="1.3" aria-hidden="true">
-              <path d="M48 14 18 34l30 48 30-48-30-20Z" />
-              <path d="M18 34h60M33 34 48 14l15 20M33 34l15 48M63 34 48 82" />
-            </svg>
-            <p class="empty-title">No products available.</p>
-            <p class="empty-sub">Try adjusting your filters or browse another collection.</p>
-            <button type="button" class="btn btn-secondary" id="emptyResetBtn">Reset Filters</button>
+          <div id="catalogueResults">
+            {% include 'partials/product_grid.html' %}
           </div>
-
-          <nav class="pagination" id="paginationNav" aria-label="Catalogue pagination" {% if not is_paginated %}hidden{% endif %}>
-            {% if page_obj.has_previous %}
-              <a class="page-btn" href="?sort={{ sort }}&amp;page={{ page_obj.previous_page_number }}">&lsaquo; Previous</a>
-            {% else %}
-              <button class="page-btn" type="button" disabled>&lsaquo; Previous</button>
-            {% endif %}
-
-            {% for num in paginator.page_range %}
-              {% if num == page_obj.number %}
-                <button class="page-btn" type="button" aria-current="page">{{ num }}</button>
-              {% else %}
-                <a class="page-btn" href="?sort={{ sort }}&amp;page={{ num }}">{{ num }}</a>
-              {% endif %}
-            {% endfor %}
-
-            {% if page_obj.has_next %}
-              <a class="page-btn" href="?sort={{ sort }}&amp;page={{ page_obj.next_page_number }}">Next &rsaquo;</a>
-            {% else %}
-              <button class="page-btn" type="button" disabled>Next &rsaquo;</button>
-            {% endif %}
-          </nav>
 
         </div>
       </div>

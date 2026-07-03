@@ -315,7 +315,7 @@
   .toolbar-right { width: 100%; justify-content: space-between; }
   .toolbar-search { flex: 1 1 auto; }
   .toolbar-search input { width: 100%; }
-  .toolbar-sort-field select { padding: 9px 12px; }
+  .toolbar-sort-field select { padding: 9px 42px 9px 16px;  }
   .catalogue-hero-inner { padding-block: 48px 44px; }
 }
 
