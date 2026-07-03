@@ -99,7 +99,13 @@
         </div>
       </div>
       <div class="rail-viewport">
-        <ul class="rail" id="newArrivalsRail"></ul>
+        <ul class="rail" id="newArrivalsRail">
+          {% for product in latest_products %}
+            {% include 'product_card.html' %}
+          {% empty %}
+            <li class="rail-empty">No products available.</li>
+          {% endfor %}
+        </ul>
       </div>
     </section>
 

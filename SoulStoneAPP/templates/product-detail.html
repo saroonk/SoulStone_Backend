@@ -4,8 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SoulStones · Burmese Ruby</title>
-  <meta name="description" content="Certified Natural Burmese Ruby — 4.1 carat, Mogok provenance, independently lab-certified. Selected for colour, authenticity, and astrological significance." />
+  <title>SoulStones · {{ product.name }}</title>
+  <meta name="description" content="{{ product.short_description }}" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -25,7 +25,6 @@
   <main id="main">
 
     <!-- ============================ BREADCRUMB ============================ -->
-    {% comment %} Django note: each crumb / the leaf label would come from product/category context {% endcomment %}
     <nav class="pd-breadcrumb-nav" aria-label="Breadcrumb">
       <div class="shell">
         <ol class="pd-breadcrumb-list">
@@ -33,9 +32,9 @@
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
           <li><a href="{% url 'products' %}">Collections</a></li>
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
-          <li><a href="{% url 'products' %}?category=Ruby">Ruby</a></li>
+          <li><a href="{% url 'products' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
-          <li aria-current="page">Burmese Ruby</li>
+          <li aria-current="page">{{ product.name }}</li>
         </ol>
       </div>
     </nav>
@@ -47,55 +46,45 @@
         <!-- Gallery -->
         <div class="pd-gallery">
           <div class="pd-gallery-main">
-            <img id="pdMainImage" src="{% static 'images/Ruby.webp' %}" alt="Burmese Ruby, 4.1 carat loose natural ruby, front view" />
+            <img id="pdMainImage" src="{{ product.main_image.url }}" alt="{{ product.name }}" />
           </div>
           <div class="pd-thumbs" id="pdThumbs" role="group" aria-label="Product images">
-            <button type="button" class="pd-thumb is-active" data-full="{% static 'images/Ruby.webp' %}" data-alt="Burmese Ruby, front view" aria-current="true" aria-label="Image 1 of 6">
-              <img src="{% static 'images/Ruby.webp' %}" alt="" loading="lazy" />
+            <button type="button" class="pd-thumb is-active" data-full="{{ product.main_image.url }}" data-alt="{{ product.name }}" aria-current="true" aria-label="Image 1 of {{ gallery_images|length|add:1 }}">
+              <img src="{{ product.main_image.url }}" alt="" loading="lazy" />
             </button>
-            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/32700204/pexels-photo-32700204.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Burmese Ruby held with gemmological tweezers under studio light" aria-label="Image 2 of 6">
-              <img src="https://images.pexels.com/photos/32700204/pexels-photo-32700204.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
-            </button>
-            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/32700209/pexels-photo-32700209.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Burmese Ruby held with tweezers, natural daylight" aria-label="Image 3 of 6">
-              <img src="https://images.pexels.com/photos/32700209/pexels-photo-32700209.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
-            </button>
-            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/13307186/pexels-photo-13307186.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="A parcel of natural ruby crystals" aria-label="Image 4 of 6">
-              <img src="https://images.pexels.com/photos/13307186/pexels-photo-13307186.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
-            </button>
-            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/13307185/pexels-photo-13307185.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="Three natural ruby crystals on a reflective surface" aria-label="Image 5 of 6">
-              <img src="https://images.pexels.com/photos/13307185/pexels-photo-13307185.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
-            </button>
-            <button type="button" class="pd-thumb" data-full="https://images.pexels.com/photos/35497311/pexels-photo-35497311.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=1400" data-alt="A ruby crystal in its natural matrix" aria-label="Image 6 of 6">
-              <img src="https://images.pexels.com/photos/35497311/pexels-photo-35497311.jpeg?auto=compress&amp;cs=tinysrgb&amp;w=300" alt="" loading="lazy" />
-            </button>
-
-
-
-
+            {% for image in gallery_images %}
+              <button type="button" class="pd-thumb" data-full="{{ image.image.url }}" data-alt="{{ image.alt_text|default:product.name }}" aria-label="Image {{ forloop.counter|add:1 }} of {{ gallery_images|length|add:1 }}">
+                <img src="{{ image.image.url }}" alt="" loading="lazy" />
+              </button>
+            {% endfor %}
           </div>
         </div>
 
         <!-- Info + purchase -->
         <div class="pd-info">
           <div class="pd-badges">
-            <span class="pd-badge pd-badge-category">Ruby &middot; Manik</span>
-            <span class="pd-badge pd-badge-cert">
-              <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
-              Lab Certified
-            </span>
+            <span class="pd-badge pd-badge-category">{{ product.category.name }}</span>
+            {% if product.is_certified %}
+              <span class="pd-badge pd-badge-cert">
+                <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
+                Lab Certified
+              </span>
+            {% endif %}
           </div>
 
-          <h1 class="pd-name">Burmese Ruby</h1>
+          <h1 class="pd-name">{{ product.name }}</h1>
 
-          <p class="pd-availability is-in-stock"><span class="pd-dot" aria-hidden="true"></span>In Stock &mdash; ships in 2&ndash;4 business days</p>
+          <p class="pd-availability{% if product.in_stock %} is-in-stock{% endif %}"><span class="pd-dot" aria-hidden="true"></span>{% if product.in_stock %}In Stock &mdash; ships in 2&ndash;4 business days{% else %}Out of Stock{% endif %}</p>
 
           <div class="pd-price-row">
-            <span class="pd-price">&#8377;62,000</span>
-            <span class="pd-price-original">&#8377;68,000</span>
-            <span class="pd-price-save">Save 9%</span>
+            <span class="pd-price">&#8377;{{ product.new_price|floatformat:0 }}</span>
+            {% if product.old_price > product.new_price %}
+              <span class="pd-price-original">&#8377;{{ product.old_price|floatformat:0 }}</span>
+              <span class="pd-price-save">Save {{ product.discount_percentage }}%</span>
+            {% endif %}
           </div>
 
-          <p class="pd-desc">Certified Natural Burmese Ruby selected for exceptional colour, authenticity, and astrological significance. A 4.1&nbsp;carat stone of deep, saturated red, sourced from the Mogok valley and independently lab-certified.</p>
+          <p class="pd-desc">{{ product.short_description }}</p>
 
           <!-- ============================ PURCHASE SECTION ============================ -->
           <div class="pd-purchase">
@@ -104,12 +93,12 @@
               <span class="pd-qty-val" id="pdQtyVal" aria-live="polite">1</span>
               <button type="button" class="pd-qty-btn" id="pdQtyPlus" aria-label="Increase quantity">+</button>
             </div>
-            <button type="button" class="btn btn-primary pd-add-btn" id="pdAddToCart">Add to Cart</button>
+            <button type="button" class="btn btn-primary pd-add-btn" id="pdAddToCart"{% if not product.in_stock %} disabled{% endif %}>Add to Cart</button>
             <!-- <button type="button" class="btn btn-secondary pd-buy-btn" id="pdBuyNow">Buy Now</button> -->
           </div>
 
           <!-- Hidden bridge into main.js's existing cart/drawer system (same product id, so the cart stays accurate) -->
-          <button type="button" class="sr-only" id="pdCartBridge" data-add="manik" tabindex="-1" aria-hidden="true">Add Burmese Ruby to cart</button>
+          <button type="button" class="sr-only" id="pdCartBridge" data-add="{{ product.slug }}" tabindex="-1" aria-hidden="true">Add {{ product.name }} to cart</button>
 
           <ul class="pd-reassurance">
             <li><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>Secure Shopping</li>
@@ -123,9 +112,6 @@
     </section>
 
     <!-- ============================ GEMSTONE INFORMATION TABS ============================ -->
-    {% comment %} Django note: each panel's inner .pd-richtext markup is a stand-in for
-         CKEditor-generated HTML (product.description_html / .certification_html
-         / .origin_html). Keep these panels as plain rich-text containers. {% endcomment %}
     <section class="section pd-tabs-section" aria-label="Gemstone information">
       <div class="shell">
         <div class="pd-tabs" role="tablist" aria-label="Gemstone information">
@@ -137,65 +123,15 @@
         <div class="pd-tab-panels">
 
           <div class="pd-tab-panel pd-richtext is-active" id="pdTabPanelDescription" role="tabpanel" aria-labelledby="pdTabBtnDescription" tabindex="0">
-            <h3>About This Gemstone</h3>
-            <p>This <strong>Burmese Ruby</strong> is a loose, unset natural corundum prized for its deep, saturated red and fine clarity. Each stone in this listing is individually inspected before it is offered, weighed, and matched to its laboratory report.</p>
-            <p>Rubies form deep within marble deposits under immense heat and pressure, a process spanning millions of years. Trace amounts of chromium give the stone its characteristic red, with the finest examples showing the glow Mogok stones are <em>historically</em> known for.</p>
-
-            <h4>Specifications</h4>
-            <ul>
-              <li><strong>Origin:</strong> Mogok, Myanmar (Burma)</li>
-              <li><strong>Treatment:</strong> Heat-treated &mdash; traditional, fully disclosed</li>
-              <li><strong>Weight:</strong> 4.1 carats</li>
-              <li><strong>Dimensions:</strong> 9.8 &times; 7.6 &times; 5.2&nbsp;mm</li>
-              <li><strong>Shape:</strong> Oval mixed cut</li>
-              <li><strong>Colour:</strong> Deep, saturated red</li>
-              <li><strong>Clarity:</strong> Eye-clean, minor natural inclusions</li>
-              <li><strong>Birthstone month:</strong> July</li>
-            </ul>
-
-            <h4>Astrological Significance</h4>
-            <p>Ruby has long been associated with the <strong>Sun</strong> and worn in pursuit of vitality, leadership, and confidence. This is offered as educational context &mdash; for guidance specific to your chart, <a href="#consult">speak with one of our gem advisors</a>.</p>
-            <ul>
-              <li><strong>Planet:</strong> Sun (Surya)</li>
-              <li><strong>Recommended metal:</strong> Gold or copper</li>
-              <li><strong>Recommended finger:</strong> Ring finger, right hand</li>
-              <li><strong>Recommended day:</strong> Sunday morning, at sunrise</li>
-            </ul>
-
-            <h4>Care Instructions</h4>
-            <p>Clean gently with lukewarm water and a soft brush; avoid harsh chemicals and ultrasonic cleaners if the stone has been treated. Store separately from harder gems to avoid surface scratching, and remove before swimming, exercise, or manual work.</p>
+            {{ product.description_and_benefits|safe }}
           </div>
 
           <div class="pd-tab-panel pd-richtext" id="pdTabPanelCertification" role="tabpanel" aria-labelledby="pdTabBtnCertification" tabindex="0" hidden>
-            <h3>Certified &amp; Authentic</h3>
-            <p>Every SoulStones gemstone ships with independent laboratory certification. This stone's report confirms it is a <strong>natural ruby</strong>, discloses any treatment, and records its weight, measurements, and identifying characteristics.</p>
-
-            <h4>What We Verify Before Listing</h4>
-            <ol>
-              <li>Independent gemmological testing to confirm natural origin</li>
-              <li>Full disclosure of any treatment &mdash; never hidden, never assumed</li>
-              <li>Colour, clarity, and cut checked against our internal quality standard</li>
-              <li>A final review by our gem advisors for astrological accuracy</li>
-            </ol>
-
-            <p><em>Certificate preview placeholder &mdash; a scan of the actual laboratory report will appear here.</em></p>
-
-            <p>The laboratory certificate ships in the box with your stone. If you would like to see a sample report before you buy, <a href="#consult">ask an advisor on WhatsApp</a>.</p>
+            {{ product.certification_authenticity|safe }}
           </div>
 
           <div class="pd-tab-panel pd-richtext" id="pdTabPanelOrigin" role="tabpanel" aria-labelledby="pdTabBtnOrigin" tabindex="0" hidden>
-            <h3>Where This Stone Comes From</h3>
-            <p>We source rubies directly from established mining regions, with provenance and quality verified at every step before a stone reaches certification.</p>
-
-            <h4>Mogok, Myanmar</h4>
-            <p>The historic <em>"Valley of Rubies,"</em> prized for its vivid red and natural fluorescence &mdash; this stone's origin.</p>
-
-            <h4>Other Sourcing Regions</h4>
-            <ul>
-              <li><strong>Sri Lanka</strong> &mdash; softer, pinkish-red rubies with excellent natural clarity</li>
-              <li><strong>Mozambique</strong> &mdash; strong, consistent colour and good size</li>
-              <li><strong>Madagascar</strong> &mdash; vivid, well-saturated stones from alluvial deposits</li>
-            </ul>
+            {{ product.stone_origin|safe }}
           </div>
 
         </div>
@@ -208,7 +144,13 @@
         <header class="section-head">
           <h2 class="section-title">You May Also Like</h2>
         </header>
-        <ul class="product-grid" id="relatedGrid" aria-live="polite"></ul>
+        <ul class="product-grid" id="relatedGrid" aria-live="polite">
+          {% for product in related_products %}
+            {% include 'product_card.html' %}
+          {% empty %}
+            <li class="related-empty">No related products available.</li>
+          {% endfor %}
+        </ul>
       </div>
     </section>
 

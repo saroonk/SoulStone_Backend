@@ -81,12 +81,11 @@
   }
 
   /* ---------------------------- New arrivals rail ---------------------------- */
+  // Card markup for this rail is now server-rendered by Django (see index.html /
+  // product_card.html), so this only wires up the scroll controls.
   function renderRail() {
     var rail = $("#newArrivalsRail");
     if (!rail) return;
-    PRODUCTS.filter(function (p) { return p.isNew; }).forEach(function (p) {
-      rail.appendChild(productCard(p));
-    });
 
     var prev = $("[data-rail-prev]"), next = $("[data-rail-next]");
     function step() { return Math.max(260, rail.firstElementChild ? rail.firstElementChild.getBoundingClientRect().width + 22 : 280); }

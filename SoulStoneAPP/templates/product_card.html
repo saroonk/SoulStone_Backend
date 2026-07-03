@@ -1,0 +1,27 @@
+{% comment %}
+Shared product card, used on the homepage "Just arrived" rail, the
+catalogue grid, and the "You May Also Like" related products rail.
+Expects a `product` variable in context.
+{% endcomment %}
+<li>
+  <article class="product-card{% if not product.in_stock %} out-of-stock{% endif %}">
+    <a class="product-media" href="{% url 'product_detail' product.slug %}" aria-label="View {{ product.name }}">
+      {% if product.is_new %}<span class="badge-new">New</span>{% endif %}
+      {% if not product.in_stock %}<span class="badge-stock">Out of Stock</span>{% endif %}
+      <img src="{{ product.main_image.url }}" alt="{{ product.name }}" loading="lazy" />
+    </a>
+    <div class="product-body">
+      <span class="product-planet">{{ product.category.name }}</span>
+      <span class="product-name">{{ product.name }}</span>
+      <span class="product-meta">{{ product.subtitle }}{% if product.is_certified %} &middot; Certified{% endif %}</span>
+      <div class="product-foot">
+        <span class="product-price">&#8377;{{ product.new_price|floatformat:0 }}</span>
+        {% if product.in_stock %}
+          <button class="add-btn" type="button" data-add="{{ product.slug }}">Add</button>
+        {% else %}
+          <button class="add-btn" type="button" disabled>Sold Out</button>
+        {% endif %}
+      </div>
+    </div>
+  </article>
+</li>
