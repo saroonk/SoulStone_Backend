@@ -1,9 +1,9 @@
 /* ============================================================
    SoulStones — Sign In / Register page
    Plain JS, no dependencies. Handles the Login/Register form
-   swap animation and password show/hide toggles only. No
-   validation or authentication logic — both forms submit as
-   plain HTML forms, ready to be swapped for Django form posts.
+   swap animation and password show/hide toggles only. Both
+   forms are real Django form posts (see login.html / views.login);
+   this file has no validation or authentication logic.
    ============================================================ */
 (function () {
   "use strict";
@@ -20,7 +20,11 @@
     var registerSwitchLink = $("#registerSwitchLink");
     if (!loginForm || !registerForm) return;
 
-    var current = "login";
+    // The server may render either form as the active one (e.g. after a
+    // failed registration it re-renders with the register form visible),
+    // so read the actual starting state from the DOM instead of assuming.
+    var current = loginForm.hidden ? "register" : "login";
+    setBrandSwitch(current);
 
     function setBrandSwitch(target) {
       if (target === "login") {
@@ -94,41 +98,9 @@
     });
   }
 
-  /* ---------------------------- Submit placeholder feedback ---------------------------- */
-  // No backend yet — prevent the page from reloading/navigating away and
-  // surface a neutral status message instead of faking a login/registration.
-  function bindFormSubmissions() {
-    var loginForm = $("#loginForm"), registerForm = $("#registerForm");
-    var loginMsg = $("#loginMsg"), registerMsg = $("#registerMsg");
-
-    if (loginForm) loginForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (loginMsg) {
-        loginMsg.setAttribute("data-state", "info");
-        loginMsg.textContent = "Sign-in isn't connected yet — this is a design preview.";
-      }
-    });
-    if (registerForm) registerForm.addEventListener("submit", function (e) {
-      e.preventDefault();
-      if (registerMsg) {
-        registerMsg.setAttribute("data-state", "info");
-        registerMsg.textContent = "Account creation isn't connected yet — this is a design preview.";
-      }
-    });
-
-    var googleBtn = $("#loginGoogleBtn");
-    if (googleBtn) googleBtn.addEventListener("click", function () {
-      if (loginMsg) {
-        loginMsg.setAttribute("data-state", "info");
-        loginMsg.textContent = "Google sign-in isn't connected yet — this is a design preview.";
-      }
-    });
-  }
-
   /* ---------------------------- Init ---------------------------- */
   document.addEventListener("DOMContentLoaded", function () {
     bindFormSwitch();
     bindPasswordToggles();
-    bindFormSubmissions();
   });
 })();

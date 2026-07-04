@@ -1,5 +1,6 @@
 from datetime import timedelta
 
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -111,3 +112,11 @@ class ProductImage(models.Model):
 
     def __str__(self):
         return f"{self.product.name} - image {self.display_order}"
+
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    mobile_number = models.CharField(max_length=15, unique=True, null=True, blank=True)
+
+    def __str__(self):
+        return f"{self.user.username} ({self.mobile_number})"

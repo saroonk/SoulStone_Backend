@@ -121,6 +121,7 @@ html, body { height: 100%; }
 
 .auth-form-msg { margin: 14px 0 0; font-size: 0.8125rem; min-height: 1.1em; color: var(--muted); text-align: center; }
 .auth-form-msg[data-state="info"] { color: var(--gold-deep); }
+.auth-form-msg[data-state="error"] { color: #c0392b; }
 
 .auth-divider {
   display: flex; align-items: center; gap: 16px;

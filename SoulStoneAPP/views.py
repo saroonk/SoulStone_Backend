@@ -1,13 +1,14 @@
 from decimal import Decimal, InvalidOperation
 
 from django.contrib import messages
+from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 
-from .forms import ContactForm
+from .forms import ContactForm, LoginForm, RegisterForm
 from .models import Contact, Product
 from django.core.mail import send_mail
 from threading import Thread
@@ -74,7 +75,39 @@ def index(request):
 
 
 def login(request):
-    return render(request, 'login.html')
+    login_form = LoginForm()
+    register_form = RegisterForm()
+    active_form = 'login'
+
+    if request.method == 'POST':
+        form_type = request.POST.get('form_type')
+
+        if form_type == 'register':
+            active_form = 'register'
+            register_form = RegisterForm(request.POST)
+            if register_form.is_valid():
+                register_form.save()
+                messages.success(request, "Your account has been created successfully. Please login.")
+                return redirect('login')
+        elif form_type == 'login':
+            active_form = 'login'
+            login_form = LoginForm(request.POST)
+            if login_form.is_valid():
+                auth_login(request, login_form.cleaned_data['user'])
+                messages.success(request, "Welcome back!")
+                return redirect('index')
+
+    return render(request, 'login.html', {
+        'login_form': login_form,
+        'register_form': register_form,
+        'active_form': active_form,
+    })
+
+
+def logout_view(request):
+    auth_logout(request)
+    messages.success(request, "You have been logged out.")
+    return redirect('index')
 
 
 def checkout(request):

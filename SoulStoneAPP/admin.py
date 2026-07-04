@@ -41,3 +41,13 @@ class ProductAdmin(ModelAdmin):
     search_fields = ("name", "subtitle")
     ordering = ("-created_at",)
     inlines = [ProductImageInline]
+
+
+@admin.register(UserProfile)
+class UserProfileAdmin(ModelAdmin):
+    list_display = ("user", "email", "mobile_number")
+    search_fields = ("user__username", "user__email", "mobile_number")
+
+    @admin.display(description="Email")
+    def email(self, obj):
+        return obj.user.email

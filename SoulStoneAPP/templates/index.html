@@ -71,7 +71,7 @@
 
         <div class="category-grid">
           {% for category in categories %}
-            <a class="cat-tile{% if forloop.first %} cat-tile--lead{% endif %}" href="#top-styles">
+            <a class="cat-tile{% if forloop.first %} cat-tile--lead{% endif %}" href="{% url 'products' %}?category={{ category.slug }}">
               <span class="cat-media"><img src="{{ category.image.url }}" alt="{{ category.name }}" loading="lazy" /></span>
               <span class="cat-label"><span class="cat-name">{{ category.name }}</span>{% if category.description %}<span class="cat-planet">{{ category.description }}</span>{% endif %}</span>
             </a>
