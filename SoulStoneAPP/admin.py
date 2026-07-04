@@ -51,3 +51,27 @@ class UserProfileAdmin(ModelAdmin):
     @admin.display(description="Email")
     def email(self, obj):
         return obj.user.email
+
+
+class CartItemInline(TabularInline):
+    model = CartItem
+    extra = 0
+
+
+@admin.register(Cart)
+class CartAdmin(ModelAdmin):
+    list_display = ("id", "user", "session_key", "total_items", "updated_at")
+    list_filter = ("updated_at",)
+    search_fields = ("user__username", "user__email", "session_key")
+    inlines = [CartItemInline]
+
+    @admin.display(description="Total Items")
+    def total_items(self, obj):
+        return obj.total_items
+
+
+@admin.register(CartItem)
+class CartItemAdmin(ModelAdmin):
+    list_display = ("cart", "product", "quantity", "updated_at")
+    list_filter = ("updated_at",)
+    search_fields = ("product__name", "cart__user__username", "cart__session_key")

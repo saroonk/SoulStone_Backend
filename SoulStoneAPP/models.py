@@ -1,6 +1,7 @@
 from datetime import timedelta
 
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 from django.db import models
 from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -120,3 +121,49 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return f"{self.user.username} ({self.mobile_number})"
+
+
+class Cart(models.Model):
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="cart", null=True, blank=True, unique=True
+    )
+    session_key = models.CharField(max_length=40, null=True, blank=True, unique=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    @property
+    def total_items(self):
+        return sum(item.quantity for item in self.items.all())
+
+    @property
+    def subtotal(self):
+        return sum(item.line_total for item in self.items.all())
+
+    def __str__(self):
+        return f"Cart #{self.pk} ({self.user or self.session_key})"
+
+
+class CartItem(models.Model):
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(default=1, validators=[MinValueValidator(1)])
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("cart", "product")
+
+    @property
+    def line_total(self):
+        return self.product.new_price * self.quantity
+
+    def save(self, *args, **kwargs):
+        # Belt-and-suspenders: no code path (view, admin, merge, shell) may
+        # ever persist a CartItem with quantity < 1. Callers that would
+        # reduce it to zero should delete the row instead of saving it.
+        if self.quantity < 1:
+            raise ValueError("CartItem quantity must be at least 1; delete the row instead of saving 0.")
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.product.name} x {self.quantity}"

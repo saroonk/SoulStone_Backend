@@ -1,4 +1,5 @@
 <header class="site-header" id="siteHeader" data-elevated="false">
+  {% csrf_token %}
 
   <!-- Announcement bar -->
   <div class="announcement-bar" id="announcementBar">
@@ -62,7 +63,7 @@
       <!-- Cart -->
       <button class="icon-btn cart-button" id="cartButton" aria-label="Open cart, 0 items">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M16 11V7a4 4 0 0 0-8 0v4"/><rect x="3" y="11" width="18" height="10" rx="2"/></svg>
-        <span class="cart-count" id="cartCount" data-empty="true">0</span>
+        <span class="cart-count" id="cartCount" data-empty="{% if cart_count %}false{% else %}true{% endif %}">{{ cart_count|default:0 }}</span>
       </button>
     </div>
   </div>
@@ -79,3 +80,15 @@
   </div>
 
 </header>
+
+<!-- Cart feedback toast (Bootstrap component; no custom CSS needed).
+     Kept outside <header> because its backdrop-filter creates a containing
+     block that would otherwise trap position:fixed descendants. -->
+<div class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1080; ">
+  <div id="cartToast" class="toast align-items-center border-0" role="status" aria-live="polite" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="cartToastBody"></div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>

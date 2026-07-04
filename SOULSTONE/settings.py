@@ -66,6 +66,7 @@ TEMPLATES = [
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'SoulStoneAPP.context_processors.categories',
+                'SoulStoneAPP.context_processors.cart',
             ],
         },
     },

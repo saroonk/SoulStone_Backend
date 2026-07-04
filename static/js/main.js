@@ -1,33 +1,14 @@
 /* ============================================================
    SoulStones — homepage interactivity
-   Plain JS, no dependencies. Structured for later Django port:
-   PRODUCTS would come from a context variable / API instead of
-   this hardcoded array.
+   Plain JS, no dependencies. Cart state is backend-driven (see the
+   Cart section below); everything else here is UI chrome.
    ============================================================ */
 (function () {
   "use strict";
 
-  // Placeholder business contact. Replace before launch.
-  var WHATSAPP_NUMBER = "91XXXXXXXXXX";
   var IMG = "static/images/";
 
   /* ---------------------------- Data ---------------------------- */
-  // NOTE: GM*.webp shots are watermarked competitor placeholders.
-  // Swap for clean product photography before launch.
-  var PRODUCTS = [
-    { id: "neelam",  name: "Ceylon Blue Sapphire", stone: "Neelam",   planet: "Saturn",  carat: 5.2, price: 48000, img: "GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp", isNew: true },
-    { id: "manik",   name: "Burmese Ruby",         stone: "Manik",    planet: "Sun",     carat: 4.1, price: 62000, img: "GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp", isNew: true },
-    { id: "panna",   name: "Zambian Emerald",      stone: "Panna",    planet: "Mercury", carat: 4.8, price: 41000, img: "GM09656_FRONT_fa2dff4c-569a-4169-b02b-ef805440efc9.webp", isNew: true },
-    { id: "pukhraj", name: "Ceylon Yellow Sapphire", stone: "Pukhraj", planet: "Jupiter", carat: 6.0, price: 37000, img: "GM09592_FRONT_b1965923-977d-4883-987a-076196fb558a.webp", isNew: true },
-    { id: "gomed",   name: "Hessonite Garnet",     stone: "Gomed",    planet: "Rahu",    carat: 7.3, price: 15500, img: "GM02832_FRONT_98ad636b-fc2f-4674-90ca-84dffc2ebd78.webp", isNew: false },
-    { id: "moonga",  name: "Italian Red Coral",    stone: "Moonga",   planet: "Mars",    carat: 8.1, price: 12800, img: "GM09798_BACK_10d467d5-6723-43aa-9e1c-6b73714b4a69.webp", isNew: true },
-    { id: "moti",    name: "Basra Pearl",          stone: "Moti",     planet: "Moon",    carat: 5.5, price: 9800,  img: "GM09862_BACK_ef1c9a47-1c0e-429b-ba4b-064de53006f2.webp", isNew: false },
-    { id: "lehsunia",name: "Cat's Eye Chrysoberyl",stone: "Lehsunia", planet: "Ketu",    carat: 6.4, price: 22000, img: "GM09864_BACK_199c02c1-d92f-4df2-98d8-105b6f93a3b5.webp", isNew: false },
-    { id: "sphatik", name: "White Sapphire",       stone: "Safed Pukhraj", planet: "Venus", carat: 4.9, price: 18500, img: "GM09896_BACK_ce70a685-b98d-4fba-b863-df39b2d43e8c.webp", isNew: true },
-    { id: "neelam2", name: "Kashmir Blue Sapphire",stone: "Neelam",   planet: "Saturn",  carat: 3.4, price: 91000, img: "GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp", isNew: false },
-    { id: "manik2",  name: "Old Mine Ruby",        stone: "Manik",    planet: "Sun",     carat: 2.9, price: 44000, img: "GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp", isNew: false }
-  ];
-
   var REVIEWS = [
     { stars: 5, quote: "The certificate matched the stone exactly. First time I have trusted an online gem seller.", author: "Ananya R.", stone: "Blue Sapphire" },
     { stars: 5, quote: "An advisor talked me through carat and quality on WhatsApp for twenty minutes. No pressure at all.", author: "Vikram S.", stone: "Yellow Sapphire" },
@@ -165,42 +146,103 @@
     });
   }
 
-  /* ---------------------------- Cart ---------------------------- */
-  var cart = loadCart();
-  function loadCart() {
-    try { return JSON.parse(localStorage.getItem("ss_cart") || "[]"); }
-    catch (e) { return []; }
-  }
-  function saveCart() {
-    try { localStorage.setItem("ss_cart", JSON.stringify(cart)); } catch (e) {}
-  }
-  function findProduct(id) { for (var i = 0; i < PRODUCTS.length; i++) if (PRODUCTS[i].id === id) return PRODUCTS[i]; return null; }
-  function cartCount() { return cart.reduce(function (n, it) { return n + it.qty; }, 0); }
-  function cartSubtotal() {
-    return cart.reduce(function (sum, it) { var p = findProduct(it.id); return sum + (p ? p.price * it.qty : 0); }, 0);
+  /* ---------------------------- Cart (backend-driven) ---------------------------- */
+  // Cart state lives in the Django backend (session cart for guests, user
+  // cart when logged in — see cart_utils.py). This talks to it over fetch()
+  // and re-renders the same drawer/badge markup from the JSON it returns.
+  var CART_URLS = {
+    data: "/cart/data/",
+    add: "/cart/add/",
+    increase: "/cart/increase/",
+    decrease: "/cart/decrease/",
+    remove: "/cart/remove/"
+  };
+
+  function getCsrfToken() {
+    var match = document.cookie.match(/(?:^|; )csrftoken=([^;]*)/);
+    return match ? decodeURIComponent(match[1]) : "";
   }
 
-  function addToCart(id) {
-    var row = null;
-    for (var i = 0; i < cart.length; i++) if (cart[i].id === id) { row = cart[i]; break; }
-    if (row) row.qty += 1; else cart.push({ id: id, qty: 1 });
-    saveCart(); updateCartBadge(true); renderDrawer();
-    var p = findProduct(id);
-    announce((p ? p.name : "Item") + " added to your selection.");
-  }
-  function setQty(id, delta) {
-    for (var i = 0; i < cart.length; i++) {
-      if (cart[i].id === id) { cart[i].qty += delta; if (cart[i].qty <= 0) cart.splice(i, 1); break; }
+  // Success/error feedback for cart actions, using Bootstrap's own toast
+  // component (already loaded sitewide) so no new CSS is needed.
+  function showToast(message, isSuccess) {
+    var toastEl = $("#cartToast");
+    if (!message || !toastEl || typeof bootstrap === "undefined") {
+      announce(message);
+      return;
     }
-    saveCart(); updateCartBadge(false); renderDrawer();
-  }
-  function removeFromCart(id) {
-    cart = cart.filter(function (it) { return it.id !== id; });
-    saveCart(); updateCartBadge(false); renderDrawer();
+    var body = $("#cartToastBody", toastEl);
+    if (body) body.textContent = message;
+    toastEl.classList.remove("text-bg-success", "text-bg-danger");
+    toastEl.classList.add(isSuccess ? "text-bg-success" : "text-bg-danger");
+    bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 2600 }).show();
+    announce(message);
   }
 
-  function updateCartBadge(bump) {
-    var count = cartCount(), badge = $("#cartCount"), btn = $("#cartButton");
+  function postCart(url, body) {
+    return fetch(url, {
+      method: "POST",
+      credentials: "same-origin",
+      headers: {
+        "X-CSRFToken": getCsrfToken(),
+        "Content-Type": "application/x-www-form-urlencoded",
+        "X-Requested-With": "XMLHttpRequest"
+      },
+      body: new URLSearchParams(body || {}).toString()
+    }).then(function (res) {
+      return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+    });
+  }
+
+  function fetchCart() {
+    return fetch(CART_URLS.data, {
+      credentials: "same-origin",
+      headers: { "X-Requested-With": "XMLHttpRequest" }
+    })
+      .then(function (res) { return res.json(); })
+      .then(function (data) {
+        renderDrawer(data.cart);
+        updateCartBadge(data.cart.count, false);
+      });
+  }
+
+  function addToCart(slug, quantity, buttonEl) {
+    return postCart(CART_URLS.add, { slug: slug, quantity: quantity || 1 }).then(function (result) {
+      renderDrawer(result.data.cart);
+      updateCartBadge(result.data.cart.count, result.ok);
+      showToast(result.data.message, result.ok);
+      if (!result.ok && buttonEl) flashButtonMessage(buttonEl, result.data.message);
+      return result;
+    });
+  }
+
+  function setQty(slug, delta) {
+    var url = delta > 0 ? CART_URLS.increase : CART_URLS.decrease;
+    return postCart(url, { slug: slug }).then(function (result) {
+      renderDrawer(result.data.cart);
+      updateCartBadge(result.data.cart.count, false);
+      if (!result.ok) showToast(result.data.message, false);
+      return result;
+    });
+  }
+
+  function removeFromCart(slug) {
+    return postCart(CART_URLS.remove, { slug: slug }).then(function (result) {
+      renderDrawer(result.data.cart);
+      updateCartBadge(result.data.cart.count, false);
+      return result;
+    });
+  }
+
+  function flashButtonMessage(btn, message) {
+    var original = btn.textContent;
+    btn.textContent = message && message.length < 20 ? message : "Unavailable";
+    setTimeout(function () { btn.textContent = original; }, 1600);
+  }
+
+  function updateCartBadge(count, bump) {
+    var badge = $("#cartCount"), btn = $("#cartButton");
+    if (!badge) return;
     badge.textContent = count;
     badge.setAttribute("data-empty", count === 0 ? "true" : "false");
     if (btn) btn.setAttribute("aria-label", "Open cart, " + count + (count === 1 ? " item" : " items"));
@@ -209,48 +251,34 @@
     }
   }
 
-  function whatsappForCart() {
-    var lines = cart.map(function (it) {
-      var p = findProduct(it.id);
-      return p ? ("• " + p.name + " (" + p.stone + ", " + p.carat.toFixed(1) + "ct) x" + it.qty + " · " + inr(p.price * it.qty)) : "";
-    }).filter(Boolean);
-    var msg = "Hi SoulStones, I would like to confirm this selection:\n" + lines.join("\n") +
-      "\n\nSubtotal: " + inr(cartSubtotal());
-    return "https://wa.me/" + WHATSAPP_NUMBER + "?text=" + encodeURIComponent(msg);
-  }
-
-  function renderDrawer() {
+  function renderDrawer(cartData) {
     var items = $("#drawerItems"), emptyEl = $("#drawerEmpty"), foot = $("#drawerFoot");
-    if (!items) return;
+    if (!items || !cartData) return;
     items.innerHTML = "";
-    if (!cart.length) {
+    if (!cartData.items.length) {
       emptyEl.hidden = false; foot.hidden = true; items.hidden = true; return;
     }
     emptyEl.hidden = true; foot.hidden = false; items.hidden = false;
-    cart.forEach(function (it) {
-      var p = findProduct(it.id);
-      if (!p) return;
+    cartData.items.forEach(function (it) {
       var li = el("li", "drawer-row");
       li.innerHTML =
-        '<img class="drawer-thumb" src="' + IMG + p.img + '" alt="" />' +
+        '<img class="drawer-thumb" src="' + it.image + '" alt="" />' +
         '<div class="drawer-info">' +
-          '<div class="drawer-info-name">' + p.name + '</div>' +
-          '<div class="drawer-info-meta">' + p.planet + ' · ' + p.carat.toFixed(1) + ' ct</div>' +
+          '<div class="drawer-info-name">' + it.name + '</div>' +
+          '<div class="drawer-info-meta">' + it.meta + '</div>' +
           '<div class="drawer-qty">' +
-            '<button class="qty-btn" type="button" data-dec="' + p.id + '" aria-label="Decrease quantity">−</button>' +
-            '<span class="qty-val">' + it.qty + '</span>' +
-            '<button class="qty-btn" type="button" data-inc="' + p.id + '" aria-label="Increase quantity">+</button>' +
+            '<button class="qty-btn" type="button" data-dec="' + it.slug + '" aria-label="Decrease quantity">−</button>' +
+            '<span class="qty-val">' + it.quantity + '</span>' +
+            '<button class="qty-btn" type="button" data-inc="' + it.slug + '" aria-label="Increase quantity">+</button>' +
           '</div>' +
         '</div>' +
         '<div class="drawer-line-end">' +
-          '<span class="drawer-price">' + inr(p.price * it.qty) + '</span>' +
-          '<button class="remove-btn" type="button" data-remove="' + p.id + '">Remove</button>' +
+          '<span class="drawer-price">' + inr(Math.round(parseFloat(it.line_total))) + '</span>' +
+          '<button class="remove-btn" type="button" data-remove="' + it.slug + '">Remove</button>' +
         '</div>';
       items.appendChild(li);
     });
-    $("#drawerSubtotal").textContent = inr(cartSubtotal());
-    var checkout = $("#drawerCheckout");
-    if (checkout) checkout.href = whatsappForCart();
+    $("#drawerSubtotal").textContent = inr(Math.round(parseFloat(cartData.subtotal)));
   }
 
   /* ---------------------------- Drawer open/close + focus trap ---------------------------- */
@@ -488,9 +516,18 @@
       var t = e.target.closest("[data-add],[data-inc],[data-dec],[data-remove],[data-close-drawer]");
       if (!t) return;
       if (t.hasAttribute("data-add")) {
-        addToCart(t.getAttribute("data-add"));
-        t.classList.add("added"); t.textContent = "Added";
-        setTimeout(function () { t.classList.remove("added"); t.textContent = "Add"; }, 1200);
+        if (t.disabled) return;
+        var slug = t.getAttribute("data-add");
+        var qty = Number(t.getAttribute("data-qty")) || 1;
+        var original = t.textContent;
+        t.disabled = true;
+        addToCart(slug, qty, t).then(function (result) {
+          t.disabled = false;
+          if (result.ok) {
+            t.classList.add("added"); t.textContent = "Added";
+            setTimeout(function () { t.classList.remove("added"); t.textContent = original; }, 1200);
+          }
+        });
       } else if (t.hasAttribute("data-inc")) { setQty(t.getAttribute("data-inc"), 1); }
       else if (t.hasAttribute("data-dec")) { setQty(t.getAttribute("data-dec"), -1); }
       else if (t.hasAttribute("data-remove")) { removeFromCart(t.getAttribute("data-remove")); }
@@ -521,8 +558,7 @@
     renderRail();
     renderReviews();
     renderVideos();
-    renderDrawer();
-    updateCartBadge(false);
+    fetchCart();
     bindSort();
     bindHeaderScroll();
     bindMobileNav();
@@ -533,4 +569,9 @@
     bindNewsletter();
     bindGlobalClicks();
   });
+
+  // Small public surface so other page scripts (e.g. product-detail.js's
+  // quantity-aware Add to Cart) can reuse this cart logic instead of
+  // duplicating it.
+  window.SoulStonesCart = { addToCart: addToCart, showToast: showToast };
 })();

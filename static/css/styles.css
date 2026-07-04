@@ -418,6 +418,18 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); font-weight: 400; 
 .add-btn:hover { background: var(--gold-soft); transform: translateY(-1px); }
 .add-btn.added { background: var(--black); color: var(--gold); }
 
+/* Out-of-stock state (mirrors product.css so every product card matches) */
+.badge-stock {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  background: var(--surface); color: var(--muted);
+  border: 1px solid var(--hairline); border-radius: var(--r-badge);
+  padding: 4px 10px; font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.product-card.out-of-stock .product-media img { opacity: 0.5; }
+.add-btn:disabled, .add-btn:disabled:hover {
+  background: var(--bg); color: var(--muted); transform: none; cursor: not-allowed;
+}
+
 /* ----------------------------- Stats band (black) ----------------------------- */
 .stats-band { background: var(--black); color: var(--on-black); }
 .stats-inner { display: grid; grid-template-columns: repeat(4, 1fr); padding-block: clamp(44px, 6vw, 68px); justify-content: center !important; }

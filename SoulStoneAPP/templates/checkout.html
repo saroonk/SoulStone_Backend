@@ -93,29 +93,23 @@
             <h2 class="order-summary-title">Order Summary</h2>
 
             <ul class="order-summary-items">
-              <li class="order-summary-item">
-                <img src="{% static 'images/GM09610_FRONT_b9083458-a334-4585-b6d2-939d741e7225.webp' %}" alt="Burmese Ruby" loading="lazy" />
-                <div class="order-summary-item-info">
-                  <span class="order-summary-item-name">Burmese Ruby</span>
-                  <span class="order-summary-item-meta">Qty: 1</span>
-                  <span class="order-summary-item-price">&#8377;62,000</span>
-                </div>
-              </li>
-              <li class="order-summary-item">
-                <img src="{% static 'images/GM09395_FRONT_fffa00cc-f157-44fd-88c8-00c709c903d0.webp' %}" alt="Ceylon Blue Sapphire" loading="lazy" />
-                <div class="order-summary-item-info">
-                  <span class="order-summary-item-name">Ceylon Blue Sapphire</span>
-                  <span class="order-summary-item-meta">Qty: 1</span>
-                  <span class="order-summary-item-price">&#8377;48,000</span>
-                </div>
-              </li>
+              {% for item in cart_items %}
+                <li class="order-summary-item">
+                  <img src="{{ item.product.main_image.url }}" alt="{{ item.product.name }}" loading="lazy" />
+                  <div class="order-summary-item-info">
+                    <span class="order-summary-item-name">{{ item.product.name }}</span>
+                    <span class="order-summary-item-meta">Qty: {{ item.quantity }}</span>
+                    <span class="order-summary-item-price">&#8377;{{ item.line_total|floatformat:0 }}</span>
+                  </div>
+                </li>
+              {% endfor %}
             </ul>
 
             <div class="order-totals">
-              <div class="order-total-row"><span>Subtotal</span><span>&#8377;1,10,000</span></div>
+              <div class="order-total-row"><span>Subtotal</span><span>&#8377;{{ cart_subtotal|floatformat:0 }}</span></div>
               <div class="order-total-row"><span>Shipping</span><span class="order-total-complimentary">Complimentary</span></div>
-              <div class="order-total-row"><span>Tax (Calculated)</span><span>&#8377;3,300</span></div>
-              <div class="order-total-row order-total-row--grand"><span>Grand Total</span><span>&#8377;1,13,300</span></div>
+              <div class="order-total-row"><span>Tax</span><span>&#8377;0</span></div>
+              <div class="order-total-row order-total-row--grand"><span>Grand Total</span><span>&#8377;{{ cart_total|floatformat:0 }}</span></div>
             </div>
           </div>
 

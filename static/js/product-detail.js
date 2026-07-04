@@ -62,11 +62,17 @@
 
   /* ---------------------------- Quantity stepper ---------------------------- */
   var quantity = 1;
+  var stockLimit = Infinity;
   function bindQuantity() {
+    var qtyGroup = $(".pd-qty");
     var valEl = $("#pdQtyVal"), minus = $("#pdQtyMinus"), plus = $("#pdQtyPlus");
     if (!valEl) return;
+    if (qtyGroup && qtyGroup.dataset.stock) {
+      var parsed = parseInt(qtyGroup.dataset.stock, 10);
+      if (!isNaN(parsed) && parsed > 0) stockLimit = parsed;
+    }
     function setQuantity(n) {
-      quantity = Math.max(1, Math.min(20, n));
+      quantity = Math.max(1, Math.min(stockLimit, 20, n));
       valEl.textContent = String(quantity);
     }
     if (minus) minus.addEventListener("click", function () { setQuantity(quantity - 1); });
@@ -74,33 +80,51 @@
   }
 
   /* ---------------------------- Add to Cart / Buy Now ---------------------------- */
-  // Adds `quantity` units through main.js's own delegated [data-add] handler
-  // (dispatched on a hidden bridge button) so the cart, badge, and drawer
-  // all stay driven by the existing, unmodified cart system.
-  function addQuantityToCart() {
-    var bridge = $("#pdCartBridge");
-    if (!bridge) return;
-    for (var i = 0; i < quantity; i++) {
-      bridge.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true }));
+  // Validates the chosen quantity against stock before ever contacting the
+  // backend (which validates again — never trust the frontend alone), then
+  // calls the shared cart module directly so the button's "Added to Cart"
+  // feedback only fires once we know the add actually succeeded.
+  function addQuantityToCart(buttonEl) {
+    var cartApi = window.SoulStonesCart;
+    if (!cartApi) return Promise.resolve({ ok: false });
+
+    var addBtn = $("#pdAddToCart");
+    var slug = addBtn ? addBtn.getAttribute("data-slug") : null;
+    if (!slug) return Promise.resolve({ ok: false });
+
+    if (quantity > stockLimit) {
+      cartApi.showToast(
+        stockLimit > 0
+          ? "Only " + stockLimit + " item" + (stockLimit === 1 ? "" : "s") + " currently available."
+          : "This product is out of stock.",
+        false
+      );
+      return Promise.resolve({ ok: false });
     }
+
+    return cartApi.addToCart(slug, quantity, buttonEl);
   }
 
   function bindPurchaseActions() {
     var addBtn = $("#pdAddToCart"), buyBtn = $("#pdBuyNow");
     if (addBtn) addBtn.addEventListener("click", function () {
-      addQuantityToCart();
-      var original = addBtn.textContent;
-      addBtn.classList.add("added");
-      addBtn.textContent = "Added to Cart";
-      setTimeout(function () {
-        addBtn.classList.remove("added");
-        addBtn.textContent = original;
-      }, 1400);
+      addQuantityToCart(addBtn).then(function (result) {
+        if (!result.ok) return;
+        var original = addBtn.textContent;
+        addBtn.classList.add("added");
+        addBtn.textContent = "Added to Cart";
+        setTimeout(function () {
+          addBtn.classList.remove("added");
+          addBtn.textContent = original;
+        }, 1400);
+      });
     });
     if (buyBtn) buyBtn.addEventListener("click", function () {
-      addQuantityToCart();
-      var cartButton = $("#cartButton");
-      if (cartButton) cartButton.click();
+      addQuantityToCart(buyBtn).then(function (result) {
+        if (!result.ok) return;
+        var cartButton = $("#cartButton");
+        if (cartButton) cartButton.click();
+      });
     });
   }
 

@@ -7,9 +7,11 @@ from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
+from django.views.decorators.http import require_GET, require_POST
 
+from .cart_utils import get_existing_cart, get_or_create_cart, merge_guest_cart_into_user, serialize_cart
 from .forms import ContactForm, LoginForm, RegisterForm
-from .models import Contact, Product
+from .models import CartItem, Contact, Product
 from django.core.mail import send_mail
 from threading import Thread
 
@@ -93,7 +95,10 @@ def login(request):
             active_form = 'login'
             login_form = LoginForm(request.POST)
             if login_form.is_valid():
-                auth_login(request, login_form.cleaned_data['user'])
+                guest_session_key = request.session.session_key
+                user = login_form.cleaned_data['user']
+                auth_login(request, user)
+                merge_guest_cart_into_user(guest_session_key, user)
                 messages.success(request, "Welcome back!")
                 return redirect('index')
 
@@ -111,7 +116,20 @@ def logout_view(request):
 
 
 def checkout(request):
-    return render(request, 'checkout.html')
+    cart = get_existing_cart(request)
+    items = list(cart.items.select_related('product', 'product__category').all()) if cart else []
+
+    if not items:
+        messages.info(request, "Your cart is empty. Add a stone before checking out.")
+        return redirect('products')
+
+    subtotal = sum(item.line_total for item in items)
+
+    return render(request, 'checkout.html', {
+        'cart_items': items,
+        'cart_subtotal': subtotal,
+        'cart_total': subtotal,
+    })
 
 
 def contact(request):
@@ -256,3 +274,99 @@ def products(request):
 
 def track_order(request):
     return render(request, 'track-order.html')
+
+
+def _cart_error(request, message, status=400):
+    return JsonResponse(
+        {'success': False, 'message': message, 'cart': serialize_cart(get_existing_cart(request))},
+        status=status,
+    )
+
+
+@require_GET
+def cart_data(request):
+    return JsonResponse({'success': True, 'cart': serialize_cart(get_existing_cart(request))})
+
+
+@require_POST
+def cart_add(request):
+    slug = request.POST.get('slug')
+    try:
+        quantity = int(request.POST.get('quantity', 1))
+    except (TypeError, ValueError):
+        quantity = 1
+    quantity = max(1, quantity)
+
+    product = Product.objects.filter(slug=slug, is_active=True).first()
+    if not product:
+        return _cart_error(request, "Product not found.", status=404)
+
+    if product.stock <= 0:
+        return _cart_error(request, f"{product.name} is out of stock.")
+
+    cart = get_or_create_cart(request)
+    existing_item = CartItem.objects.filter(cart=cart, product=product).first()
+    current_quantity = existing_item.quantity if existing_item else 0
+    new_quantity = current_quantity + quantity
+
+    if new_quantity > product.stock:
+        remaining = max(product.stock - current_quantity, 0)
+        if remaining:
+            return _cart_error(request, f"Only {remaining} more of {product.name} can be added (stock limit reached).")
+        return _cart_error(request, f"You already have the maximum available stock of {product.name} in your cart.")
+
+    if existing_item:
+        existing_item.quantity = new_quantity
+        existing_item.save()
+    else:
+        CartItem.objects.create(cart=cart, product=product, quantity=new_quantity)
+
+    return JsonResponse({
+        'success': True,
+        'message': f"{product.name} added to cart.",
+        'cart': serialize_cart(cart),
+    })
+
+
+@require_POST
+def cart_increase(request):
+    slug = request.POST.get('slug')
+    cart = get_or_create_cart(request)
+    item = CartItem.objects.filter(cart=cart, product__slug=slug).select_related('product').first()
+    if not item:
+        return _cart_error(request, "Item not found in cart.", status=404)
+
+    if item.quantity + 1 > item.product.stock:
+        return _cart_error(request, f"Only {item.product.stock} of {item.product.name} left in stock.")
+
+    item.quantity += 1
+    item.save()
+
+    return JsonResponse({'success': True, 'message': "Quantity updated.", 'cart': serialize_cart(cart)})
+
+
+@require_POST
+def cart_decrease(request):
+    slug = request.POST.get('slug')
+    cart = get_or_create_cart(request)
+    item = CartItem.objects.filter(cart=cart, product__slug=slug).first()
+    if not item:
+        return _cart_error(request, "Item not found in cart.", status=404)
+
+    item.quantity -= 1
+    if item.quantity <= 0:
+        item.delete()
+        message = "Item removed."
+    else:
+        item.save()
+        message = "Quantity updated."
+
+    return JsonResponse({'success': True, 'message': message, 'cart': serialize_cart(cart)})
+
+
+@require_POST
+def cart_remove(request):
+    slug = request.POST.get('slug')
+    cart = get_or_create_cart(request)
+    CartItem.objects.filter(cart=cart, product__slug=slug).delete()
+    return JsonResponse({'success': True, 'message': "Item removed.", 'cart': serialize_cart(cart)})
