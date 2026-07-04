@@ -173,8 +173,10 @@
     }
     var body = $("#cartToastBody", toastEl);
     if (body) body.textContent = message;
-    toastEl.classList.remove("text-bg-success", "text-bg-danger");
-    toastEl.classList.add(isSuccess ? "text-bg-success" : "text-bg-danger");
+    // Success uses the brand gold accent (not Bootstrap's default green);
+    // errors keep Bootstrap's standard red.
+    toastEl.classList.remove("text-bg-success", "text-bg-danger", "cart-toast-success");
+    toastEl.classList.add(isSuccess ? "cart-toast-success" : "text-bg-danger");
     bootstrap.Toast.getOrCreateInstance(toastEl, { delay: 2600 }).show();
     announce(message);
   }

@@ -784,3 +784,26 @@ h1, h2, h3, h4 { margin: 0; font-family: var(--font-display); font-weight: 400; 
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
   .reveal { opacity: 1; transform: none; }
 }
+
+/* ----------------------------- Cart success toast ----------------------------- */
+/* Brand gold instead of Bootstrap's default green; error toasts keep
+   Bootstrap's stock text-bg-danger (unchanged). */
+#cartToast.cart-toast-success {
+  background-color: var(--gold);
+  color: var(--ink);
+}
+#cartToast.cart-toast-success .btn-close {
+  filter: none;
+}
+
+
+
+
+
+
+
+
+
+
+
+
