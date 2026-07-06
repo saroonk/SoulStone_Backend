@@ -194,6 +194,7 @@
 .mo-status--out-for-delivery { background: #FEF2E2;           color: #7A4A18;          }
 .mo-status--delivered      { background: #E8F4EC;             color: #3A7A4A;          }
 .mo-status--cancelled      { background: #FAE8E8;             color: #8B2E2E;          }
+.mo-status--returned       { background: #F3E7E0;             color: #8B4B2E;          }
 
 /* ---- Chevron icon ---- */
 .mo-chevron {

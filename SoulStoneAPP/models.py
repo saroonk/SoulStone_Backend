@@ -167,3 +167,111 @@ class CartItem(models.Model):
 
     def __str__(self):
         return f"{self.product.name} x {self.quantity}"
+
+
+def generate_order_number():
+    """SS + year + a 5-digit sequence, e.g. SS202600001. Retried on collision
+    by the caller (order_number is unique), so this only needs to be close."""
+    prefix = f"SS{timezone.now().year}"
+    last = (
+        Order.objects.filter(order_number__startswith=prefix)
+        .order_by("-order_number")
+        .values_list("order_number", flat=True)
+        .first()
+    )
+    next_seq = int(last[len(prefix):]) + 1 if last else 1
+    return f"{prefix}{next_seq:05d}"
+
+
+class Order(models.Model):
+    PAYMENT_PENDING = "pending"
+    PAYMENT_PAID = "paid"
+    PAYMENT_FAILED = "failed"
+    PAYMENT_REFUNDED = "refunded"
+    PAYMENT_STATUS_CHOICES = [
+        (PAYMENT_PENDING, "Pending"),
+        (PAYMENT_PAID, "Paid"),
+        (PAYMENT_FAILED, "Failed"),
+        (PAYMENT_REFUNDED, "Refunded"),
+    ]
+
+    STATUS_PENDING = "pending"
+    STATUS_CONFIRMED = "confirmed"
+    STATUS_SHIPPED = "shipped"
+    STATUS_DELIVERED = "delivered"
+    STATUS_CANCELLED = "cancelled"
+    STATUS_RETURNED = "returned"
+    ORDER_STATUS_CHOICES = [
+        (STATUS_PENDING, "Pending"),
+        (STATUS_CONFIRMED, "Confirmed"),
+        (STATUS_SHIPPED, "Shipped"),
+        (STATUS_DELIVERED, "Delivered"),
+        (STATUS_CANCELLED, "Cancelled"),
+        (STATUS_RETURNED, "Returned"),
+    ]
+
+    # Badge class already defined in my-orders.css for each order_status.
+    STATUS_BADGE_CLASS = {
+        STATUS_PENDING: "mo-status--processing",
+        STATUS_CONFIRMED: "mo-status--confirmed",
+        STATUS_SHIPPED: "mo-status--shipped",
+        STATUS_DELIVERED: "mo-status--delivered",
+        STATUS_CANCELLED: "mo-status--cancelled",
+        STATUS_RETURNED: "mo-status--returned",
+    }
+
+    # Customer information
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name="orders")
+    session_key = models.CharField(max_length=40, null=True, blank=True)
+    order_number = models.CharField(max_length=20, unique=True, editable=False)
+    full_name = models.CharField(max_length=150)
+    email = models.EmailField()
+    mobile_number = models.CharField(max_length=15)
+    address_line1 = models.CharField(max_length=255)
+    address_line2 = models.CharField(max_length=255, blank=True)
+    city = models.CharField(max_length=100)
+    state = models.CharField(max_length=100)
+    country = models.CharField(max_length=100, default="India")
+    pincode = models.CharField(max_length=10)
+
+    # Order information
+    total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+    payment_status = models.CharField(max_length=10, choices=PAYMENT_STATUS_CHOICES, default=PAYMENT_PENDING)
+    order_status = models.CharField(max_length=10, choices=ORDER_STATUS_CHOICES, default=STATUS_PENDING)
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=255, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    def save(self, *args, **kwargs):
+        if not self.order_number:
+            self.order_number = generate_order_number()
+        super().save(*args, **kwargs)
+
+    @property
+    def status_badge_class(self):
+        return self.STATUS_BADGE_CLASS.get(self.order_status, "mo-status--processing")
+
+    @property
+    def estimated_delivery(self):
+        # Demo calculation, as explicitly allowed: 5 business-ish days out.
+        return self.created_at + timedelta(days=5)
+
+    def __str__(self):
+        return self.order_number
+
+
+class OrderItem(models.Model):
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
+    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True, blank=True)
+    product_name = models.CharField(max_length=200)
+    product_price = models.DecimalField(max_digits=10, decimal_places=2)
+    quantity = models.PositiveIntegerField()
+    line_total = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __str__(self):
+        return f"{self.product_name} x {self.quantity}"

@@ -33,23 +33,22 @@
           <h1 class="checkout-title">Checkout</h1>
           <p class="checkout-lede">Complete your order by providing your shipping information and destination details for our artisans to prepare your delivery.</p>
 
-          {% comment %} Django note: replace fields/action with {{ form }} from a Django checkout form;
-               order_items / totals on the right stand in for {{ order.items }} / {{ order.totals }} {% endcomment %}
-          <form id="checkoutForm" novalidate>
+          <form id="checkoutForm" novalidate data-create-order-url="{% url 'checkout_create_order' %}" data-verify-url="{% url 'checkout_verify_payment' %}" data-failed-url="{% url 'checkout_payment_failed' %}" data-razorpay-key="{{ razorpay_key_id }}">
+            {% csrf_token %}
 
             <div class="checkout-divider"><span>Billing Information</span></div>
             <div class="checkout-field-grid">
               <div class="checkout-field checkout-field--full">
                 <label for="billingName">Full Name</label>
-                <input type="text" id="billingName" name="billingName" autocomplete="name" required />
+                <input type="text" id="billingName" name="billingName" value="{{ prefill.billingName|default:'' }}" autocomplete="name" required />
               </div>
               <div class="checkout-field">
                 <label for="billingEmail">Email Address</label>
-                <input type="email" id="billingEmail" name="billingEmail" autocomplete="email" required />
+                <input type="email" id="billingEmail" name="billingEmail" value="{{ prefill.billingEmail|default:'' }}" autocomplete="email" required />
               </div>
               <div class="checkout-field">
                 <label for="billingPhone">Phone Number</label>
-                <input type="tel" id="billingPhone" name="billingPhone" autocomplete="tel" required />
+                <input type="tel" id="billingPhone" name="billingPhone" value="{{ prefill.billingPhone|default:'' }}" autocomplete="tel" required />
               </div>
             </div>
 
@@ -83,7 +82,7 @@
               </div>
             </div>
 
-            <a href="{% url 'order_successful' %}" type="submit" class="btn btn-primary checkout-submit">Proceed to Payment</a>
+            <button type="submit" class="btn btn-primary checkout-submit">Proceed to Payment</button>
             <p class="checkout-form-msg" id="checkoutMsg" role="status" aria-live="polite"></p>
           </form>
         </div>
@@ -108,7 +107,7 @@
             <div class="order-totals">
               <div class="order-total-row"><span>Subtotal</span><span>&#8377;{{ cart_subtotal|floatformat:0 }}</span></div>
               <div class="order-total-row"><span>Shipping</span><span class="order-total-complimentary">Complimentary</span></div>
-              <div class="order-total-row"><span>Tax</span><span>&#8377;0</span></div>
+              <!-- <div class="order-total-row"><span>Tax</span><span>&#8377;0</span></div> -->
               <div class="order-total-row order-total-row--grand"><span>Grand Total</span><span>&#8377;{{ cart_total|floatformat:0 }}</span></div>
             </div>
           </div>
@@ -184,6 +183,7 @@
   <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
 
   <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script src="{% static 'js/checkout.js' %}" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
 

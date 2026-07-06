@@ -75,3 +75,56 @@ class CartItemAdmin(ModelAdmin):
     list_display = ("cart", "product", "quantity", "updated_at")
     list_filter = ("updated_at",)
     search_fields = ("product__name", "cart__user__username", "cart__session_key")
+
+
+class OrderItemInline(TabularInline):
+    model = OrderItem
+    extra = 0
+    readonly_fields = ("product", "product_name", "product_price", "quantity", "line_total")
+    can_delete = False
+
+    def has_add_permission(self, request, obj=None):
+        return False
+
+
+@admin.register(Order)
+class OrderAdmin(ModelAdmin):
+    list_display = (
+        "order_number",
+        "full_name",
+        "total_amount",
+        "payment_status",
+        "order_status",
+        "created_at",
+    )
+    list_filter = ("order_status", "payment_status", "created_at")
+    search_fields = ("order_number", "full_name", "email", "mobile_number", "razorpay_order_id", "razorpay_payment_id")
+    date_hierarchy = "created_at"
+    ordering = ("-created_at",)
+    list_editable = ("order_status",)
+    readonly_fields = (
+        "order_number",
+        "user",
+        "session_key",
+        "total_amount",
+        "razorpay_order_id",
+        "razorpay_payment_id",
+        "razorpay_signature",
+        "created_at",
+        "updated_at",
+    )
+    inlines = [OrderItemInline]
+    fieldsets = (
+        ("Order", {"fields": ("order_number", "user", "session_key", "order_status", "payment_status", "total_amount")}),
+        ("Customer", {"fields": ("full_name", "email", "mobile_number")}),
+        ("Shipping Address", {"fields": ("address_line1", "address_line2", "city", "state", "country", "pincode")}),
+        ("Razorpay", {"fields": ("razorpay_order_id", "razorpay_payment_id", "razorpay_signature")}),
+        ("Timestamps", {"fields": ("created_at", "updated_at")}),
+    )
+
+
+@admin.register(OrderItem)
+class OrderItemAdmin(ModelAdmin):
+    list_display = ("order", "product_name", "quantity", "product_price", "line_total")
+    search_fields = ("order__order_number", "product_name")
+    list_filter = ("order__order_status",)

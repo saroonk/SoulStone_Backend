@@ -153,6 +153,10 @@ CKEDITOR_CONFIGS = {
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+# So @login_required redirects to this project's actual login page instead
+# of Django's default /accounts/login/.
+LOGIN_URL = 'login'
+
 
 
 
@@ -161,6 +165,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'saroonsharu@gmail.com'  
-EMAIL_HOST_PASSWORD = 'rtpobhetadmayvul'   
+EMAIL_HOST_USER = 'saroonsharu@gmail.com'
+EMAIL_HOST_PASSWORD = 'rtpobhetadmayvul'
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+# Order notifications are sent to the first address in ADMINS via mail_admins().
+ADMINS = [('SoulStones Admin', EMAIL_HOST_USER)]
+EMAIL_SUBJECT_PREFIX = ''  # mail_admins() would otherwise prefix subjects with "[Django] "
+
+# Razorpay
+# https://razorpay.com/docs/payments/server-integration/python/
+# Keys are added manually (e.g. via environment variables) before payments go live.

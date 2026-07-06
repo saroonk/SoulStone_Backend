@@ -1,7 +1,9 @@
 from decimal import Decimal, InvalidOperation
 
+import razorpay
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
+from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q
 from django.http import JsonResponse
@@ -10,8 +12,9 @@ from django.template.loader import render_to_string
 from django.views.decorators.http import require_GET, require_POST
 
 from .cart_utils import get_existing_cart, get_or_create_cart, merge_guest_cart_into_user, serialize_cart
-from .forms import ContactForm, LoginForm, RegisterForm
-from .models import CartItem, Contact, Product
+from .forms import CheckoutForm, ContactForm, LoginForm, RegisterForm
+from .models import CartItem, Contact, Order, Product
+from .order_utils import CheckoutError, create_pending_order, finalize_paid_order, mark_order_failed
 from django.core.mail import send_mail
 from threading import Thread
 
@@ -125,11 +128,133 @@ def checkout(request):
 
     subtotal = sum(item.line_total for item in items)
 
+    prefill = {}
+    if request.user.is_authenticated:
+        prefill = {
+            'billingName': request.user.get_full_name() or request.user.username,
+            'billingEmail': request.user.email,
+            'billingPhone': getattr(getattr(request.user, 'profile', None), 'mobile_number', '') or '',
+        }
+
     return render(request, 'checkout.html', {
         'cart_items': items,
         'cart_subtotal': subtotal,
         'cart_total': subtotal,
+        'prefill': prefill,
+        'razorpay_key_id': settings.RAZORPAY_KEY_ID,
     })
+
+
+def _razorpay_client():
+    if not settings.RAZORPAY_KEY_ID or not settings.RAZORPAY_KEY_SECRET:
+        return None
+    return razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
+
+
+@require_POST
+def checkout_create_order(request):
+    """Step 1 of payment: validate the checkout form + cart/stock, create a
+    Pending Order snapshot, open a matching Razorpay order, and hand the
+    frontend everything it needs to open the Razorpay Checkout widget.
+    """
+    client = _razorpay_client()
+    if client is None:
+        return JsonResponse({'success': False, 'message': "Online payment is not configured yet. Please contact support."}, status=503)
+
+    form = CheckoutForm(request.POST)
+    if not form.is_valid():
+        first_error = next(iter(form.errors.values()))[0]
+        return JsonResponse({'success': False, 'message': first_error}, status=400)
+
+    try:
+        order, _cart = create_pending_order(request, form)
+    except CheckoutError as exc:
+        return JsonResponse({'success': False, 'message': str(exc)}, status=400)
+
+    try:
+        razorpay_order = client.order.create(data={
+            'amount': int(order.total_amount * 100),
+            'currency': 'INR',
+            'receipt': order.order_number,
+            'notes': {'order_number': order.order_number},
+        })
+    except Exception:
+        return JsonResponse({'success': False, 'message': "Could not start payment. Please try again."}, status=502)
+
+    order.razorpay_order_id = razorpay_order['id']
+    order.save(update_fields=['razorpay_order_id', 'updated_at'])
+
+    return JsonResponse({
+        'success': True,
+        'key_id': settings.RAZORPAY_KEY_ID,
+        'razorpay_order_id': razorpay_order['id'],
+        'amount': razorpay_order['amount'],
+        'currency': razorpay_order['currency'],
+        'order_number': order.order_number,
+        'name': "SoulStones",
+        'description': f"Order {order.order_number}",
+        'prefill': {
+            'name': order.full_name,
+            'email': order.email,
+            'contact': order.mobile_number,
+        },
+    })
+
+
+@require_POST
+def checkout_verify_payment(request):
+    """Step 2: called from the Razorpay Checkout `handler` once the customer
+    completes payment. Verifies the signature server-side (never trust the
+    frontend), then finalizes the order — stock reduction, cart clearing,
+    and the Confirmed-status email all happen here, only on real success.
+    """
+    order_number = request.POST.get('order_number')
+    razorpay_order_id = request.POST.get('razorpay_order_id')
+    razorpay_payment_id = request.POST.get('razorpay_payment_id')
+    razorpay_signature = request.POST.get('razorpay_signature')
+
+    order = Order.objects.filter(order_number=order_number, razorpay_order_id=razorpay_order_id).first()
+    if not order:
+        return JsonResponse({'success': False, 'message': "Order not found."}, status=404)
+
+    client = _razorpay_client()
+    if client is None:
+        return JsonResponse({'success': False, 'message': "Online payment is not configured yet."}, status=503)
+
+    try:
+        client.utility.verify_payment_signature({
+            'razorpay_order_id': razorpay_order_id,
+            'razorpay_payment_id': razorpay_payment_id,
+            'razorpay_signature': razorpay_signature,
+        })
+    except razorpay.errors.SignatureVerificationError:
+        mark_order_failed(order)
+        return JsonResponse({'success': False, 'message': "Payment verification failed. Please try again."}, status=400)
+
+    order.razorpay_payment_id = razorpay_payment_id
+    order.razorpay_signature = razorpay_signature
+    order.save(update_fields=['razorpay_payment_id', 'razorpay_signature', 'updated_at'])
+
+    cart = get_existing_cart(request)
+    try:
+        finalize_paid_order(order, cart)
+    except CheckoutError as exc:
+        mark_order_failed(order)
+        return JsonResponse({'success': False, 'message': str(exc)}, status=400)
+
+    return JsonResponse({'success': True, 'redirect_url': f"/order-successful/?order={order.order_number}"})
+
+
+@require_POST
+def checkout_payment_failed(request):
+    """Razorpay's own `payment.failed` widget event lands here so a Failed
+    order isn't left silently Pending forever. Stock/cart are untouched.
+    """
+    order_number = request.POST.get('order_number')
+    order = Order.objects.filter(order_number=order_number).first()
+    if order and order.payment_status != Order.PAYMENT_PAID:
+        mark_order_failed(order)
+    return JsonResponse({'success': True})
 
 
 def contact(request):
@@ -156,12 +281,29 @@ def contact(request):
     return render(request, 'contact.html', {'form': form})
 
 
+@login_required
 def my_orders(request):
-    return render(request, 'my-orders.html')
+    orders = (
+        Order.objects.filter(user=request.user)
+        .prefetch_related('items', 'items__product')
+        .order_by('-created_at')
+    )
+    return render(request, 'my-orders.html', {'orders': orders})
 
 
 def order_successful(request):
-    return render(request, 'order-successful.html')
+    order_number = request.GET.get('order')
+    order = None
+    if order_number:
+        order_qs = Order.objects.filter(order_number=order_number).prefetch_related('items')
+        if request.user.is_authenticated:
+            order = order_qs.filter(user=request.user).first()
+        else:
+            order = order_qs.filter(session_key=request.session.session_key).first()
+    if not order:
+        messages.info(request, "We couldn't find that order.")
+        return redirect('index')
+    return render(request, 'order-successful.html', {'order': order})
 
 
 def ourstory(request):
@@ -273,7 +415,21 @@ def products(request):
 
 
 def track_order(request):
-    return render(request, 'track-order.html')
+    orders = None
+    searched_email = ''
+    if request.method == 'POST':
+        searched_email = request.POST.get('email', '').strip()
+        if searched_email:
+            orders = (
+                Order.objects.filter(email__iexact=searched_email)
+                .prefetch_related('items', 'items__product')
+                .order_by('-created_at')
+            )
+    return render(request, 'track-order.html', {
+        'orders': orders,
+        'searched': request.method == 'POST',
+        'searched_email': searched_email,
+    })
 
 
 def _cart_error(request, message, status=400):

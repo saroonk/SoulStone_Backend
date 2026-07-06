@@ -67,6 +67,19 @@ class RegisterForm(forms.Form):
         return user
 
 
+class CheckoutForm(forms.Form):
+    # Field names match checkout.html's existing input `name` attributes exactly.
+    billingName = forms.CharField(max_length=150, label="Full Name")
+    billingEmail = forms.EmailField(label="Email Address")
+    billingPhone = forms.CharField(max_length=15, label="Phone Number")
+    addressLine1 = forms.CharField(max_length=255, label="Address Line 1")
+    addressLine2 = forms.CharField(max_length=255, required=False, label="Address Line 2")
+    city = forms.CharField(max_length=100, label="City")
+    state = forms.CharField(max_length=100, label="State / Province")
+    pinCode = forms.CharField(max_length=10, label="PIN / ZIP Code")
+    country = forms.ChoiceField(choices=[("India", "India")], label="Country")
+
+
 class LoginForm(forms.Form):
     identifier = forms.CharField(label="Username or Email")
     password = forms.CharField(widget=forms.PasswordInput, label="Password")

@@ -29,8 +29,6 @@
     <section class="section os-section" aria-label="Order confirmed">
       <div class="shell os-shell">
 
-        {% comment %} Django note: order context vars: {{ order.number }}, {{ order.customer_name }},
-             {{ order.payment_status }}, {{ order.estimated_delivery }} {% endcomment %}
         <div class="os-card">
 
           <!-- Animated success icon (CSS-only, respects prefers-reduced-motion) -->
@@ -49,27 +47,29 @@
           <p class="os-script" aria-hidden="true">with care &amp; certainty</p>
 
           <!-- Headline (Gloock 400) -->
-          {% comment %} Django note: optionally "Thank you, {{ order.customer_name|first_name }}" {% endcomment %}
-          <h1 class="os-headline">Order Successfully Placed</h1>
+          <h1 class="os-headline">Thank You, {{ order.full_name }}</h1>
 
           <!-- Reassurance message -->
-          <p class="os-message">Your order has been successfully placed. Thank you for choosing SoulStones. We&rsquo;re preparing your certified gemstone with the utmost care and will keep you updated throughout your order journey.</p>
+          <p class="os-message">Your order has been successfully placed on {{ order.created_at|date:"j F Y" }}. Thank you for choosing SoulStones. We&rsquo;re preparing your certified gemstone with the utmost care and will keep you updated throughout your order journey.</p>
 
           <!-- Confirmation details -->
-          {% comment %} Django note: replace each dd value with {{ order.number }}, {{ order.estimated_delivery }}, {{ order.payment_status }} {% endcomment %}
           <dl class="os-confirm-box">
             <div class="os-confirm-item">
               <dt class="os-confirm-label">Order Number</dt>
-              <dd class="os-confirm-value">#SS102458</dd>
+              <dd class="os-confirm-value">#{{ order.order_number }}</dd>
+            </div>
+            <div class="os-confirm-item">
+              <dt class="os-confirm-label">Order Total</dt>
+              <dd class="os-confirm-value">&#8377;{{ order.total_amount|floatformat:0 }}</dd>
             </div>
             <div class="os-confirm-item">
               <dt class="os-confirm-label">Estimated Delivery</dt>
-              <dd class="os-confirm-value">3&ndash;5 Business Days</dd>
+              <dd class="os-confirm-value">{{ order.estimated_delivery|date:"j F Y" }}</dd>
             </div>
             <div class="os-confirm-item">
               <dt class="os-confirm-label">Payment Status</dt>
-              <dd class="os-confirm-value os-confirm-value--paid">
-                <span class="os-paid-dot" aria-hidden="true"></span>Paid
+              <dd class="os-confirm-value{% if order.payment_status == 'paid' %} os-confirm-value--paid{% endif %}">
+                {% if order.payment_status == 'paid' %}<span class="os-paid-dot" aria-hidden="true"></span>{% endif %}{{ order.get_payment_status_display }}
               </dd>
             </div>
           </dl>
