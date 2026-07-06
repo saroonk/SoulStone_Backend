@@ -275,3 +275,36 @@ class OrderItem(models.Model):
 
     def __str__(self):
         return f"{self.product_name} x {self.quantity}"
+
+
+class Testimonial(models.Model):
+    RATING_1 = 1
+    RATING_2 = 2
+    RATING_3 = 3
+    RATING_4 = 4
+    RATING_5 = 5
+    RATING_CHOICES = [
+        (RATING_1, "⭐ 1 Star"),
+        (RATING_2, "⭐⭐ 2 Stars"),
+        (RATING_3, "⭐⭐⭐ 3 Stars"),
+        (RATING_4, "⭐⭐⭐⭐ 4 Stars"),
+        (RATING_5, "⭐⭐⭐⭐⭐ 5 Stars"),
+    ]
+
+    reviewer_name = models.CharField(max_length=150)
+    product_purchased = models.CharField(max_length=200)
+    review = models.TextField()
+    rating = models.PositiveSmallIntegerField(choices=RATING_CHOICES, default=RATING_5)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["-created_at"]
+
+    @property
+    def star_display(self):
+        return "★" * self.rating + "☆" * (5 - self.rating)
+
+    def __str__(self):
+        return f"{self.reviewer_name} — {self.rating}★"

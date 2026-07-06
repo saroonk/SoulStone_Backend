@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from .cart_utils import get_existing_cart, get_or_create_cart, merge_guest_cart_into_user, serialize_cart
 from .forms import CheckoutForm, ContactForm, LoginForm, RegisterForm
 from .invoice_utils import invoice_filename, render_invoice_pdf
-from .models import CartItem, Contact, Order, Product
+from .models import CartItem, Contact, Order, Product, Testimonial
 from .order_utils import CheckoutError, create_pending_order, finalize_paid_order, mark_order_failed
 from django.core.mail import send_mail
 from threading import Thread
@@ -76,9 +76,11 @@ def index(request):
         .select_related('category')
         .order_by('?')
     )
+    testimonials = Testimonial.objects.filter(is_active=True).order_by('-created_at')[:6]
     return render(request, 'index.html', {
         'latest_products': latest_products,
         'collection_products': collection_products,
+        'testimonials': testimonials,
     })
 
 

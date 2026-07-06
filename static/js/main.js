@@ -9,15 +9,6 @@
   var IMG = "static/images/";
 
   /* ---------------------------- Data ---------------------------- */
-  var REVIEWS = [
-    { stars: 5, quote: "The certificate matched the stone exactly. First time I have trusted an online gem seller.", author: "Ananya R.", stone: "Blue Sapphire" },
-    { stars: 5, quote: "An advisor talked me through carat and quality on WhatsApp for twenty minutes. No pressure at all.", author: "Vikram S.", stone: "Yellow Sapphire" },
-    { stars: 5, quote: "Photographs were honest. What arrived looked exactly like the listing, not better, not worse.", author: "Meera J.", stone: "Emerald" },
-    { stars: 4, quote: "Packaging was beautiful and the lab report was in the box. Delivery took a day longer than expected.", author: "Rohan K.", stone: "Ruby" },
-    { stars: 5, quote: "I sent my birth chart and they helped me pick. It felt like a jeweller, not a remedy shop.", author: "Priya N.", stone: "Hessonite" },
-    { stars: 5, quote: "Premium without being flashy. Exactly the experience I wanted for something this meaningful.", author: "Aditya M.", stone: "Red Coral" }
-  ];
-
   // Video posters reuse gem imagery until real customer videos exist.
   var STORIES = [
     { name: "Sunita's story", stone: "Found her Pukhraj", poster: "GM09592_FRONT_b1965923-977d-4883-987a-076196fb558a.webp" },
@@ -112,20 +103,9 @@
     if (sel) sel.addEventListener("change", function () { activeSort = sel.value; renderGrid(); });
   }
 
-  /* ---------------------------- Reviews ---------------------------- */
-  function renderReviews() {
-    var wrap = $("#reviewColumns");
-    if (!wrap) return;
-    REVIEWS.forEach(function (r) {
-      var stars = "★★★★★".slice(0, r.stars) + "☆☆☆☆☆".slice(0, 5 - r.stars);
-      var card = el("figure", "review");
-      card.innerHTML =
-        '<div class="review-stars" aria-label="' + r.stars + ' out of 5 stars">' + stars + '</div>' +
-        '<blockquote class="review-quote">' + r.quote + '</blockquote>' +
-        '<figcaption><span class="review-author">' + r.author + '</span><br><span class="review-stone">' + r.stone + '</span></figcaption>';
-      wrap.appendChild(card);
-    });
-  }
+  /* Reviews are now rendered server-side by Django directly into
+     #reviewColumns (see index.html / views.index), so there is no
+     client-side rendering step for them here. */
 
   /* ---------------------------- Video testimonials ---------------------------- */
   function renderVideos() {
@@ -558,7 +538,6 @@
     bindChips();
     renderGrid();
     renderRail();
-    renderReviews();
     renderVideos();
     fetchCart();
     bindSort();

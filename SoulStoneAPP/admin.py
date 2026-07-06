@@ -138,3 +138,11 @@ class OrderItemAdmin(ModelAdmin):
     list_display = ("order", "product_name", "quantity", "product_price", "line_total")
     search_fields = ("order__order_number", "product_name")
     list_filter = ("order__order_status",)
+
+
+@admin.register(Testimonial)
+class TestimonialAdmin(ModelAdmin):
+    list_display = ("reviewer_name", "product_purchased", "rating", "is_active", "created_at")
+    list_filter = ("rating", "is_active")
+    search_fields = ("reviewer_name", "product_purchased")
+    ordering = ("-created_at",)

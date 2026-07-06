@@ -213,7 +213,17 @@
         <header class="section-head">
           <h2 class="section-title">Trusted by thousands</h2>
         </header>
-        <div class="review-columns" id="reviewColumns"></div>
+        <div class="review-columns" id="reviewColumns">
+          {% for testimonial in testimonials %}
+          <figure class="review">
+            <div class="review-stars" aria-label="{{ testimonial.rating }} out of 5 stars">{{ testimonial.star_display }}</div>
+            <blockquote class="review-quote">{{ testimonial.review }}</blockquote>
+            <figcaption><span class="review-author">{{ testimonial.reviewer_name }}</span><br><span class="review-stone">{{ testimonial.product_purchased }}</span></figcaption>
+          </figure>
+          {% empty %}
+          <p>No reviews yet — be the first to share your experience.</p>
+          {% endfor %}
+        </div>
       </div>
     </section>
 
