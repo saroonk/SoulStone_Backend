@@ -1,4 +1,6 @@
 from django.contrib import admin
+from django.urls import reverse
+from django.utils.html import format_html
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
 
 from .models import *
@@ -96,6 +98,7 @@ class OrderAdmin(ModelAdmin):
         "payment_status",
         "order_status",
         "created_at",
+        "download_invoice",
     )
     list_filter = ("order_status", "payment_status", "created_at")
     search_fields = ("order_number", "full_name", "email", "mobile_number", "razorpay_order_id", "razorpay_payment_id")
@@ -121,6 +124,13 @@ class OrderAdmin(ModelAdmin):
         ("Razorpay", {"fields": ("razorpay_order_id", "razorpay_payment_id", "razorpay_signature")}),
         ("Timestamps", {"fields": ("created_at", "updated_at")}),
     )
+
+    @admin.display(description="Invoice")
+    def download_invoice(self, obj):
+        if obj.payment_status != Order.PAYMENT_PAID:
+            return "—"
+        url = reverse("order_invoice", args=[obj.order_number])
+        return format_html('<a class="button" href="{}" target="_blank">Download Invoice</a>', url)
 
 
 @admin.register(OrderItem)

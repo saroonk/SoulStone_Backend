@@ -11,8 +11,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.template.loader import render_to_string
 from django.views.decorators.http import require_GET, require_POST
 
+from django.http import HttpResponse, HttpResponseForbidden
+
 from .cart_utils import get_existing_cart, get_or_create_cart, merge_guest_cart_into_user, serialize_cart
 from .forms import CheckoutForm, ContactForm, LoginForm, RegisterForm
+from .invoice_utils import invoice_filename, render_invoice_pdf
 from .models import CartItem, Contact, Order, Product
 from .order_utils import CheckoutError, create_pending_order, finalize_paid_order, mark_order_failed
 from django.core.mail import send_mail
@@ -304,6 +307,32 @@ def order_successful(request):
         messages.info(request, "We couldn't find that order.")
         return redirect('index')
     return render(request, 'order-successful.html', {'order': order})
+
+
+def _user_owns_order(request, order):
+    if request.user.is_staff:
+        return True
+    if request.user.is_authenticated:
+        return order.user_id == request.user.id
+    return bool(order.session_key) and order.session_key == request.session.session_key
+
+
+def order_invoice(request, order_number):
+    """Serves a PDF invoice generated on the fly (never stored on disk).
+    Ownership is checked the same way as order_successful — by user for
+    logged-in accounts, by session_key for guests — plus a staff bypass for
+    the admin download column. Both "no such order" and "not yours" return
+    the same generic 403 so order numbers can't be probed. Invoices only
+    exist once an order is actually paid.
+    """
+    order = Order.objects.filter(order_number=order_number).prefetch_related('items', 'items__product').first()
+    if not order or order.payment_status != Order.PAYMENT_PAID or not _user_owns_order(request, order):
+        return HttpResponseForbidden("You do not have permission to access this invoice.")
+
+    pdf_bytes = render_invoice_pdf(order)
+    response = HttpResponse(pdf_bytes, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="{invoice_filename(order)}"'
+    return response
 
 
 def ourstory(request):

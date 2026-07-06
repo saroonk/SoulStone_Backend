@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8" />
+<title>Invoice {{ order.order_number }}</title>
+<style>
+  @page {
+    size: A4;
+    margin: 2.1cm 1.8cm 2.4cm 1.8cm;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 10.5pt;
+    color: #1A160F;
+  }
+  table { border-collapse: collapse; width: 100%; }
+  td, th { vertical-align: top; }
+
+  .brand-name {
+    font-family: Times-Roman, "Times New Roman", serif;
+    font-size: 26pt;
+    color: #876521;
+    font-weight: bold;
+  }
+  .brand-tagline {
+    font-size: 9pt;
+    color: #8A7B6C;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+  .invoice-heading {
+    font-family: Times-Roman, "Times New Roman", serif;
+    font-size: 20pt;
+    color: #1A160F;
+    text-align: right;
+  }
+  .invoice-meta-table td {
+    font-size: 9.5pt;
+    padding: 1px 0;
+  }
+  .invoice-meta-label {
+    color: #8A7B6C;
+    text-align: right;
+    padding-right: 10px;
+  }
+  .invoice-meta-value {
+    text-align: right;
+    font-weight: bold;
+    color: #1A160F;
+  }
+
+  .header-table { margin-bottom: 22px; }
+
+  .hr-gold {
+    border-bottom: 1.6pt solid #C9A24B;
+    line-height: 0;
+    font-size: 0;
+    margin: 6px 0 18px 0;
+  }
+  .hr-thin {
+    border-bottom: 0.75pt solid #DAD2C2;
+    line-height: 0;
+    font-size: 0;
+  }
+
+  .section-label {
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #876521;
+    font-weight: bold;
+    padding-bottom: 4px;
+  }
+  .info-block-table { margin-bottom: 20px; }
+  .info-block-table td { padding-right: 24px; }
+  .info-name { font-weight: bold; font-size: 11pt; margin-bottom: 2px; }
+  .info-line { font-size: 9.5pt; color: #3A342A; line-height: 1.5; }
+
+  .items-table { margin-top: 6px; margin-bottom: 4px; }
+  .items-table thead td {
+    background-color: #16120B;
+    color: #F4EEE1;
+    font-size: 8.5pt;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 8px 8px;
+  }
+  .items-table tbody td {
+    font-size: 9.5pt;
+    padding: 8px 8px;
+    border-bottom: 0.75pt solid #EDE6D6;
+  }
+  .items-table .col-img { width: 50px; }
+  .items-table .col-name { }
+  .items-table .col-qty { width: 42px; text-align: center; }
+  .items-table .col-price { width: 78px; text-align: right; }
+  .items-table .col-total { width: 84px; text-align: right; font-weight: bold; }
+  .prod-thumb { width: 38px; height: 38px; }
+  .prod-name { font-weight: bold; color: #1A160F; }
+  .prod-sub { font-size: 8pt; color: #8A7B6C; }
+
+  .totals-table { width: 260px; margin-left: auto; margin-top: 14px; }
+  .totals-table td { padding: 5px 0; font-size: 9.5pt; }
+  .totals-label { color: #5C5344; }
+  .totals-value { text-align: right; }
+  .totals-free { color: #876521; font-weight: bold; text-align: right; }
+  .grand-row td { padding-top: 9px; }
+  .grand-label { font-size: 11.5pt; font-weight: bold; color: #1A160F; }
+  .grand-value { font-size: 13pt; font-weight: bold; text-align: right; color: #876521; }
+
+  .status-pill {
+    display: inline;
+    font-size: 8pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    padding: 2px 8px;
+    border-radius: 8px;
+    color: #FFFDF8;
+    background-color: #4C8B5B;
+  }
+
+  .footer-note {
+    margin-top: 34px;
+    padding-top: 14px;
+    border-top: 0.75pt solid #DAD2C2;
+    text-align: center;
+  }
+  .footer-thanks {
+    font-family: Times-Roman, "Times New Roman", serif;
+    font-size: 12pt;
+    color: #876521;
+    margin-bottom: 4px;
+  }
+  .footer-sub {
+    font-size: 8.5pt;
+    color: #8A7B6C;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+
+  <!-- ============ COMPANY + INVOICE HEADER ============ -->
+  <table class="header-table">
+    <tr>
+      <td style="width: 55%;">
+        <div class="brand-name">Soul Stone</div>
+        <div class="brand-tagline">PREMIUM ASTROLOGY GEMSTONES</div>
+        <div class="info-line" style="margin-top: 10px;">
+          123 Gemstone Lane, Bandra West<br/>
+          Mumbai, Maharashtra 400050, India<br/>
+          support@soulstone.example &nbsp;&middot;&nbsp; +91 98765 43210
+        </div>
+      </td>
+      <td style="width: 45%;">
+        <div class="invoice-heading">INVOICE</div>
+        <table class="invoice-meta-table" style="margin-top: 10px;">
+          <tr><td class="invoice-meta-label">Invoice Number</td><td class="invoice-meta-value">INV-{{ order.order_number }}</td></tr>
+          <tr><td class="invoice-meta-label">Invoice Date</td><td class="invoice-meta-value">{{ invoice_date|date:"d M Y" }}</td></tr>
+          <tr><td class="invoice-meta-label">Order Number</td><td class="invoice-meta-value">{{ order.order_number }}</td></tr>
+          <tr><td class="invoice-meta-label">Payment Status</td><td class="invoice-meta-value">{{ order.get_payment_status_display }}</td></tr>
+          <tr><td class="invoice-meta-label">Order Status</td><td class="invoice-meta-value">{{ order.get_order_status_display }}</td></tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+
+  <div class="hr-gold">&nbsp;</div>
+
+  <!-- ============ CUSTOMER + SHIPPING ============ -->
+  <table class="info-block-table">
+    <tr>
+      <td style="width: 50%;">
+        <div class="section-label">Billed To</div>
+        <div class="info-name">{{ order.full_name }}</div>
+        <div class="info-line">
+          {{ order.email }}<br/>
+          {{ order.mobile_number }}
+        </div>
+      </td>
+      <td style="width: 50%;">
+        <div class="section-label">Shipping Address</div>
+        <div class="info-line">
+          {{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}<br/>
+          {{ order.city }}, {{ order.state }}<br/>
+          {{ order.country }} &ndash; {{ order.pincode }}
+        </div>
+      </td>
+    </tr>
+  </table>
+
+  <!-- ============ PRODUCTS TABLE ============ -->
+  <table class="items-table">
+    <thead>
+      <tr>
+        <td class="col-img">&nbsp;</td>
+        <td class="col-name">Product</td>
+        <td class="col-qty">Qty</td>
+        <td class="col-price">Unit Price</td>
+        <td class="col-total">Line Total</td>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in items %}
+      <tr>
+        <td class="col-img">
+          {% if item.invoice_image %}
+          <img class="prod-thumb" src="{{ item.invoice_image }}" />
+          {% endif %}
+        </td>
+        <td class="col-name">
+          <div class="prod-name">{{ item.product_name }}</div>
+          {% if item.product.subtitle %}<div class="prod-sub">{{ item.product.subtitle }}</div>{% endif %}
+        </td>
+        <td class="col-qty">{{ item.quantity }}</td>
+        <td class="col-price">Rs. {{ item.product_price|floatformat:0 }}</td>
+        <td class="col-total">Rs. {{ item.line_total|floatformat:0 }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="hr-thin">&nbsp;</div>
+
+  <!-- ============ TOTALS ============ -->
+  <table class="totals-table">
+    <tr>
+      <td class="totals-label">Subtotal</td>
+      <td class="totals-value">Rs. {{ order.total_amount|floatformat:0 }}</td>
+    </tr>
+    <tr>
+      <td class="totals-label">Shipping</td>
+      <td class="totals-free">FREE &ndash; Rs. 0</td>
+    </tr>
+    <tr>
+      <td colspan="2" style="padding: 8px 0 0 0;"><div style="border-top: 1.4pt solid #16120B;">&nbsp;</div></td>
+    </tr>
+    <tr class="grand-row">
+      <td class="grand-label">Grand Total</td>
+      <td class="grand-value">Rs. {{ order.total_amount|floatformat:0 }}</td>
+    </tr>
+  </table>
+
+  <!-- ============ FOOTER ============ -->
+  <div class="footer-note">
+    <div class="footer-thanks">Thank you for choosing Soul Stone.</div>
+    <div class="footer-sub">
+      We appreciate your trust.<br/>
+      This invoice is computer generated and does not require a signature.
+    </div>
+  </div>
+
+</body>
+</html>

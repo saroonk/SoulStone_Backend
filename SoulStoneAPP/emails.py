@@ -2,7 +2,9 @@
 confirmed or its status changes, so the sending logic lives in one place.
 """
 from django.conf import settings
-from django.core.mail import mail_admins, send_mail
+from django.core.mail import EmailMessage, mail_admins, send_mail
+
+from .invoice_utils import invoice_filename, render_invoice_pdf
 
 
 def _order_lines(order):
@@ -25,21 +27,45 @@ def _send(order, subject, message):
 def send_order_confirmed_emails(order):
     """Sent once, when payment succeeds and the order becomes Confirmed:
     one email to the customer, one to the admin address in settings.ADMINS.
+
+    This already runs on a background thread (see signals.py), off the
+    checkout request entirely, so generating the invoice PDF here costs the
+    customer nothing. It's still wrapped in try/except: if PDF generation
+    ever fails for some reason, the confirmation email must still go out —
+    just without the attachment, pointing the customer to My Orders instead.
     """
-    _send(
-        order,
+    closing = (
+        "We will notify you once your order is shipped.\n\n"
+        "Thank you for choosing SoulStones."
+    )
+    attachment = None
+    try:
+        attachment = (invoice_filename(order), render_invoice_pdf(order), "application/pdf")
+    except Exception:
+        closing = (
+            "You can download your invoice anytime from the My Orders "
+            "section of your Soul Stone account.\n\n"
+            "We will notify you once your order is shipped.\n\n"
+            "Thank you for choosing SoulStones."
+        )
+
+    email = EmailMessage(
         subject="Order Confirmed - Soul Stone",
-        message=(
+        body=(
             f"Hello {order.full_name},\n\n"
             "Thank you for your purchase. Your order has been confirmed successfully.\n\n"
             f"Order Number: {order.order_number}\n\n"
             "Order Summary:\n"
             f"{_order_lines(order)}\n\n"
             f"Total Amount: Rs.{order.total_amount}\n\n"
-            "We will notify you once your order is shipped.\n\n"
-            "Thank you for choosing SoulStones."
+            f"{closing}"
         ),
+        from_email=settings.DEFAULT_FROM_EMAIL,
+        to=[order.email],
     )
+    if attachment:
+        email.attach(*attachment)
+    email.send(fail_silently=True)
 
     mail_admins(
         subject="New Order Received",

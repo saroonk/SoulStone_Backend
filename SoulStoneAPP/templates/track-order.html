@@ -140,6 +140,9 @@
 
                 <div class="mo-order-actions">
                   <a class="btn btn-secondary" href="{% url 'products' %}">Continue Shopping</a>
+                  {% if order.payment_status == 'paid' %}
+                  <a class="btn btn-secondary" href="{% url 'order_invoice' order.order_number %}">Download Invoice</a>
+                  {% endif %}
                 </div>
 
               </div>
