@@ -139,6 +139,22 @@
 
   {% include 'footer.html' %}
 
+  <!-- ============================ PAYMENT PROCESSING OVERLAY ============================ -->
+  {% comment %} Reuses the existing .drawer-overlay backdrop (same class used by the cart
+       drawer elsewhere on this page) so this needs no new CSS. Shown the instant Razorpay
+       reports success, so the customer is never left looking at the checkout form while
+       the order is being created. {% endcomment %}
+  <div class="drawer-overlay" id="checkoutProcessingOverlay" style="align-items:center; justify-content:center; z-index:2000;" role="status" aria-live="assertive" aria-atomic="true" hidden>
+    <div style="background:var(--surface); border-radius:var(--r-card); box-shadow:var(--sh-hover); padding:40px 36px; max-width:22rem; width:calc(100% - 40px); text-align:center;">
+      <div style="width:56px; height:56px; border-radius:50%; background:#4C8B5B; display:flex; align-items:center; justify-content:center; margin:0 auto 20px;">
+        <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 12l4 4 8-8"/></svg>
+      </div>
+      <p style="margin:0 0 8px; font-family:var(--font-display); font-size:1.375rem; color:var(--ink);">Payment Successful</p>
+      <p style="margin:0 0 6px; font-size:1rem; color:var(--ink);">Creating your order&hellip;</p>
+      <p style="margin:0; font-size:0.8125rem; color:var(--muted);">Please wait. Do not refresh or close this page.</p>
+    </div>
+  </div>
+
   <!-- ============================ CART DRAWER (reused structure, driven by main.js) ============================ -->
   <div class="drawer-overlay" id="drawerOverlay" hidden></div>
   <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
