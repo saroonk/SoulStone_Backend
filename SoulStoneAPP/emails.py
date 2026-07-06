@@ -87,7 +87,7 @@ def send_order_shipped_email(order):
         message=(
             f"Hello {order.full_name},\n\n"
             f"Your order {order.order_number} has been shipped and is on its way to you.\n\n"
-            "Tracking information: your courier's tracking details will be shared shortly.\n\n"
+            "Tracking information: you can find the status of your shipment at any time from your account.\n\n"
             "Thank you for shopping with SoulStones."
         ),
     )

@@ -17,17 +17,24 @@
   table { border-collapse: collapse; width: 100%; }
   td, th { vertical-align: top; }
 
-  .brand-name {
+  /* Same wordmark treatment as the site navbar: "Soul" in ink, "Stones" in
+     gold-deep, normal weight, tight letter-spacing. Gloock itself can't be
+     embedded in the PDF (no local font file), so a serif fallback keeps the
+     same shape/weight/spirit as closely as a base PDF font allows. */
+  .wordmark {
     font-family: Times-Roman, "Times New Roman", serif;
-    font-size: 26pt;
-    color: #876521;
-    font-weight: bold;
+    font-weight: normal;
+    font-size: 30pt;
+    letter-spacing: -0.3pt;
+    line-height: 1;
+    color: #1A160F;
   }
+  .wordmark-stones { color: #876521; }
   .brand-tagline {
     font-size: 9pt;
     color: #8A7B6C;
     letter-spacing: 0.5px;
-    margin-top: 2px;
+    margin-top: 6px;
   }
   .invoice-heading {
     font-family: Times-Roman, "Times New Roman", serif;
@@ -50,7 +57,7 @@
     color: #1A160F;
   }
 
-  .header-table { margin-bottom: 22px; }
+  .header-table { margin-bottom: 26px; }
 
   .hr-gold {
     border-bottom: 1.6pt solid #C9A24B;
@@ -58,12 +65,6 @@
     font-size: 0;
     margin: 6px 0 18px 0;
   }
-  .hr-thin {
-    border-bottom: 0.75pt solid #DAD2C2;
-    line-height: 0;
-    font-size: 0;
-  }
-
   .section-label {
     font-size: 8.5pt;
     text-transform: uppercase;
@@ -72,36 +73,40 @@
     font-weight: bold;
     padding-bottom: 4px;
   }
-  .info-block-table { margin-bottom: 20px; }
-  .info-block-table td { padding-right: 24px; }
-  .info-name { font-weight: bold; font-size: 11pt; margin-bottom: 2px; }
-  .info-line { font-size: 9.5pt; color: #3A342A; line-height: 1.5; }
+  .info-block-table { table-layout: fixed; margin-bottom: 26px; }
+  .info-col { width: 50%; vertical-align: top; }
+  .info-col--left { text-align: left; padding-right: 24px; }
+  .info-col--right { text-align: right; padding-left: 24px; }
+  .info-name { font-weight: bold; font-size: 11pt; margin-bottom: 4px; }
+  .info-line { font-size: 9.5pt; color: #3A342A; line-height: 1.6; }
 
-  .items-table { margin-top: 6px; margin-bottom: 4px; }
+  .items-table { table-layout: fixed; margin-top: 8px; margin-bottom: 4px; }
   .items-table thead td {
     background-color: #16120B;
     color: #F4EEE1;
     font-size: 8.5pt;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    padding: 8px 8px;
+    padding: 10px 10px;
+    vertical-align: middle;
   }
   .items-table tbody td {
     font-size: 9.5pt;
-    padding: 8px 8px;
+    padding: 12px 10px;
     border-bottom: 0.75pt solid #EDE6D6;
+    vertical-align: middle;
   }
-  .items-table .col-img { width: 50px; }
+  .items-table .col-img { width: 76px; }
   .items-table .col-name { }
   .items-table .col-qty { width: 42px; text-align: center; }
-  .items-table .col-price { width: 78px; text-align: right; }
-  .items-table .col-total { width: 84px; text-align: right; font-weight: bold; }
-  .prod-thumb { width: 38px; height: 38px; }
+  .items-table .col-price { width: 84px; text-align: right; }
+  .items-table .col-total { width: 90px; text-align: right; font-weight: bold; }
+  .prod-thumb { width: 56px; height: 56px; }
   .prod-name { font-weight: bold; color: #1A160F; }
-  .prod-sub { font-size: 8pt; color: #8A7B6C; }
+  .prod-sub { font-size: 8pt; color: #8A7B6C; margin-top: 2px; }
 
-  .totals-table { width: 260px; margin-left: auto; margin-top: 14px; }
-  .totals-table td { padding: 5px 0; font-size: 9.5pt; }
+  .totals-table { width: 260px; margin-left: auto; margin-top: 18px; }
+  .totals-table td { padding: 6px 0; font-size: 9.5pt; }
   .totals-label { color: #5C5344; }
   .totals-value { text-align: right; }
   .totals-free { color: #876521; font-weight: bold; text-align: right; }
@@ -121,22 +126,26 @@
     background-color: #4C8B5B;
   }
 
-  .footer-note {
-    margin-top: 34px;
-    padding-top: 14px;
-    border-top: 0.75pt solid #DAD2C2;
+  .footer-table { margin-top: 36px; }
+  .footer-heading-cell {
+    height: 64px;
+    vertical-align: middle;
     text-align: center;
+    border-top: 0.75pt solid #DAD2C2;
+    border-bottom: 0.75pt solid #DAD2C2;
   }
   .footer-thanks {
     font-family: Times-Roman, "Times New Roman", serif;
-    font-size: 12pt;
+    font-weight: bold;
+    font-size: 13.5pt;
     color: #876521;
-    margin-bottom: 4px;
   }
   .footer-sub {
-    font-size: 8.5pt;
+    margin-top: 22px;
+    font-size: 9.5pt;
     color: #8A7B6C;
-    line-height: 1.5;
+    line-height: 1.7;
+    text-align: center;
   }
 </style>
 </head>
@@ -146,7 +155,7 @@
   <table class="header-table">
     <tr>
       <td style="width: 55%;">
-        <div class="brand-name">Soul Stone</div>
+        <div class="wordmark"><span class="wordmark-mark">Soul</span><span class="wordmark-mark wordmark-stones">Stones</span></div>
         <div class="brand-tagline">PREMIUM ASTROLOGY GEMSTONES</div>
         <div class="info-line" style="margin-top: 10px;">
           123 Gemstone Lane, Bandra West<br/>
@@ -171,8 +180,12 @@
 
   <!-- ============ CUSTOMER + SHIPPING ============ -->
   <table class="info-block-table">
+    <colgroup>
+      <col style="width: 50%;" />
+      <col style="width: 50%;" />
+    </colgroup>
     <tr>
-      <td style="width: 50%;">
+      <td class="info-col info-col--left">
         <div class="section-label">Billed To</div>
         <div class="info-name">{{ order.full_name }}</div>
         <div class="info-line">
@@ -180,8 +193,9 @@
           {{ order.mobile_number }}
         </div>
       </td>
-      <td style="width: 50%;">
+      <td class="info-col info-col--right">
         <div class="section-label">Shipping Address</div>
+        <div class="info-name">{{ order.full_name }}</div>
         <div class="info-line">
           {{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}<br/>
           {{ order.city }}, {{ order.state }}<br/>
@@ -199,7 +213,7 @@
         <td class="col-name">Product</td>
         <td class="col-qty">Qty</td>
         <td class="col-price">Unit Price</td>
-        <td class="col-total">Line Total</td>
+        <td class="col-total">Total</td>
       </tr>
     </thead>
     <tbody>
@@ -222,8 +236,6 @@
     </tbody>
   </table>
 
-  <div class="hr-thin">&nbsp;</div>
-
   <!-- ============ TOTALS ============ -->
   <table class="totals-table">
     <tr>
@@ -232,7 +244,7 @@
     </tr>
     <tr>
       <td class="totals-label">Shipping</td>
-      <td class="totals-free">FREE &ndash; Rs. 0</td>
+      <td class="totals-free">FREE</td>
     </tr>
     <tr>
       <td colspan="2" style="padding: 8px 0 0 0;"><div style="border-top: 1.4pt solid #16120B;">&nbsp;</div></td>
@@ -244,12 +256,16 @@
   </table>
 
   <!-- ============ FOOTER ============ -->
-  <div class="footer-note">
-    <div class="footer-thanks">Thank you for choosing Soul Stone.</div>
-    <div class="footer-sub">
-      We appreciate your trust.<br/>
-      This invoice is computer generated and does not require a signature.
-    </div>
+  <table class="footer-table">
+    <tr>
+      <td class="footer-heading-cell">
+        <div class="footer-thanks">Thank you for choosing SoulStones.</div>
+      </td>
+    </tr>
+  </table>
+  <div class="footer-sub">
+    We appreciate your trust.<br/>
+    This invoice is computer generated and does not require a signature.
   </div>
 
 </body>
