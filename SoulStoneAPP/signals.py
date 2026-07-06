@@ -1,4 +1,7 @@
+from threading import Thread
+
 from django.conf import settings
+from django.db import transaction
 from django.db.models.signals import post_save, pre_save
 from django.dispatch import receiver
 
@@ -45,5 +48,17 @@ def _send_order_status_email(sender, instance, created, **kwargs):
         return  # status didn't change on this save; never re-send
 
     send_email = ORDER_STATUS_EMAILS.get(instance.order_status)
-    if send_email:
-        send_email(instance)
+    if not send_email:
+        return
+
+    # Emails must never add latency (or hold row locks) inside the checkout
+    # request. transaction.on_commit() waits until the enclosing atomic
+    # block (e.g. finalize_paid_order's stock update) has actually
+    # committed — so we never email about an order that got rolled back —
+    # and the real SMTP I/O then runs on a background thread, off the
+    # request/response path entirely. Outside any atomic block (e.g. an
+    # admin save), on_commit() just runs the callback immediately.
+    def _send_in_background():
+        Thread(target=send_email, args=(instance,), daemon=True).start()
+
+    transaction.on_commit(_send_in_background)

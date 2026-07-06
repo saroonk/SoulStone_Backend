@@ -7,11 +7,12 @@
       stay enabled, since FormData(form) silently drops disabled
       fields and would otherwise submit an empty payload.
    2. Open the Razorpay Checkout widget immediately.
-   3. Only once Razorpay reports a successful payment: disable the
-      whole form, show the full-page processing overlay, and POST
-      the Razorpay response for server-side signature verification.
-      Only then does the backend confirm the order, reduce stock,
-      clear the cart, and send emails.
+   3. Once Razorpay reports a successful payment, POST the response
+      for server-side signature verification and redirect to the
+      Order Success page the instant that responds — no popup or
+      loading dialog. The backend now sends order emails on a
+      background thread after its own transaction commits, so this
+      request is no longer held up by SMTP and the redirect is fast.
    4. On failure/cancel, tell the backend so the order is marked
       Failed instead of being left silently Pending.
    ============================================================ */
@@ -22,7 +23,6 @@
     var form = document.getElementById("checkoutForm");
     var msg = document.getElementById("checkoutMsg");
     var submitBtn = form ? form.querySelector(".checkout-submit") : null;
-    var overlay = document.getElementById("checkoutProcessingOverlay");
     if (!form) return;
 
     var createOrderUrl = form.dataset.createOrderUrl;
@@ -49,32 +49,6 @@
       if (!submitBtn) return;
       submitBtn.disabled = isBusy;
       submitBtn.textContent = isBusy ? "Processing…" : "Proceed to Payment";
-    }
-
-    function setFormDisabled(disabled) {
-      Array.prototype.forEach.call(form.elements, function (el) { el.disabled = disabled; });
-    }
-
-    // Shown only once Razorpay has confirmed payment, covering the checkout
-    // form entirely so the customer feels the payment completed instantly
-    // instead of wondering whether the site is stuck.
-    function showProcessingOverlay() {
-      if (!overlay) return;
-      overlay.hidden = false;
-      // The [hidden] attribute only works while no inline "display" is set,
-      // so set/clear it alongside `hidden` rather than baking it into the
-      // static style attribute (which would defeat `hidden` permanently).
-      overlay.style.display = "flex";
-      requestAnimationFrame(function () { overlay.classList.add("show"); });
-    }
-
-    function hideProcessingOverlay() {
-      if (!overlay) return;
-      overlay.classList.remove("show");
-      setTimeout(function () {
-        overlay.hidden = true;
-        overlay.style.display = "";
-      }, 250);
     }
 
     function postForm(url, body) {
@@ -114,12 +88,6 @@
         prefill: order.prefill,
         theme: { color: "#C9A24B" },
         handler: function (response) {
-          // Payment is done as far as the customer is concerned — switch
-          // away from the checkout UI right now, before making them wait
-          // on the verification/order-creation request.
-          setFormDisabled(true);
-          showProcessingOverlay();
-
           postForm(verifyUrl, {
             order_number: order.order_number,
             razorpay_order_id: response.razorpay_order_id,
@@ -130,10 +98,7 @@
               window.location.href = result.data.redirect_url;
             } else {
               // Vanishingly rare (Razorpay said success but our own
-              // verification failed) — let the customer see why and retry
-              // rather than leaving them stuck behind the overlay forever.
-              hideProcessingOverlay();
-              setFormDisabled(false);
+              // verification failed) — let the customer see why and retry.
               resetToIdle();
               setMessage(result.data.message || "Payment verification failed.", "error");
             }
