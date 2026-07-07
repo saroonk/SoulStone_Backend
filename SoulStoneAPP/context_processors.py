@@ -1,9 +1,19 @@
+from django.conf import settings
+
 from .cart_utils import get_existing_cart
 from .models import Category
 
 
 def categories(request):
     return {"categories": Category.objects.all()}
+
+
+def whatsapp(request):
+    """Centralizes the WhatsApp number used by every "consult-band" advisor
+    section, so changing SoulStones.settings.WHATSAPP_NUMBER once updates
+    every WhatsApp button across the site.
+    """
+    return {"whatsapp_number": settings.WHATSAPP_NUMBER}
 
 
 def cart(request):

@@ -67,6 +67,7 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'SoulStoneAPP.context_processors.categories',
                 'SoulStoneAPP.context_processors.cart',
+                'SoulStoneAPP.context_processors.whatsapp',
             ],
         },
     },
@@ -176,3 +177,11 @@ EMAIL_SUBJECT_PREFIX = ''  # mail_admins() would otherwise prefix subjects with 
 # Razorpay
 # https://razorpay.com/docs/payments/server-integration/python/
 # Keys are added manually (e.g. via environment variables) before payments go live.
+RAZORPAY_KEY_ID = 'rzp_test_SLFGCvb0VMW4Dl'
+RAZORPAY_KEY_SECRET = '1t5NKclonzMGs1mD9smIywJ3'
+
+# WhatsApp number (with country code, no symbols) used by the "consult-band"
+# advisor sections across the site. Change this one value to update every
+# WhatsApp button — see SoulStoneAPP.context_processors.whatsapp.
+WHATSAPP_NUMBER = '918089801771'
+

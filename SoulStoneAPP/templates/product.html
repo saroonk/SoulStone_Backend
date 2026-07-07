@@ -161,16 +161,15 @@
           <p class="consult-kicker">Not sure which stone is right for you?</p>
           <h2 class="consult-title">Speak with a gem advisor before you buy.</h2>
           <p class="consult-body">Share your birth details or your astrologer's recommendation. We will help you choose a certified stone that genuinely fits, with no pressure to purchase.</p>
-          <a class="btn btn-whatsapp" href="https://wa.me/91XXXXXXXXXX?text=Hi%20SoulStones%2C%20I%27d%20like%20guidance%20choosing%20a%20gemstone." target="_blank" rel="noopener">
+          <a class="btn btn-whatsapp" href="https://wa.me/{{ whatsapp_number }}?text=Hi%20SoulStones%2C%20I%27d%20like%20guidance%20choosing%20a%20gemstone." target="_blank" rel="noopener">
             <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.18-1.14l-.3-.18-3.03.79.81-2.95-.2-.31A8.2 8.2 0 1 1 12 20.2Zm4.5-6.13c-.25-.13-1.46-.72-1.69-.8-.23-.08-.39-.13-.56.13-.16.25-.64.8-.78.96-.14.17-.29.19-.54.06-.25-.12-1.04-.38-1.98-1.22-.73-.65-1.23-1.46-1.37-1.71-.14-.25-.02-.39.11-.51.11-.11.25-.29.37-.43.13-.14.17-.25.25-.41.08-.17.04-.31-.02-.43-.06-.13-.56-1.35-.77-1.85-.2-.48-.41-.42-.56-.43h-.48a.93.93 0 0 0-.66.31c-.23.25-.86.85-.86 2.07 0 1.22.89 2.4 1.01 2.56.13.17 1.74 2.66 4.22 3.73.59.26 1.05.41 1.41.52.59.19 1.13.16 1.56.1.48-.07 1.46-.6 1.66-1.18.21-.58.21-1.07.14-1.18-.06-.1-.22-.16-.47-.28Z"/></svg>
             Speak with us on WhatsApp
           </a>
           <p class="consult-hours">Advisors reply within a few hours, 7 days a week.</p>
         </div>
-        <!-- PLACEHOLDER: replace with a real photo of an advisor / hand presenting a stone -->
         <figure class="consult-portrait" aria-hidden="true">
           <div class="portrait-slot">
-            <span class="portrait-tag">Advisor portrait</span>
+            <img src="{% static 'images/astrologerimage.webp' %}" alt="" style="width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-card);" />
           </div>
         </figure>
       </div>
