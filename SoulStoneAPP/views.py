@@ -16,7 +16,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from .cart_utils import get_existing_cart, get_or_create_cart, merge_guest_cart_into_user, serialize_cart
 from .forms import CheckoutForm, ContactForm, LoginForm, RegisterForm
 from .invoice_utils import invoice_filename, render_invoice_pdf
-from .models import CartItem, Contact, Order, Product, Testimonial
+from .models import CartItem, Category, Contact, Order, Product, Testimonial
 from .order_utils import CheckoutError, create_pending_order, finalize_paid_order, mark_order_failed
 from django.core.mail import send_mail
 from threading import Thread
@@ -373,6 +373,19 @@ def _parse_price_range(value):
         return None
 
 
+def _products_hero_title(selected_categories):
+    """Products page hero title: the site default with no category filter,
+    the category's own name when exactly one is selected, or a generic
+    label once more than one is active (never lists every name).
+    """
+    if not selected_categories:
+        return "Our Collection"
+    if len(selected_categories) > 1:
+        return "Filtered Collection"
+    category = Category.objects.filter(slug=selected_categories[0]).first()
+    return f"{category.name} Collection" if category else "Our Collection"
+
+
 def products(request):
     search_query = request.GET.get('search', '').strip()
     selected_categories = request.GET.getlist('category')
@@ -432,15 +445,18 @@ def products(request):
         'base_querystring': base_querystring,
     }
 
+    hero_title = _products_hero_title(selected_categories)
+
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         html = render_to_string('partials/product_grid.html', context, request=request)
-        return JsonResponse({'html': html, 'count': paginator.count})
+        return JsonResponse({'html': html, 'count': paginator.count, 'hero_title': hero_title})
 
     context.update({
         'search_query': search_query,
         'selected_categories': selected_categories,
         'selected_availability': selected_availability,
         'selected_price': selected_price,
+        'hero_title': hero_title,
     })
     return render(request, 'product.html', context)
 

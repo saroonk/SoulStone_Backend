@@ -89,6 +89,9 @@
         var countEl = $("#toolbarCount");
         if (countEl) countEl.textContent = "Showing " + data.count + (data.count === 1 ? " Product" : " Products");
 
+        var heroTitle = $("#catalogueHeroTitle");
+        if (heroTitle && data.hero_title) heroTitle.textContent = data.hero_title;
+
         if (pushHistory) window.history.pushState(null, "", url || PRODUCTS_URL);
       })
       .catch(function () { /* keep whatever is currently on screen if the request fails */ })
