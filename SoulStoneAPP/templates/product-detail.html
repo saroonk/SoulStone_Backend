@@ -4,8 +4,38 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SoulStones · {{ product.name }}</title>
+  <title>{{ product.name }} | Soul Stone</title>
   <meta name="description" content="{{ product.short_description }}" />
+  <meta name="keywords" content="{{ product.name }}, natural gemstone, certified gemstone, buy {{ product.name }} online" />
+  <meta name="author" content="SoulStones" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#C9A24B" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="{{ product.name }} | Soul Stone" />
+  <meta property="og:description" content="{{ product.short_description }}" />
+  <meta property="og:type" content="website" />
+  {% if product.main_image %}
+  <meta property="og:image" content="{{ product.main_image.url }}" />
+  {% else %}
+  <meta property="og:image" content="{% static 'images/hero_section_banner.webp' %}" />
+  {% endif %}
+  <meta property="og:site_name" content="SoulStones" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ product.name }} | Soul Stone" />
+  <meta name="twitter:description" content="{{ product.short_description }}" />
+  {% if product.main_image %}
+  <meta name="twitter:image" content="{{ product.main_image.url }}" />
+  {% else %}
+  <meta name="twitter:image" content="{% static 'images/hero_section_banner.webp' %}" />
+  {% endif %}
+
+  <!-- Favicon (placeholders — replace these files under static/images/ later) -->
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
