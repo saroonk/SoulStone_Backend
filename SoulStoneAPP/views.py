@@ -1,6 +1,7 @@
 from decimal import Decimal, InvalidOperation
 
 import razorpay
+import requests
 from django.contrib import messages
 from django.contrib.auth import login as auth_login, logout as auth_logout
 from django.contrib.auth.decorators import login_required
@@ -262,28 +263,51 @@ def checkout_payment_failed(request):
     return JsonResponse({'success': True})
 
 
+def _recaptcha_passed(request):
+    """Verifies the "I'm not a robot" checkbox server-side with Google's
+    siteverify API, using the secret key (never exposed to the client).
+    Fails closed: any network/config problem is treated as verification
+    failure rather than silently letting the submission through.
+    """
+    token = request.POST.get('g-recaptcha-response', '')
+    if not token:
+        return False
+    try:
+        response = requests.post(
+            'https://www.google.com/recaptcha/api/siteverify',
+            data={'secret': settings.RECAPTCHA_SECRET_KEY, 'response': token, 'remoteip': request.META.get('REMOTE_ADDR')},
+            timeout=5,
+        )
+        return bool(response.json().get('success'))
+    except requests.RequestException:
+        return False
+
+
 def contact(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            Contact.objects.create(
-                full_name=form.cleaned_data['fullName'],
-                email=form.cleaned_data['emailAddress'],
-                phone_number=form.cleaned_data['phoneNumber'],
-                subject=form.cleaned_data['subject'],
-                message=form.cleaned_data['message'],
-            )
-            messages.success(
-                request,
-                "Thank you for contacting SoulStones. We have received your "
-                "message successfully. Our team will get back to you as soon as possible."
-            )
+            if not _recaptcha_passed(request):
+                messages.error(request, "Please complete the reCAPTCHA verification before sending your message.")
+            else:
+                Contact.objects.create(
+                    full_name=form.cleaned_data['fullName'],
+                    email=form.cleaned_data['emailAddress'],
+                    phone_number=form.cleaned_data['phoneNumber'],
+                    subject=form.cleaned_data['subject'],
+                    message=form.cleaned_data['message'],
+                )
+                messages.success(
+                    request,
+                    "Thank you for contacting SoulStones. We have received your "
+                    "message successfully. Our team will get back to you as soon as possible."
+                )
 
-            Thread(target=send_contact_email, args=(form.cleaned_data,)).start()
-            return redirect('contact')
+                Thread(target=send_contact_email, args=(form.cleaned_data,)).start()
+                return redirect('contact')
     else:
         form = ContactForm()
-    return render(request, 'contact.html', {'form': form})
+    return render(request, 'contact.html', {'form': form, 'recaptcha_site_key': settings.RECAPTCHA_SITE_KEY})
 
 
 @login_required
