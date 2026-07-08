@@ -1,0 +1,202 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Privacy Policy | Soul Stone</title>
+  <meta name="description" content="Read SoulStones' Privacy Policy to understand what information we collect, how we use it, and how we protect your data when you shop for certified natural gemstones." />
+  <meta name="keywords" content="privacy policy, soulstones privacy, data protection, gemstone store privacy" />
+  <meta name="author" content="SoulStones" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#C9A24B" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Privacy Policy | Soul Stone" />
+  <meta property="og:description" content="Read SoulStones' Privacy Policy to understand what information we collect, how we use it, and how we protect your data when you shop for certified natural gemstones." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="{% static 'images/hero_section_banner.webp' %}" />
+  <meta property="og:site_name" content="SoulStones" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Privacy Policy | Soul Stone" />
+  <meta name="twitter:description" content="Read SoulStones' Privacy Policy to understand what information we collect, how we use it, and how we protect your data when you shop for certified natural gemstones." />
+  <meta name="twitter:image" content="{% static 'images/hero_section_banner.webp' %}" />
+
+  <!-- Favicon (placeholders — replace these files under static/images/ later) -->
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/policy.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="policy-hero" aria-labelledby="policyHeroTitle">
+      <div class="shell">
+        <p class="policy-hero-accent" aria-hidden="true">Trust &amp; Transparency</p>
+        <h1 class="policy-hero-title" id="policyHeroTitle">Privacy Policy</h1>
+        <p class="policy-hero-sub">How we collect, use, and protect your personal information when you shop for certified natural gemstones with SoulStones.</p>
+      </div>
+    </section>
+
+    <!-- ============================ BREADCRUMB ============================ -->
+    <nav class="policy-breadcrumb-nav" aria-label="Breadcrumb">
+      <div class="shell">
+        <ol class="policy-breadcrumb-list">
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li class="policy-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li aria-current="page">Privacy Policy</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ============================ CONTENT ============================ -->
+    <section class="section policy-content" aria-label="Privacy Policy details">
+      <div class="shell">
+        <div class="policy-content-inner">
+
+          <p class="policy-updated">Last updated: 8 July 2026</p>
+
+          <div class="policy-section">
+            <p>SoulStones ("we", "us", or "our") operates this website to sell certified natural gemstones and related products. This Privacy Policy explains what personal information we collect from you, how we use it, and the choices you have regarding your data. By using our website or placing an order with us, you agree to the practices described in this policy.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>1. Information We Collect</h2>
+            <p>To process your orders and provide you with a smooth shopping experience, we collect the following types of information:</p>
+            <ul>
+              <li>Contact details such as your name, email address, mobile number, and shipping address.</li>
+              <li>Account information, including your username and encrypted password, when you register with us.</li>
+              <li>Order details, including the products purchased, order value, and order history.</li>
+              <li>Payment-related information processed securely through our payment partner, Razorpay (we do not store your card, UPI, or net-banking details on our own servers).</li>
+              <li>Technical information such as your browser type, device, and IP address, collected automatically to keep our website secure and functioning correctly.</li>
+              <li>Communications you send us through our contact form, email, or WhatsApp, including any questions or guidance requests about a gemstone.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>2. How We Use Your Information</h2>
+            <p>We use the information we collect strictly to operate and improve our business, including to:</p>
+            <ul>
+              <li>Create and manage your account, and process, ship, and track your orders.</li>
+              <li>Send order confirmations, shipping updates, invoices, and other transactional emails.</li>
+              <li>Respond to your enquiries and provide gemstone guidance through our advisors.</li>
+              <li>Detect and prevent fraud, abuse, or unauthorized access to your account.</li>
+              <li>Understand how our website is used so that we can improve navigation, content, and product offerings.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>3. Payment Security</h2>
+            <p>All payments made on SoulStones are processed through Razorpay, a PCI-DSS compliant payment gateway. Your card, UPI, and net-banking details are entered directly into Razorpay's secure payment interface and are never transmitted to or stored on our servers. We only receive confirmation of a successful or failed payment, along with a transaction reference, in order to update your order status.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>4. Cookies</h2>
+            <p>Our website uses cookies and similar technologies to keep you signed in, remember items in your cart, and understand how visitors use our site. Cookies are small text files stored on your device. You can disable cookies through your browser settings, though some features of the website — such as staying logged in or keeping items in your cart — may not work correctly without them.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>5. Third-Party Services</h2>
+            <p>We work with a small number of trusted third-party services to run our business, including:</p>
+            <ul>
+              <li><strong>Razorpay</strong> — for secure payment processing.</li>
+              <li><strong>Email service providers</strong> — to deliver order confirmations, shipping updates, and account-related emails.</li>
+              <li><strong>Courier and logistics partners</strong> — to deliver your order and provide tracking updates.</li>
+            </ul>
+            <p>These providers only receive the information necessary to perform their specific service and are not permitted to use your data for any other purpose.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>6. Marketing Communication</h2>
+            <p>If you subscribe to our newsletter or opt in at checkout, we may send you emails about new arrivals, offers, and gemstone guidance. Every marketing email includes an unsubscribe link, and you may opt out at any time without affecting your ability to place orders or use your account.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>7. Data Protection</h2>
+            <p>We take reasonable technical and organizational measures to protect your personal information from unauthorized access, loss, misuse, or alteration. Account passwords are stored in encrypted form, and access to customer data within our organization is limited to team members who need it to fulfil your order or respond to your enquiry.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>8. Your Rights</h2>
+            <p>You have the right to:</p>
+            <ul>
+              <li>Access the personal information we hold about you.</li>
+              <li>Request correction of inaccurate or incomplete information.</li>
+              <li>Request deletion of your account and associated personal data, subject to any records we are legally required to retain (such as invoices).</li>
+              <li>Withdraw consent for marketing communications at any time.</li>
+            </ul>
+            <p>To exercise any of these rights, please contact us using the details below.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>9. Contact Information</h2>
+            <p>If you have any questions about this Privacy Policy or how your data is handled, please reach out to us:</p>
+            <div class="policy-callout">
+              <p>Email: <a href="mailto:care@soulstones.example">care@soulstones.example</a></p>
+              <p>WhatsApp: available via the "Talk to an Astrologer" button on our website.</p>
+            </div>
+          </div>
+
+          <div class="policy-section">
+            <h2>10. Updates to This Policy</h2>
+            <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, or legal requirements. Any changes will be posted on this page with a revised "Last updated" date. We encourage you to review this page periodically to stay informed about how we protect your information.</p>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+  <!-- ============================ CART DRAWER (main.js compatibility) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="{% url 'products' %}" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">&#8377;0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" href="{% url 'checkout' %}" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/></svg>
+        Checkout
+      </a>
+    </div>
+  </aside>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

@@ -341,6 +341,18 @@ def ourstory(request):
     return render(request, 'ourstory.html')
 
 
+def privacy_policy(request):
+    return render(request, 'privacy-policy.html')
+
+
+def shipping_return_policy(request):
+    return render(request, 'shipping-return-policy.html')
+
+
+def terms_and_conditions(request):
+    return render(request, 'terms-and-conditions.html')
+
+
 def product_detail(request, slug):
     product = get_object_or_404(
         Product.objects.select_related('category'),

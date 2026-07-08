@@ -1,0 +1,212 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipping &amp; Returns | Soul Stone</title>
+  <meta name="description" content="Learn about SoulStones' free India-wide shipping, order processing and delivery timelines, tracking, and our hassle-free return and refund process." />
+  <meta name="keywords" content="shipping policy, return policy, refund policy, soulstones delivery, free shipping india" />
+  <meta name="author" content="SoulStones" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#C9A24B" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Shipping & Returns | Soul Stone" />
+  <meta property="og:description" content="Learn about SoulStones' free India-wide shipping, order processing and delivery timelines, tracking, and our hassle-free return and refund process." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="{% static 'images/hero_section_banner.webp' %}" />
+  <meta property="og:site_name" content="SoulStones" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Shipping & Returns | Soul Stone" />
+  <meta name="twitter:description" content="Learn about SoulStones' free India-wide shipping, order processing and delivery timelines, tracking, and our hassle-free return and refund process." />
+  <meta name="twitter:image" content="{% static 'images/hero_section_banner.webp' %}" />
+
+  <!-- Favicon (placeholders — replace these files under static/images/ later) -->
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/policy.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="policy-hero" aria-labelledby="policyHeroTitle">
+      <div class="shell">
+        <p class="policy-hero-accent" aria-hidden="true">Delivered With Care</p>
+        <h1 class="policy-hero-title" id="policyHeroTitle">Shipping &amp; Returns</h1>
+        <p class="policy-hero-sub">Everything you need to know about delivery timelines, tracking, and our hassle-free return process.</p>
+      </div>
+    </section>
+
+    <!-- ============================ BREADCRUMB ============================ -->
+    <nav class="policy-breadcrumb-nav" aria-label="Breadcrumb">
+      <div class="shell">
+        <ol class="policy-breadcrumb-list">
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li class="policy-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li aria-current="page">Shipping &amp; Returns</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ============================ CONTENT ============================ -->
+    <section class="section policy-content" aria-label="Shipping and return policy details">
+      <div class="shell">
+        <div class="policy-content-inner">
+
+          <p class="policy-updated">Last updated: 8 July 2026</p>
+
+          <div class="policy-section">
+            <div class="policy-callout">
+              <p><strong>Free shipping, every order, anywhere in India.</strong> We currently ship only within India, and delivery is completely free on every order — no minimum order value required.</p>
+            </div>
+          </div>
+
+          <div class="policy-section">
+            <h2>1. Shipping Coverage</h2>
+            <p>SoulStones currently ships to addresses within India only. We are unable to process international orders or deliveries outside Indian territory at this time. If this changes, we will update this page accordingly.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>2. Free Shipping</h2>
+            <p>Shipping is complimentary on every order placed on our website, regardless of order value. The shipping charge shown at checkout and on your invoice will always read "Free" — there are no hidden delivery fees.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>3. Order Processing Time</h2>
+            <p>Once your payment is confirmed, our team carefully inspects, cleans, and packages your gemstone before handing it to our courier partner. Order processing typically takes 1–2 business days. Orders placed on weekends or public holidays are processed on the next business day.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>4. Estimated Delivery Time</h2>
+            <p>Once dispatched, most orders are delivered within 3–7 business days, depending on your location. Customers in metro cities generally receive their order sooner, while remote or rural pin codes may take a little longer. An estimated delivery date is shown on your Order Confirmation page and in your confirmation email.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>5. Order Tracking</h2>
+            <p>You can check the status of your order at any time:</p>
+            <ul>
+              <li>Logged-in customers can view live order status under <strong>My Orders</strong>.</li>
+              <li>Guests can look up their order using the <strong>Track Order</strong> page with the email address used at checkout.</li>
+              <li>You will also receive email updates as your order is confirmed, shipped, and delivered.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>6. Delayed Shipments</h2>
+            <p>While we make every effort to deliver within the estimated timeframe, occasional delays may occur due to courier logistics, weather, regional restrictions, or unforeseen circumstances. If your order is significantly delayed beyond the estimated delivery date, please contact our support team and we will investigate with our courier partner on your behalf.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>7. Damaged Packages</h2>
+            <p>Every gemstone is securely packed in tamper-evident, protective packaging. If your package arrives visibly damaged, please:</p>
+            <ul>
+              <li>Avoid accepting the package if the outer packaging is severely damaged or tampered with.</li>
+              <li>If already accepted, photograph the packaging and the product immediately upon opening.</li>
+              <li>Contact our support team within 48 hours of delivery with your order number and photographs.</li>
+            </ul>
+            <p>We will arrange a replacement or a full refund for genuinely damaged items reported within this window.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>8. Return Eligibility</h2>
+            <p>We want you to be completely confident in your purchase. Returns are accepted within 7 days of delivery, provided that:</p>
+            <ul>
+              <li>The gemstone is unused, unaltered, and in its original condition.</li>
+              <li>The original certification, packaging, and invoice are included.</li>
+              <li>The item was not custom-made, resized, or personalized in any way.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>9. Return Process</h2>
+            <p>To initiate a return:</p>
+            <ul>
+              <li>Contact our support team with your order number and the reason for return.</li>
+              <li>Our team will confirm eligibility and share pickup or return-shipping instructions.</li>
+              <li>Once the returned item passes a quality check on arrival, your refund will be processed.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>10. Refund Process</h2>
+            <p>Approved refunds are credited to your original payment method via Razorpay within 5–7 business days of the returned item passing our quality check. You will receive an email confirmation once your refund has been initiated.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>11. Non-Returnable Items</h2>
+            <p>For hygiene, customization, and authenticity reasons, the following items cannot be returned:</p>
+            <ul>
+              <li>Gemstones that have been resized, engraved, or altered from their original form.</li>
+              <li>Products purchased as part of a limited-time or clearance sale, unless defective.</li>
+              <li>Items returned without their original certification or packaging.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>12. Contact Support</h2>
+            <p>For any questions about your shipment, delivery, or a return request, our team is happy to help:</p>
+            <div class="policy-callout">
+              <p>Email: <a href="mailto:care@soulstones.example">care@soulstones.example</a></p>
+              <p>WhatsApp: available via the "Talk to an Astrologer" button on our website.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+  <!-- ============================ CART DRAWER (main.js compatibility) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="{% url 'products' %}" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">&#8377;0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" href="{% url 'checkout' %}" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/></svg>
+        Checkout
+      </a>
+    </div>
+  </aside>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

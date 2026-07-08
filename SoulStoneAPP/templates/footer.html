@@ -31,7 +31,7 @@
 
     <div class="footer-col footer-contact">
       <h4>Talk to us</h4>
-      <a class="footer-whatsapp" href="https://wa.me/91XXXXXXXXXX" target="_blank" rel="noopener">
+      <a class="footer-whatsapp" href="https://wa.me/{{ whatsapp_number }}" target="_blank" rel="noopener">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.05L2 22l5.1-1.34A10 10 0 1 0 12 2Z"/></svg>
         WhatsApp a gem advisor
       </a>
@@ -46,6 +46,6 @@
 
   <div class="shell footer-base">
     <p>&copy; <span id="year"></span> SoulStones. All stones independently certified.</p>
-    <p class="footer-legal"><a href="#">Privacy</a> &middot; <a href="#">Shipping &amp; returns</a> &middot; <a href="#">Terms</a></p>
+    <p class="footer-legal"><a href="{% url 'privacy_policy' %}">Privacy</a> &middot; <a href="{% url 'shipping_return_policy' %}">Shipping &amp; returns</a> &middot; <a href="{% url 'terms_and_conditions' %}">Terms</a></p>
   </div>
 </footer>
