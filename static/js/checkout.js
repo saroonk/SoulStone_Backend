@@ -43,6 +43,19 @@
       else msg.removeAttribute("data-state");
     }
 
+    // Stock/cart validation errors from the create-order step (e.g. "Only 2
+    // of Ruby left in stock") are easy to miss as plain text below the
+    // button, so they're shown via the same red toast the rest of the site
+    // already uses for cart errors (main.js's Bootstrap Toast, exposed on
+    // window.SoulStonesCart) instead of the inline message.
+    function showErrorToast(text) {
+      if (window.SoulStonesCart && typeof window.SoulStonesCart.showToast === "function") {
+        window.SoulStonesCart.showToast(text, false);
+      } else {
+        setMessage(text, "error");
+      }
+    }
+
     // Only the button — never the fields — so FormData(form) still picks
     // up every value while a create-order/Razorpay-open request is in flight.
     function setButtonBusy(isBusy) {
@@ -144,7 +157,7 @@
           openRazorpay(result.data);
         } else {
           resetToIdle();
-          setMessage(result.data.message || "Something went wrong. Please try again.", "error");
+          showErrorToast(result.data.message || "Something went wrong. Please try again.");
         }
       });
     });
