@@ -10,6 +10,7 @@ problem degrades to the plain-text email rather than blocking delivery.
 from django.conf import settings
 from django.core.mail import EmailMultiAlternatives, mail_admins
 from django.template.loader import render_to_string
+from django.urls import reverse
 
 from .invoice_utils import invoice_filename, render_invoice_pdf
 
@@ -28,32 +29,38 @@ def _order_lines(order):
     )
 
 
+def _absolute_url(url_name):
+    """Builds a full URL from a Django URL name via reverse(), so link
+    targets always follow urls.py instead of being hand-typed."""
+    return f"{SITE_URL.rstrip('/')}{reverse(url_name)}"
+
+
 def _order_cta_url(order):
     """Registered customers are sent to My Orders; guest orders go to Track
     Order instead, since My Orders requires a login guests don't have."""
-    return f"{SITE_URL}/my-orders/" if order.user_id else f"{SITE_URL}/track-order/"
+    return _absolute_url('track_order') if order.user_id else _absolute_url('track_order')
 
 
-def _render_email_html(template_name, order, cta_label):
+def _render_email_html(template_name, order, cta_label, cta_url):
     try:
         return render_to_string(f"emails/{template_name}", {
             "order": order,
             "site_url": SITE_URL,
-            "cta_url": _order_cta_url(order),
+            "cta_url": cta_url,
             "cta_label": cta_label,
         })
     except Exception:
         return None
 
 
-def _send(order, subject, message, template_name, cta_label):
+def _send(order, subject, message, template_name, cta_label, cta_url):
     email = EmailMultiAlternatives(
         subject=subject,
         body=message,
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[order.email],
     )
-    html_body = _render_email_html(template_name, order, cta_label)
+    html_body = _render_email_html(template_name, order, cta_label, cta_url)
     if html_body:
         email.attach_alternative(html_body, "text/html")
     email.send(fail_silently=True)
@@ -98,7 +105,7 @@ def send_order_confirmed_emails(order):
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[order.email],
     )
-    html_body = _render_email_html("order_confirmation.html", order, "View My Order")
+    html_body = _render_email_html("order_confirmation.html", order, "Track Order", _order_cta_url(order))
     if html_body:
         email.attach_alternative(html_body, "text/html")
     if attachment:
@@ -130,6 +137,7 @@ def send_order_shipped_email(order):
         ),
         template_name="order_shipped.html",
         cta_label="Track Order",
+        cta_url=_order_cta_url(order),
     )
 
 
@@ -144,6 +152,7 @@ def send_order_delivered_email(order):
         ),
         template_name="order_delivered.html",
         cta_label="Continue Shopping",
+        cta_url=_absolute_url('index'),
     )
 
 
@@ -158,6 +167,7 @@ def send_order_cancelled_email(order):
         ),
         template_name="order_cancelled.html",
         cta_label="Continue Shopping",
+        cta_url=_order_cta_url(order),
     )
 
 
@@ -172,4 +182,5 @@ def send_order_returned_email(order):
         ),
         template_name="order_returned.html",
         cta_label="View My Order",
+        cta_url=_order_cta_url(order),
     )
