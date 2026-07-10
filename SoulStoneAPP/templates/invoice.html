@@ -160,7 +160,7 @@
         <div class="info-line" style="margin-top: 10px;">
           123 Gemstone Lane, Bandra West<br/>
           Mumbai, Maharashtra 400050, India<br/>
-          support@soulstone.example &nbsp;&middot;&nbsp; +91 98765 43210
+          soulstonebysana@gmail.com &nbsp;&middot;&nbsp; +91 7593029706
         </div>
       </td>
       <td style="width: 45%;">
@@ -187,7 +187,7 @@
     <tr>
       <td class="info-col info-col--left">
         <div class="section-label">Billed To</div>
-        <div class="info-name">{{ order.full_name }}</div>
+        <div class="info-name">{{ order.full_name|title }}</div>
         <div class="info-line">
           {{ order.email }}<br/>
           {{ order.mobile_number }}
@@ -195,7 +195,7 @@
       </td>
       <td class="info-col info-col--right">
         <div class="section-label">Shipping Address</div>
-        <div class="info-name">{{ order.full_name }}</div>
+        <div class="info-name">{{ order.full_name|title }}</div>
         <div class="info-line">
           {{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}<br/>
           {{ order.city }}, {{ order.state }}<br/>
