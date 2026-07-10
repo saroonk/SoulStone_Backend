@@ -53,6 +53,16 @@ def _render_email_html(template_name, order, cta_label, cta_url):
         return None
 
 
+def _render_admin_email_html(order):
+    try:
+        return render_to_string("emails/admin_new_order.html", {
+            "order": order,
+            "admin_url": _absolute_url('admin:index'),
+        })
+    except Exception:
+        return None
+
+
 def _send(order, subject, message, template_name, cta_label, cta_url):
     email = EmailMultiAlternatives(
         subject=subject,
@@ -122,6 +132,7 @@ def send_order_confirmed_emails(order):
             f"{_order_lines(order)}"
         ),
         fail_silently=True,
+        html_message=_render_admin_email_html(order),
     )
 
 

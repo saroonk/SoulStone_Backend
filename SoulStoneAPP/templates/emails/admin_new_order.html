@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="x-apple-disable-message-reformatting" />
+<title>New Order Received - Soul Stone</title>
+<!--[if mso]>
+<style>
+  table { border-collapse: collapse; }
+  * { font-family: Arial, Helvetica, sans-serif !important; }
+</style>
+<![endif]-->
+<style>
+  body, table, td { font-family: Arial, Helvetica, sans-serif; }
+  body { margin: 0; padding: 0; background-color: #F7F3EA; -webkit-text-size-adjust: 100%; }
+  img { border: 0; line-height: 100%; outline: none; text-decoration: none; }
+  a { color: #876521; }
+  .brand-serif { font-family: Georgia, 'Times New Roman', serif; }
+  @media only screen and (max-width: 620px) {
+    .email-container { width: 100% !important; }
+    .fluid-padding { padding-left: 20px !important; padding-right: 20px !important; }
+  }
+</style>
+</head>
+<body style="margin:0; padding:0; background-color:#F7F3EA;">
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0; mso-hide:all;">A new order #{{ order.order_number }} has been placed and is awaiting review.&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#F7F3EA;">
+    <tr>
+      <td align="center" style="padding: 32px 16px;">
+
+        <table role="presentation" class="email-container" width="600" cellpadding="0" cellspacing="0" border="0" style="width:600px; max-width:600px; background-color:#FFFDF8; border-radius:14px; overflow:hidden;">
+
+          <!-- ============ HEADER ============ -->
+          <tr>
+            <td align="center" style="background-color:#16120B; padding:32px 24px;">
+              <div class="brand-serif" style="font-size:28px; line-height:1;">
+                <span style="color:#F4EEE1;">Soul</span><span style="color:#C9A24B;">Stones</span>
+              </div>
+              <div style="font-size:11px; letter-spacing:1.5px; text-transform:uppercase; color:rgba(244,238,225,0.6); margin-top:8px;">
+                Premium Certified Gemstones
+              </div>
+            </td>
+          </tr>
+
+          <!-- ============ ADMIN LABEL STRIP ============ -->
+          <tr>
+            <td align="center" style="background-color:#C9A24B; padding:8px 24px;">
+              <span style="font-size:11px; letter-spacing:1px; text-transform:uppercase; font-weight:bold; color:#1A160F;">Admin Notification</span>
+            </td>
+          </tr>
+
+          <!-- ============ MAIN HEADING ============ -->
+          <tr>
+            <td align="center" class="fluid-padding" style="padding: 40px 32px 4px;">
+              <h1 class="brand-serif" style="margin:0; font-weight:normal; font-size:25px; line-height:1.3; color:#1A160F;">New Order Received</h1>
+            </td>
+          </tr>
+
+          <!-- ============ BODY CONTENT ============ -->
+          <tr>
+            <td class="fluid-padding" style="padding: 12px 32px 0;">
+
+              <p style="margin:0 0 20px; font-size:15px; line-height:1.7; color:#1A160F;">A new order has been successfully placed on the website and is awaiting your review.</p>
+
+              <!-- Order information card -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border:1px solid rgba(26,22,15,0.12); border-radius:10px; margin:18px 0;">
+                <tr>
+                  <td style="padding:20px 22px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:14px; color:#1A160F;">
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Order Number</td>
+                        <td style="padding:6px 0; text-align:right; font-weight:bold;">#{{ order.order_number }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Order Date &amp; Time</td>
+                        <td style="padding:6px 0; text-align:right;">{{ order.created_at|date:"j F Y, g:i A" }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Customer Name</td>
+                        <td style="padding:6px 0; text-align:right;">{{ order.full_name }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Customer Email</td>
+                        <td style="padding:6px 0; text-align:right;">{{ order.email }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Customer Phone</td>
+                        <td style="padding:6px 0; text-align:right;">{{ order.mobile_number }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Payment Status</td>
+                        <td style="padding:6px 0; text-align:right;">{{ order.get_payment_status_display }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:6px 0; color:#8A7B6C;">Order Status</td>
+                        <td style="padding:6px 0; text-align:right;">{{ order.get_order_status_display }}</td>
+                      </tr>
+                      <tr>
+                        <td style="padding:12px 0 0; border-top:1px solid rgba(26,22,15,0.1); font-weight:bold; font-size:15px;">Total Amount</td>
+                        <td style="padding:12px 0 0; border-top:1px solid rgba(26,22,15,0.1); text-align:right; font-weight:bold; font-size:15px; color:#876521;">Rs. {{ order.total_amount|floatformat:0 }}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Shipping address -->
+              <div style="margin:20px 0;">
+                <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#876521; font-weight:bold; margin-bottom:8px;">Shipping Address</div>
+                <div style="font-size:14px; color:#1A160F; line-height:1.7;">
+                  {{ order.full_name }}<br />
+                  {{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}<br />
+                  {{ order.city }}, {{ order.state }} {{ order.pincode }}<br />
+                  {{ order.country }}
+                </div>
+              </div>
+
+              <!-- Order items -->
+              <div style="margin:20px 0 4px;">
+                <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#876521; font-weight:bold; margin-bottom:10px;">Order Items</div>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="font-size:13px; color:#1A160F;">
+                  <tr>
+                    <td style="padding:0 0 8px; border-bottom:1px solid rgba(26,22,15,0.15); color:#8A7B6C; font-size:11px; text-transform:uppercase; letter-spacing:0.5px;">Product</td>
+                    <td style="padding:0 0 8px; border-bottom:1px solid rgba(26,22,15,0.15); color:#8A7B6C; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; text-align:center;">Qty</td>
+                    <td style="padding:0 0 8px; border-bottom:1px solid rgba(26,22,15,0.15); color:#8A7B6C; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; text-align:right;">Unit Price</td>
+                    <td style="padding:0 0 8px; border-bottom:1px solid rgba(26,22,15,0.15); color:#8A7B6C; font-size:11px; text-transform:uppercase; letter-spacing:0.5px; text-align:right;">Total</td>
+                  </tr>
+                  {% for item in order.items.all %}
+                  <tr>
+                    <td style="padding:10px 0; border-bottom:1px solid rgba(26,22,15,0.08); font-weight:bold;">{{ item.product_name }}</td>
+                    <td style="padding:10px 0; border-bottom:1px solid rgba(26,22,15,0.08); text-align:center;">{{ item.quantity }}</td>
+                    <td style="padding:10px 0; border-bottom:1px solid rgba(26,22,15,0.08); text-align:right; white-space:nowrap;">Rs. {{ item.product_price|floatformat:0 }}</td>
+                    <td style="padding:10px 0; border-bottom:1px solid rgba(26,22,15,0.08); text-align:right; font-weight:bold; white-space:nowrap;">Rs. {{ item.line_total|floatformat:0 }}</td>
+                  </tr>
+                  {% endfor %}
+                </table>
+              </div>
+
+              <!-- Admin action notice -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#FBF1DC; border:1px solid rgba(201,162,75,0.4); border-radius:10px; margin-top:24px;">
+                <tr>
+                  <td style="padding:18px 20px; font-size:13px; line-height:1.7; color:#5C4A1E;">
+                    <strong>This order requires your attention.</strong><br />
+                    Please log in to the Django Admin Panel to review the order, verify payment (if applicable), and update the order status.
+                  </td>
+                </tr>
+              </table>
+
+              {% if admin_url %}
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="padding:24px 0 8px;">
+                    <a href="{{ admin_url }}" style="display:inline-block; background-color:#16120B; color:#F4EEE1; font-weight:bold; font-size:13px; letter-spacing:0.6px; text-transform:uppercase; text-decoration:none; padding:14px 34px; border-radius:999px;">Open Admin Panel</a>
+                  </td>
+                </tr>
+              </table>
+              {% endif %}
+
+            </td>
+          </tr>
+
+          <!-- ============ FOOTER ============ -->
+          <tr>
+            <td align="center" style="background-color:#16120B; padding:28px 24px; margin-top:16px;">
+              <div class="brand-serif" style="font-size:16px; margin-bottom:8px;">
+                <span style="color:#F4EEE1;">Soul</span><span style="color:#C9A24B;">Stones</span>
+              </div>
+              <div style="font-size:12px; color:rgba(244,238,225,0.55); line-height:1.8;">
+                &copy; {% now "Y" %} SoulStones. All stones independently certified.<br />
+                This is an automated administrative notification.
+              </div>
+            </td>
+          </tr>
+
+        </table>
+
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
