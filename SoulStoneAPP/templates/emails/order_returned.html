@@ -1,0 +1,15 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Your Order Has Been Returned - Soul Stone{% endblock %}
+{% block preheader %}Your order #{{ order.order_number }} has been marked as returned.{% endblock %}
+{% block heading %}Your Order Has Been Returned{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.7; color:#1A160F;">Hi {{ order.full_name }},</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Your order <strong>#{{ order.order_number }}</strong> has been marked as returned.</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Our team will process your return and keep you updated.</p>
+
+  {% include "emails/_order_summary_card.html" %}
+
+  {% include "emails/_cta_button.html" with cta_label="View My Order" %}
+{% endblock %}

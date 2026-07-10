@@ -1,0 +1,18 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Order Confirmed - Soul Stone{% endblock %}
+{% block preheader %}Your order #{{ order.order_number }} has been confirmed.{% endblock %}
+{% block heading %}Your Order Has Been Confirmed{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.7; color:#1A160F;">Hi {{ order.full_name }},</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Thank you for your purchase. Your order has been confirmed successfully and our team is preparing your certified gemstone with care.</p>
+
+  {% include "emails/_order_summary_card.html" %}
+  {% include "emails/_shipping_address.html" %}
+  {% include "emails/_order_items_table.html" %}
+
+  <p style="margin:20px 0 0; font-size:14px; line-height:1.7; color:#1A160F;">We will notify you as soon as your order is shipped.</p>
+
+  {% include "emails/_cta_button.html" with cta_label="View My Order" %}
+{% endblock %}

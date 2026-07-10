@@ -1,0 +1,9 @@
+<div style="margin:20px 0;">
+  <div style="font-size:11px; text-transform:uppercase; letter-spacing:1px; color:#876521; font-weight:bold; margin-bottom:8px;">Shipping Address</div>
+  <div style="font-size:14px; color:#1A160F; line-height:1.7;">
+    {{ order.full_name }}<br />
+    {{ order.address_line1 }}{% if order.address_line2 %}, {{ order.address_line2 }}{% endif %}<br />
+    {{ order.city }}, {{ order.state }} {{ order.pincode }}<br />
+    {{ order.country }}
+  </div>
+</div>

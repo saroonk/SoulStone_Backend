@@ -1,0 +1,16 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Your Order Has Been Shipped - Soul Stone{% endblock %}
+{% block preheader %}Your order #{{ order.order_number }} is on its way.{% endblock %}
+{% block heading %}Your Order Has Been Shipped{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.7; color:#1A160F;">Hi {{ order.full_name }},</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Good news — your order <strong>#{{ order.order_number }}</strong> has been shipped and is on its way to you.</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">You can find the latest status of your shipment at any time from your account.</p>
+
+  {% include "emails/_order_summary_card.html" %}
+  {% include "emails/_shipping_address.html" %}
+
+  {% include "emails/_cta_button.html" with cta_label="Track Order" %}
+{% endblock %}

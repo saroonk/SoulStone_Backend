@@ -1,10 +1,24 @@
 """Order notification emails. Called from signals.py whenever an order is
 confirmed or its status changes, so the sending logic lives in one place.
+
+Every customer-facing email is sent as a multipart message: the original
+plain-text body (unchanged) is kept as the text/plain fallback, and a
+premium HTML version (templates/emails/) is attached as the text/html
+alternative. HTML rendering is always wrapped in try/except so a template
+problem degrades to the plain-text email rather than blocking delivery.
 """
 from django.conf import settings
-from django.core.mail import EmailMessage, mail_admins, send_mail
+from django.core.mail import EmailMultiAlternatives, mail_admins
+from django.template.loader import render_to_string
 
 from .invoice_utils import invoice_filename, render_invoice_pdf
+
+# Placeholder production domain used to build absolute links inside emails
+# (email clients can't resolve relative URLs, and there's no request object
+# available here). Swap for the real domain once SoulStones is deployed —
+# matches the same placeholder-domain convention already used elsewhere
+# (e.g. the "soulstone.example" addresses in invoice.html / SEO meta tags).
+SITE_URL = "http://127.0.0.1:8000/"
 
 
 def _order_lines(order):
@@ -14,14 +28,35 @@ def _order_lines(order):
     )
 
 
-def _send(order, subject, message):
-    send_mail(
+def _order_cta_url(order):
+    """Registered customers are sent to My Orders; guest orders go to Track
+    Order instead, since My Orders requires a login guests don't have."""
+    return f"{SITE_URL}/my-orders/" if order.user_id else f"{SITE_URL}/track-order/"
+
+
+def _render_email_html(template_name, order, cta_label):
+    try:
+        return render_to_string(f"emails/{template_name}", {
+            "order": order,
+            "site_url": SITE_URL,
+            "cta_url": _order_cta_url(order),
+            "cta_label": cta_label,
+        })
+    except Exception:
+        return None
+
+
+def _send(order, subject, message, template_name, cta_label):
+    email = EmailMultiAlternatives(
         subject=subject,
-        message=message,
+        body=message,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        recipient_list=[order.email],
-        fail_silently=True,
+        to=[order.email],
     )
+    html_body = _render_email_html(template_name, order, cta_label)
+    if html_body:
+        email.attach_alternative(html_body, "text/html")
+    email.send(fail_silently=True)
 
 
 def send_order_confirmed_emails(order):
@@ -49,7 +84,7 @@ def send_order_confirmed_emails(order):
             "Thank you for choosing SoulStones."
         )
 
-    email = EmailMessage(
+    email = EmailMultiAlternatives(
         subject="Order Confirmed - Soul Stone",
         body=(
             f"Hello {order.full_name},\n\n"
@@ -63,6 +98,9 @@ def send_order_confirmed_emails(order):
         from_email=settings.DEFAULT_FROM_EMAIL,
         to=[order.email],
     )
+    html_body = _render_email_html("order_confirmation.html", order, "View My Order")
+    if html_body:
+        email.attach_alternative(html_body, "text/html")
     if attachment:
         email.attach(*attachment)
     email.send(fail_silently=True)
@@ -90,6 +128,8 @@ def send_order_shipped_email(order):
             "Tracking information: you can find the status of your shipment at any time from your account.\n\n"
             "Thank you for shopping with SoulStones."
         ),
+        template_name="order_shipped.html",
+        cta_label="Track Order",
     )
 
 
@@ -102,6 +142,8 @@ def send_order_delivered_email(order):
             f"Your order {order.order_number} has been delivered. We hope you love your new gemstone.\n\n"
             "Thank you for choosing SoulStones — we would love to have you shop with us again."
         ),
+        template_name="order_delivered.html",
+        cta_label="Continue Shopping",
     )
 
 
@@ -114,6 +156,8 @@ def send_order_cancelled_email(order):
             f"Your order {order.order_number} has been cancelled.\n\n"
             "If you did not request this or have any questions, please contact our support team."
         ),
+        template_name="order_cancelled.html",
+        cta_label="Continue Shopping",
     )
 
 
@@ -126,4 +170,6 @@ def send_order_returned_email(order):
             f"Your order {order.order_number} has been marked as returned.\n\n"
             "Our team will process your return and keep you updated."
         ),
+        template_name="order_returned.html",
+        cta_label="View My Order",
     )

@@ -1,0 +1,15 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Your Order Has Been Cancelled - Soul Stone{% endblock %}
+{% block preheader %}Your order #{{ order.order_number }} has been cancelled.{% endblock %}
+{% block heading %}Your Order Has Been Cancelled{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.7; color:#1A160F;">Hi {{ order.full_name }},</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Your order <strong>#{{ order.order_number }}</strong> has been cancelled.</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">If you did not request this or have any questions, please contact our support team.</p>
+
+  {% include "emails/_order_summary_card.html" %}
+
+  {% include "emails/_cta_button.html" with cta_label="Continue Shopping" %}
+{% endblock %}

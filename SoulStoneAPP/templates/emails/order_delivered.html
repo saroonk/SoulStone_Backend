@@ -1,0 +1,15 @@
+{% extends "emails/base_email.html" %}
+
+{% block title %}Your Order Has Been Delivered - Soul Stone{% endblock %}
+{% block preheader %}Your order #{{ order.order_number }} has been delivered.{% endblock %}
+{% block heading %}Your Order Has Been Delivered{% endblock %}
+
+{% block content %}
+  <p style="margin:0 0 16px; font-size:15px; line-height:1.7; color:#1A160F;">Hi {{ order.full_name }},</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Your order <strong>#{{ order.order_number }}</strong> has been delivered. We hope you love your new gemstone.</p>
+  <p style="margin:0 0 8px; font-size:15px; line-height:1.7; color:#1A160F;">Thank you for choosing SoulStones — we would love to have you shop with us again.</p>
+
+  {% include "emails/_order_summary_card.html" %}
+
+  {% include "emails/_cta_button.html" with cta_label="Continue Shopping" %}
+{% endblock %}
