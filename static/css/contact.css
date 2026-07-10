@@ -429,3 +429,29 @@
     max-width: 100%;
   }
 }
+
+/* On very small phones, the form card and sidebar (grid items with the
+   default min-width:auto) refuse to shrink below their content's intrinsic
+   width and overflow past the right edge of their 1fr track instead of
+   matching .shell's centered width. Letting the grid track win (min-width:
+   0) keeps both columns perfectly centered. */
+@media (max-width: 380px) {
+  .contact-grid > * {
+    min-width: 0;
+  }
+
+  /* Root cause of the delayed right-side overflow: Google's reCAPTCHA
+     widget loads asynchronously (recaptcha/api.js is async/defer) and,
+     ~1s after the page first paints, replaces this empty div with a
+     fixed 304px-wide iframe that does not shrink to fit narrow
+     containers — no CSS on our own elements can prevent that once it
+     renders. Scaling the widget itself (Google's supported technique for
+     non-responsive reCAPTCHA layouts) and shrinking this wrapper to match
+     the scaled footprint keeps it inside the card at these widths. */
+  .g-recaptcha {
+    transform: scale(0.75);
+    transform-origin: 0 0;
+    width: 228px;
+    height: 59px;
+  }
+}

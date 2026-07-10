@@ -177,16 +177,9 @@ EMAIL_SUBJECT_PREFIX = ''  # mail_admins() would otherwise prefix subjects with 
 # Razorpay
 # https://razorpay.com/docs/payments/server-integration/python/
 # Keys are added manually (e.g. via environment variables) before payments go live.
-RAZORPAY_KEY_ID = 'rzp_test_SLFGCvb0VMW4Dl'
-RAZORPAY_KEY_SECRET = '1t5NKclonzMGs1mD9smIywJ3'
-
-
-
-RECAPTCHA_SITE_KEY = '6LfL5UktAAAAAIvSZZXxFVpDR3W3VMCNuCbHDTYc'
-
-RECAPTCHA_SECRET_KEY = '6LfL5UktAAAAAEXrskNE_xQ1B-3VF22sECGAYDsi'
+git 
 # WhatsApp number (with country code, no symbols) used by the "consult-band"
 # advisor sections across the site. Change this one value to update every
 # WhatsApp button — see SoulStoneAPP.context_processors.whatsapp.
-WHATSAPP_NUMBER = '917593029706'
+WHATSAPP_NUMBER = '+917593029706'
 
