@@ -42,6 +42,9 @@ class RegisterForm(forms.Form):
 
     def clean_mobile(self):
         mobile = self.cleaned_data["mobile"].strip()
+
+        if not re.match(r"^\+?\d{10,15}$", mobile):
+            raise forms.ValidationError("Enter a valid mobile number (10-15 digits, optional leading '+').")
         if UserProfile.objects.filter(mobile_number=mobile).exists():
             raise forms.ValidationError("An account with this mobile number already exists.")
         return mobile

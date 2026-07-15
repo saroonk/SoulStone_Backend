@@ -70,7 +70,7 @@
               </div>
               <div class="checkout-field">
                 <label for="billingPhone">Phone Number</label>
-                <input type="tel" id="billingPhone" name="billingPhone" value="{{ prefill.billingPhone|default:'' }}" autocomplete="tel" required />
+                <input type="tel" minlength="10" id="billingPhone" name="billingPhone" value="{{ prefill.billingPhone|default:'' }}" autocomplete="tel" required />
               </div>
             </div>
 
