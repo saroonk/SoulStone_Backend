@@ -29,7 +29,7 @@ from django.conf import settings
 PRODUCTS_PER_PAGE = 20
 
 SORT_OPTIONS = {
-    "featured": ("-is_featured", "-created_at"),
+    "featured": ("-is_featured",),
     "newest": ("-created_at",),
     "oldest": ("created_at",),
     "price_low": ("new_price",),
@@ -377,6 +377,10 @@ def terms_and_conditions(request):
     return render(request, 'terms-and-conditions.html')
 
 
+def refund_policy(request):
+    return render(request, 'refund-policy.html')
+
+
 def product_detail(request, slug):
     product = get_object_or_404(
         Product.objects.select_related('category'),
@@ -609,3 +613,7 @@ def cart_remove(request):
     cart = get_or_create_cart(request)
     CartItem.objects.filter(cart=cart, product__slug=slug).delete()
     return JsonResponse({'success': True, 'message': "Item removed.", 'cart': serialize_cart(cart)})
+
+
+
+   

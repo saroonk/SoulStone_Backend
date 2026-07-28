@@ -29,10 +29,43 @@ def generate_unique_username(email):
 
 
 class RegisterForm(forms.Form):
-    fullName = forms.CharField(max_length=150, label="Full Name")
-    email = forms.EmailField(label="Email Address")
-    mobile = forms.CharField(max_length=15, label="Mobile Number")
-    password = forms.CharField(widget=forms.PasswordInput, label="Password")
+    # fullName = forms.CharField(max_length=150, label="Full Name")
+    # email = forms.EmailField(label="Email Address")
+    # mobile = forms.CharField(max_length=15, label="Mobile Number")
+    # password = forms.CharField(widget=forms.PasswordInput, label="Password")
+
+
+    fullName = forms.CharField(
+        max_length=150,
+        label="Full Name",
+        error_messages={
+            "required": "Full Name is required."
+        }
+    )
+
+    email = forms.EmailField(
+        label="Email Address",
+        error_messages={
+            "required": "Email Address is required."
+        }
+    )
+
+    mobile = forms.CharField(
+        max_length=15,
+        label="Mobile Number",
+        error_messages={
+            "required": "Mobile Number is required."
+        }
+    )
+
+    password = forms.CharField(
+        widget=forms.PasswordInput,
+        label="Password",
+        error_messages={
+            "required": "Password is required."
+        }
+    )
+
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()

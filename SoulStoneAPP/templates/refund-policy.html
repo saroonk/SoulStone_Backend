@@ -1,0 +1,192 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Refund Policy | Soul Stone</title>
+  <meta name="description" content="Learn about SoulStones' refund eligibility, process, timelines, and conditions for returned and cancelled orders." />
+  <meta name="keywords" content="refund policy, soulstones refunds, gemstone store refund" />
+  <meta name="author" content="SoulStones" />
+  <meta name="robots" content="index, follow" />
+  <meta name="theme-color" content="#C9A24B" />
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Refund Policy | Soul Stone" />
+  <meta property="og:description" content="Learn about SoulStones' refund eligibility, process, timelines, and conditions for returned and cancelled orders." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="{% static 'images/hero_section_banner.webp' %}" />
+  <meta property="og:site_name" content="SoulStones" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Refund Policy | Soul Stone" />
+  <meta name="twitter:description" content="Learn about SoulStones' refund eligibility, process, timelines, and conditions for returned and cancelled orders." />
+  <meta name="twitter:image" content="{% static 'images/hero_section_banner.webp' %}" />
+
+  <!-- Favicon (placeholders — replace these files under static/images/ later) -->
+  <link rel="icon" href="{% static 'images/favicon.ico' %}" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static 'images/favicon-32x32.png' %}" />
+  <link rel="apple-touch-icon" href="{% static 'images/apple-touch-icon.png' %}" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Gloock&family=Inter:wght@400;500;600&family=Cormorant+Garamond:ital,wght@1,500&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="{% static 'css/styles.css' %}" />
+  <link rel="stylesheet" href="{% static 'css/policy.css' %}" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+
+  {% include 'nav.html' %}
+
+  <main id="main">
+
+    <!-- ============================ HERO ============================ -->
+    <section class="policy-hero" aria-labelledby="policyHeroTitle">
+      <div class="shell">
+        <p class="policy-hero-accent" aria-hidden="true">Please Read Carefully</p>
+        <h1 class="policy-hero-title" id="policyHeroTitle">Refund Policy</h1>
+        <p class="policy-hero-sub">Learn about our refund eligibility, process, timelines, and conditions.</p>
+      </div>
+    </section>
+
+    <!-- ============================ BREADCRUMB ============================ -->
+    <nav class="policy-breadcrumb-nav" aria-label="Breadcrumb">
+      <div class="shell">
+        <ol class="policy-breadcrumb-list">
+          <li><a href="{% url 'index' %}">Home</a></li>
+          <li class="policy-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li aria-current="page">Refund Policy</li>
+        </ol>
+      </div>
+    </nav>
+
+    <!-- ============================ CONTENT ============================ -->
+    <section class="section policy-content" aria-label="Refund Policy details">
+      <div class="shell">
+        <div class="policy-content-inner">
+
+          <p class="policy-updated">Last updated: 8 July 2026</p>
+
+          <div class="policy-section">
+            <p>At SoulStones, we want you to feel completely confident in every purchase. This Refund Policy explains when a refund applies, how the process works, and how long it takes. It should be read alongside our <a href="{% url 'shipping_return_policy' %}">Shipping &amp; Return Policy</a>, which sets out the conditions for returning a product.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>1. Overview</h2>
+            <p>Refunds are issued once a returned or cancelled order has been reviewed and approved by our team. We currently deliver only within India, and shipping is free on every order, so no shipping charges are ever deducted from a refund. Refunds are always credited back to the original payment method used at checkout.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>2. Eligibility for Refunds</h2>
+            <p>You may be eligible for a refund in the following situations:</p>
+            <ul>
+              <li>You returned an eligible product within the return window described in our Shipping &amp; Return Policy, and it passed our quality inspection.</li>
+              <li>Your order was cancelled by you before it was dispatched.</li>
+              <li>Your order was cancelled by us due to stock unavailability, a pricing error, or suspected fraud.</li>
+              <li>You received a damaged, defective, or incorrect item, as reported within the required timeframe.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>3. Non-Refundable Products</h2>
+            <p>The following are not eligible for a refund:</p>
+            <ul>
+              <li>Gemstones that have been resized, engraved, customized, or otherwise altered from their original form.</li>
+              <li>Products damaged due to customer misuse, mishandling, or normal wear after delivery.</li>
+              <li>Items returned without their original certification, packaging, or invoice.</li>
+              <li>Products purchased as part of a limited-time or clearance sale, unless the item was defective.</li>
+              <li>Return requests raised after the return window described in our Shipping &amp; Return Policy has closed.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>4. Damaged or Incorrect Items</h2>
+            <p>If your order arrives damaged, defective, or different from what you ordered, please contact our support team within 48 hours of delivery with your order number and clear photographs of the product and its packaging. Once verified, we will offer a replacement or a full refund, at no additional cost to you.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>5. Refund Request Process</h2>
+            <p>To request a refund:</p>
+            <ul>
+              <li>Contact our support team with your order number and the reason for your request.</li>
+              <li>If your request relates to a return, our team will confirm eligibility and share pickup or return-shipping instructions.</li>
+              <li>Ship or hand over the product as instructed, ensuring it is unused and includes its original certification and packaging.</li>
+            </ul>
+          </div>
+
+          <div class="policy-section">
+            <h2>6. Refund Approval Process</h2>
+            <p>Once we receive a returned product, our team inspects it to confirm that it is unused, unaltered, and accompanied by its original certification and packaging. Refunds are approved only after this inspection is complete. If a returned item does not meet our return conditions, we will contact you to explain why the refund cannot be approved and, where applicable, arrange for the item to be sent back to you.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>7. Refund Processing Time</h2>
+            <p>Approved refunds are processed within 5–7 business days of the returned item passing our quality inspection, or within 5–7 business days of a cancellation being approved. Once initiated, it may take a further 3–5 business days for the amount to reflect in your account, depending on your bank or payment provider. You will receive an email confirmation once your refund has been initiated.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>8. Payment Refund Method</h2>
+            <p>All refunds are issued to the original payment method used at checkout, processed securely through Razorpay. We are unable to issue refunds to a different card, bank account, UPI ID, or as store credit unless required by law or agreed with you in a specific case.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>9. Order Cancellation &amp; Refunds</h2>
+            <p>You may request cancellation of an order before it has been dispatched by contacting our support team as soon as possible. Once an order has been dispatched, it can no longer be cancelled and must instead follow our standard return process. We reserve the right to cancel an order at our discretion — including where stock is unavailable, a pricing error has occurred, or fraud is suspected — in which case a full refund will be issued automatically to your original payment method.</p>
+          </div>
+
+          <div class="policy-section">
+            <h2>10. Contact Support</h2>
+            <p>For any questions about a refund, return, or cancellation, our team is happy to help:</p>
+            <div class="policy-callout">
+              <p>Email: <a href="mailto:soulstonebysana@gmail.com">soulstonebysana@gmail.com</a></p>
+              <p>WhatsApp: available via the "Talk to an Astrologer" button on our website.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  {% include 'footer.html' %}
+
+  <!-- ============================ CART DRAWER (main.js compatibility) ============================ -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <aside class="cart-drawer" id="cartDrawer" aria-hidden="true" aria-label="Your cart" role="dialog" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <h2 id="drawerTitle">Your selection</h2>
+      <button class="drawer-close" id="drawerClose" aria-label="Close cart">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <ul class="drawer-items" id="drawerItems"></ul>
+    <div class="drawer-empty" id="drawerEmpty">
+      <p class="drawer-empty-title">Nothing chosen yet.</p>
+      <p class="drawer-empty-sub">Add a stone, or ask an advisor to help you pick.</p>
+      <a class="btn btn-secondary" href="{% url 'products' %}" data-close-drawer>Browse gemstones</a>
+    </div>
+    <div class="drawer-foot" id="drawerFoot" hidden>
+      <div class="drawer-subtotal">
+        <span>Subtotal</span>
+        <span id="drawerSubtotal">&#8377;0</span>
+      </div>
+      <p class="drawer-note">Click checkout and confirm your order</p>
+      <a class="btn btn-whatsapp btn-block" href="{% url 'checkout' %}" rel="noopener">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2Zm0 4H4V6h16v2Zm-9 8H6v-2h5v2Zm7 0h-5v-2h5v2Z"/></svg>
+        Checkout
+      </a>
+    </div>
+  </aside>
+
+  <span class="sr-only" id="liveRegion" role="status" aria-live="polite"></span>
+
+  <script src="{% static 'js/main.js' %}" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

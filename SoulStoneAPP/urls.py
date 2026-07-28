@@ -26,6 +26,7 @@ urlpatterns = [
     path('privacy-policy/', views.privacy_policy, name='privacy_policy'),
     path('shipping-return-policy/', views.shipping_return_policy, name='shipping_return_policy'),
     path('terms-and-conditions/', views.terms_and_conditions, name='terms_and_conditions'),
+    path('refund-policy/', views.refund_policy, name='refund_policy'),
     path('products/', views.products, name='products'),
     path('products/<slug:slug>/', views.product_detail, name='product_detail'),
     path('track-order/', views.track_order, name='track_order'),
