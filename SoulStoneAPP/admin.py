@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.urls import reverse
+from django.http import JsonResponse
+from django.urls import path, reverse
 from django.utils.html import format_html
 from unfold.admin import ModelAdmin, StackedInline, TabularInline
 
@@ -22,9 +23,33 @@ class CategoryAdmin(ModelAdmin):
     prepopulated_fields = {"slug": ("name",)}
 
 
+@admin.register(SubCategory)
+class SubCategoryAdmin(ModelAdmin):
+    list_display = ("name", "category", "slug")
+    search_fields = ("name", "category__name")
+    prepopulated_fields = {"slug": ("name",)}
+
+
+@admin.register(CollectionType)
+class CollectionTypeAdmin(ModelAdmin):
+    list_display = ("name", "subcategory", "slug", "is_active", "created_at")
+    list_filter = ("subcategory__category", "subcategory", "is_active", "created_at")
+    search_fields = ("name", "slug", "subcategory__name")
+    prepopulated_fields = {"slug": ("name",)}
+
+
 class ProductImageInline(TabularInline):
     model = ProductImage
     extra = 1
+
+
+
+
+
+
+
+
+
 
 
 @admin.register(Product)
@@ -33,6 +58,8 @@ class ProductAdmin(ModelAdmin):
     list_display = (
         "name",
         "category",
+        "subcategory",
+        "collection_type",
         "new_price",
         "stock",
         "is_active",
@@ -43,6 +70,38 @@ class ProductAdmin(ModelAdmin):
     search_fields = ("name", "subtitle")
     ordering = ("-created_at",)
     inlines = [ProductImageInline]
+
+    class Media:
+        js = ('js/admin_subcategory.js', 'js/admin_collectiontype.js')
+
+    def get_urls(self):
+        custom_urls = [
+            path(
+                'ajax/load-collection-types/',
+                self.admin_site.admin_view(self.load_collection_types),
+                name='ajax_load_collection_types',
+            ),
+        ]
+        return custom_urls + super().get_urls()
+
+    def load_collection_types(self, request):
+        subcategory_id = request.GET.get('subcategory_id')
+        if subcategory_id:
+            collection_types = CollectionType.objects.filter(
+                subcategory_id=subcategory_id, is_active=True
+            ).order_by('name')
+            data = [{'id': ct.id, 'name': ct.name} for ct in collection_types]
+            return JsonResponse(data, safe=False)
+        return JsonResponse([], safe=False)
+
+
+
+
+
+
+
+
+
 
 
 @admin.register(UserProfile)

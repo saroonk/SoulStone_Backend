@@ -319,6 +319,18 @@
     onScroll();
   }
 
+  // Collapses the Collections mega-menu back to its fully-closed state:
+  // called whenever the mobile hamburger nav closes, so re-opening it never
+  // shows a branch left expanded from a previous visit.
+  function collapseMegaMenu() {
+    var root = $("#collectionsItem");
+    if (!root) return;
+    root.querySelectorAll(".is-open").forEach(function (el) { el.classList.remove("is-open"); });
+    root.querySelectorAll(".mega-toggle[aria-expanded='true']").forEach(function (t) {
+      t.setAttribute("aria-expanded", "false");
+    });
+  }
+
   function bindMobileNav() {
     var toggle = $("#navToggle"), nav = $("#primaryNav"), header = $("#siteHeader");
     if (!toggle) return;
@@ -335,16 +347,33 @@
       var open = nav.classList.toggle("open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+      if (!open) collapseMegaMenu();
     });
     nav.addEventListener("click", function (e) {
       if (e.target.tagName === "A") {
         nav.classList.remove("open");
         toggle.setAttribute("aria-expanded", "false");
         toggle.setAttribute("aria-label", "Open menu");
+        collapseMegaMenu();
       }
     });
+
+    // Close mobile nav when the user clicks/taps outside it (Issue 2).
+    // Runs in capture phase so it fires before the mega-menu handler's
+    // stopPropagation, and ignores clicks on the toggle (which controls its
+    // own open/close) and any click inside the nav panel itself.
+    document.addEventListener("click", function (e) {
+      if (!nav.classList.contains("open")) return;
+      if (toggle.contains(e.target)) return;
+      if (nav.contains(e.target)) return;
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open menu");
+      collapseMegaMenu();
+    }, true);
   }
 
+  // Profile dropdown only — Collections has its own mega-menu handler below.
   function bindDropdowns() {
     function setupDropdown(btnId, panelId) {
       var btn = $("#" + btnId), panel = $("#" + panelId);
@@ -352,38 +381,120 @@
       btn.addEventListener("click", function (e) {
         e.stopPropagation();
         var isOpen = panel.classList.contains("open");
-        // Close every other open panel first
-        document.querySelectorAll(".nav-dropdown-panel.open").forEach(function (p) {
-          if (p !== panel) {
-            p.classList.remove("open");
-            var otherBtn = p.previousElementSibling;
-            if (otherBtn) otherBtn.setAttribute("aria-expanded", "false");
-          }
-        });
         panel.classList.toggle("open", !isOpen);
         btn.setAttribute("aria-expanded", !isOpen ? "true" : "false");
       });
     }
-    setupDropdown("collectionsBtn", "collectionsPanel");
     setupDropdown("profileBtn", "profilePanel");
 
-    // Close all dropdowns on outside click
     document.addEventListener("click", function () {
-      document.querySelectorAll(".nav-dropdown-panel.open").forEach(function (p) {
-        p.classList.remove("open");
-      });
-      ["collectionsBtn", "profileBtn"].forEach(function (id) {
-        var b = $("#" + id); if (b) b.setAttribute("aria-expanded", "false");
-      });
+      document.querySelectorAll(".nav-dropdown-panel.open").forEach(function (p) { p.classList.remove("open"); });
+      var b = $("#profileBtn"); if (b) b.setAttribute("aria-expanded", "false");
     });
-    // Close on Escape
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
         document.querySelectorAll(".nav-dropdown-panel.open").forEach(function (p) { p.classList.remove("open"); });
-        ["collectionsBtn", "profileBtn"].forEach(function (id) {
-          var b = $("#" + id); if (b) b.setAttribute("aria-expanded", "false");
+        var b = $("#profileBtn"); if (b) b.setAttribute("aria-expanded", "false");
+      }
+    });
+  }
+
+  // Collections mega-menu: Category -> SubCategory -> CollectionType.
+  //
+  // Desktop uses hover-intent (mouseenter opens immediately; mouseleave
+  // schedules a close after CLOSE_DELAY, cancelled if the pointer re-enters
+  // in time) instead of plain CSS :hover, which has zero tolerance for the
+  // gap between a row and its fly-out and flickers shut on any brief
+  // overshoot. Mobile/keyboard use the same .mega-toggle buttons as tap
+  // targets, driving a vertical accordion (max-height is measured from the
+  // real content on each open/close, so it animates smoothly regardless of
+  // how many rows a branch has, rather than snapping to a guessed value).
+  function bindMegaMenu() {
+    var root = $("#collectionsItem");
+    if (!root) return;
+
+    var CLOSE_DELAY = 260;
+
+    function getTrigger(item) {
+      var t = item.firstElementChild;
+      return (t && t.classList.contains("mega-trigger")) ? t : null;
+    }
+    function getFlyout(item) {
+      var f = item.lastElementChild;
+      return (f && (f.classList.contains("mega-panel") || f.classList.contains("mega-flyout"))) ? f : null;
+    }
+    function getToggle(item) {
+      var trigger = getTrigger(item);
+      return trigger ? trigger.querySelector(".mega-toggle") : null;
+    }
+    function isDesktop() {
+      return window.matchMedia("(min-width: 769px)").matches;
+    }
+
+    // The mobile accordion's height comes entirely from CSS (a
+    // grid-template-rows 0fr <-> 1fr transition on .mega-flyout /
+    // .nav-dropdown-panel — see styles.css); toggling .is-open is all this
+    // needs to do, at any nesting depth.
+    function setOpen(item, open) {
+      var flyout = getFlyout(item);
+      if (!flyout) return;
+      item.classList.toggle("is-open", open);
+      var toggle = getToggle(item);
+      if (toggle) toggle.setAttribute("aria-expanded", open ? "true" : "false");
+
+      if (!open) {
+        flyout.querySelectorAll(".mega-col-item.is-open").forEach(function (child) {
+          setOpen(child, false);
         });
       }
+    }
+
+    function closeSiblings(item) {
+      var parent = item.parentElement;
+      if (!parent) return;
+      Array.prototype.forEach.call(parent.children, function (sibling) {
+        if (sibling !== item && sibling.classList && sibling.classList.contains("mega-col-item")) {
+          setOpen(sibling, false);
+        }
+      });
+    }
+
+    // Tap/click: drives the mobile accordion, and doubles as a keyboard
+    // fallback for desktop users focusing the toggle without a mouse.
+    root.addEventListener("click", function (e) {
+      var toggle = e.target.closest(".mega-toggle");
+      if (!toggle || !root.contains(toggle)) return;
+      e.preventDefault();
+      e.stopPropagation();
+
+      var item = toggle.closest(".mega-col-item") || root;
+      var isOpen = item.classList.contains("is-open");
+      if (!isOpen) closeSiblings(item);
+      setOpen(item, !isOpen);
+    });
+
+    function bindHoverIntent(item) {
+      var closeTimer = null;
+      item.addEventListener("mouseenter", function () {
+        if (!isDesktop()) return;
+        clearTimeout(closeTimer);
+        closeSiblings(item);
+        setOpen(item, true);
+      });
+      item.addEventListener("mouseleave", function () {
+        if (!isDesktop()) return;
+        clearTimeout(closeTimer);
+        closeTimer = setTimeout(function () { setOpen(item, false); }, CLOSE_DELAY);
+      });
+    }
+    bindHoverIntent(root);
+    root.querySelectorAll(".mega-col-item.has-children").forEach(bindHoverIntent);
+
+    document.addEventListener("click", function (e) {
+      if (!root.contains(e.target)) setOpen(root, false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") setOpen(root, false);
     });
   }
 
@@ -544,6 +655,7 @@
     bindHeaderScroll();
     bindMobileNav();
     bindDropdowns();
+    bindMegaMenu();
     bindSearch();
     bindAnnouncement();
     bindReveal();

@@ -2,6 +2,7 @@ from datetime import timedelta
 
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils import timezone
 from ckeditor_uploader.fields import RichTextUploadingField
@@ -58,9 +59,70 @@ class Category(models.Model):
         return self.name
 
 
+class SubCategory(models.Model):
+    category = models.ForeignKey(
+        Category, on_delete=models.CASCADE, related_name="subcategories"
+    )
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Subcategory"
+        verbose_name_plural = "Subcategories"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
+class CollectionType(models.Model):
+    subcategory = models.ForeignKey(
+        SubCategory, on_delete=models.PROTECT, related_name="collection_types"
+    )
+    name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=120, unique=True, blank=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "Collection Type"
+        verbose_name_plural = "Collection Types"
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.name
+
+
 class Product(models.Model):
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, related_name="products"
+    )
+    subcategory = models.ForeignKey(
+        SubCategory,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="products"
+    )
+    collection_type = models.ForeignKey(
+        CollectionType,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="products"
     )
     name = models.CharField(max_length=200)
     slug = models.SlugField(max_length=220, unique=True)
@@ -96,8 +158,25 @@ class Product(models.Model):
     def in_stock(self):
         return self.stock > 0
 
+    def clean(self):
+        super().clean()
+        if hasattr(self, 'category') and hasattr(self, 'subcategory') and self.category and self.subcategory:
+            if self.subcategory.category != self.category:
+                raise ValidationError({
+                    "subcategory": f"The selected subcategory '{self.subcategory.name}' does not belong to the category '{self.category.name}'."
+                })
+        if hasattr(self, 'subcategory') and hasattr(self, 'collection_type') and self.subcategory and self.collection_type:
+            if self.collection_type.subcategory != self.subcategory:
+                raise ValidationError({
+                    "collection_type": f"The selected collection type '{self.collection_type.name}' does not belong to the subcategory '{self.subcategory.name}'."
+                })
+
     def __str__(self):
         return self.name
+
+
+
+
 
 
 class ProductImage(models.Model):

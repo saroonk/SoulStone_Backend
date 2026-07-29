@@ -19,17 +19,59 @@
     <nav class="primary-nav" id="primaryNav" aria-label="Primary">
       <a class="nav-link" href="{% url 'index' %}">Home</a>
 
-      <div class="nav-item nav-item--has-dropdown">
-        <button class="nav-link nav-dropdown-btn" id="collectionsBtn" aria-expanded="false" aria-haspopup="true">
-          Collections
-          <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
-        </button>
-        <div class="nav-dropdown-panel" id="collectionsPanel" aria-labelledby="collectionsBtn">
-          {% for category in categories %}
-            <a href="{% url 'products' %}?category={{ category.slug }}">{{ category.name }}</a>
-          {% endfor %}
-          <hr class="dropdown-divider" />
-          <a href="{% url 'products' %}" class="dropdown-all">All Stones &rarr;</a>
+      <div class="nav-item nav-item--has-dropdown mega-menu" id="collectionsItem">
+        <div class="mega-trigger mega-trigger--top">
+          <a class="nav-link nav-dropdown-btn" id="collectionsBtn" href="{% url 'products' %}">
+            Collections
+          </a>
+          <button type="button" class="mega-toggle mega-toggle--top" id="collectionsToggle" aria-label="Toggle collections menu" aria-expanded="false" aria-haspopup="true" aria-controls="collectionsPanel">
+            <svg class="chevron" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+        </div>
+        <div class="nav-dropdown-panel mega-panel" id="collectionsPanel" aria-labelledby="collectionsBtn">
+          <div class="mega-flyout-inner">
+            {% for category in categories %}
+              <div class="mega-col-item{% if category.nav_subcategories %} has-children{% endif %}">
+                <div class="mega-trigger">
+                  <a href="{% url 'products' %}?category={{ category.slug }}" class="mega-link mega-category-link">{{ category.name }}</a>
+                  {% if category.nav_subcategories %}
+                    <button type="button" class="mega-toggle" aria-label="Show {{ category.name }} subcategories" aria-expanded="false">
+                      <svg class="chevron chevron--right" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                    </button>
+                  {% endif %}
+                </div>
+                {% if category.nav_subcategories %}
+                  <div class="mega-flyout" aria-label="{{ category.name }} subcategories">
+                    <div class="mega-flyout-inner">
+                      {% for subcategory in category.nav_subcategories %}
+                        <div class="mega-col-item{% if subcategory.active_collection_types %} has-children{% endif %}">
+                          <div class="mega-trigger">
+                            <a href="{% url 'products' %}?subcategory={{ subcategory.slug }}" class="mega-link mega-subcategory-link">{{ subcategory.name }}</a>
+                            {% if subcategory.active_collection_types %}
+                              <button type="button" class="mega-toggle" aria-label="Show {{ subcategory.name }} collection types" aria-expanded="false">
+                                <svg class="chevron chevron--right" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.2" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+                              </button>
+                            {% endif %}
+                          </div>
+                          {% if subcategory.active_collection_types %}
+                            <div class="mega-flyout mega-flyout--level3" aria-label="{{ subcategory.name }} collection types">
+                              <div class="mega-flyout-inner">
+                                {% for collection_type in subcategory.active_collection_types %}
+                                  <a href="{% url 'products' %}?collection_type={{ collection_type.slug }}" class="mega-link mega-collectiontype-link">{{ collection_type.name }}</a>
+                                {% endfor %}
+                              </div>
+                            </div>
+                          {% endif %}
+                        </div>
+                      {% endfor %}
+                    </div>
+                  </div>
+                {% endif %}
+              </div>
+            {% endfor %}
+            <hr class="dropdown-divider" />
+            <a href="{% url 'products' %}" class="dropdown-all">All Stones &rarr;</a>
+          </div>
         </div>
       </div>
 

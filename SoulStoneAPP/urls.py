@@ -30,4 +30,5 @@ urlpatterns = [
     path('products/', views.products, name='products'),
     path('products/<slug:slug>/', views.product_detail, name='product_detail'),
     path('track-order/', views.track_order, name='track_order'),
+    path('ajax/load-subcategories/', views.load_subcategories, name='ajax_load_subcategories'),
 ]

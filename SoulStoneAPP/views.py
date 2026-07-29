@@ -17,7 +17,7 @@ from django.http import HttpResponse, HttpResponseForbidden
 from .cart_utils import get_existing_cart, get_or_create_cart, merge_guest_cart_into_user, serialize_cart
 from .forms import CheckoutForm, ContactForm, LoginForm, RegisterForm
 from .invoice_utils import invoice_filename, render_invoice_pdf
-from .models import CartItem, Category, Contact, Order, Product, Testimonial
+from .models import CartItem, Category, CollectionType, Contact, Order, Product, Testimonial, SubCategory
 from .order_utils import CheckoutError, create_pending_order, finalize_paid_order, mark_order_failed
 from django.core.mail import send_mail
 from threading import Thread
@@ -413,22 +413,36 @@ def _parse_price_range(value):
         return None
 
 
-def _products_hero_title(selected_categories):
-    """Products page hero title: the site default with no category filter,
-    the category's own name when exactly one is selected, or a generic
-    label once more than one is active (never lists every name).
+def _products_hero_title(selected_categories, selected_subcategories, selected_collection_types):
+    """Products page hero title: the site default with no filter active, the
+    name of whichever single nav level (CollectionType > SubCategory >
+    Category) the user drilled into, or a generic label once more than one
+    filter is active at once (never lists every name).
     """
-    if not selected_categories:
+    total_selected = len(selected_categories) + len(selected_subcategories) + len(selected_collection_types)
+    if total_selected == 0:
         return "Our Collection"
-    if len(selected_categories) > 1:
-        return "Filtered Collection"
-    category = Category.objects.filter(slug=selected_categories[0]).first()
-    return f"{category.name} Collection" if category else "Our Collection"
+
+    if len(selected_collection_types) == 1 and total_selected == 1:
+        collection_type = CollectionType.objects.filter(slug=selected_collection_types[0]).first()
+        return f"{collection_type.name} Collection" if collection_type else "Our Collection"
+
+    if len(selected_subcategories) == 1 and total_selected == 1:
+        subcategory = SubCategory.objects.filter(slug=selected_subcategories[0]).first()
+        return f"{subcategory.name} Collection" if subcategory else "Our Collection"
+
+    if len(selected_categories) == 1 and total_selected == 1:
+        category = Category.objects.filter(slug=selected_categories[0]).first()
+        return f"{category.name} Collection" if category else "Our Collection"
+
+    return "Filtered Collection"
 
 
 def products(request):
     search_query = request.GET.get('search', '').strip()
     selected_categories = request.GET.getlist('category')
+    selected_subcategories = request.GET.getlist('subcategory')
+    selected_collection_types = request.GET.getlist('collection_type')
     selected_availability = request.GET.getlist('availability')
     selected_price = request.GET.getlist('price')
 
@@ -445,6 +459,12 @@ def products(request):
 
     if selected_categories:
         products_qs = products_qs.filter(category__slug__in=selected_categories)
+
+    if selected_subcategories:
+        products_qs = products_qs.filter(subcategory__slug__in=selected_subcategories)
+
+    if selected_collection_types:
+        products_qs = products_qs.filter(collection_type__slug__in=selected_collection_types)
 
     if selected_availability:
         availability_q = Q()
@@ -485,7 +505,7 @@ def products(request):
         'base_querystring': base_querystring,
     }
 
-    hero_title = _products_hero_title(selected_categories)
+    hero_title = _products_hero_title(selected_categories, selected_subcategories, selected_collection_types)
 
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         html = render_to_string('partials/product_grid.html', context, request=request)
@@ -613,6 +633,16 @@ def cart_remove(request):
     cart = get_or_create_cart(request)
     CartItem.objects.filter(cart=cart, product__slug=slug).delete()
     return JsonResponse({'success': True, 'message': "Item removed.", 'cart': serialize_cart(cart)})
+
+
+def load_subcategories(request):
+    category_id = request.GET.get('category_id')
+    if category_id:
+        subcategories = SubCategory.objects.filter(category_id=category_id).order_by('name')
+        data = [{'id': sub.id, 'name': sub.name} for sub in subcategories]
+        return JsonResponse(data, safe=False)
+    return JsonResponse([], safe=False)
+
 
 
 

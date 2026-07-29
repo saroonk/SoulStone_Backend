@@ -64,6 +64,14 @@
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
           <li><a href="{% url 'products' %}?category={{ product.category.slug }}">{{ product.category.name }}</a></li>
           <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+
+          <li><a href="{% url 'products' %}?subcategory={{ product.subcategory.slug }}">{{ product.subcategory.name }}</a></li>
+          {% if product.collection_type %}
+          <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
+          <li><a href="{% url 'products' %}?collection_type={{ product.collection_type.slug }}">{{ product.collection_type.name }}</a></li>
+          {% endif %}
+
+          <li class="pd-breadcrumb-sep" aria-hidden="true">&rsaquo;</li>
           <li aria-current="page">{{ product.name }}</li>
         </ol>
       </div>
@@ -93,7 +101,7 @@
         <!-- Info + purchase -->
         <div class="pd-info">
           <div class="pd-badges">
-            <span class="pd-badge pd-badge-category">{{ product.category.name }}</span>
+            <span class="pd-badge pd-badge-category">{{ product.subcategory.name }}</span>
             {% if product.is_certified %}
               <span class="pd-badge pd-badge-cert">
                 <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3l7 3v5c0 4.5-3 7.5-7 9-4-1.5-7-4.5-7-9V6l7-3Z"/><path d="M9 12l2 2 4-4"/></svg>
