@@ -329,10 +329,27 @@ h4 {
   letter-spacing: -0.01em;
   line-height: 1;
   color: var(--ink);
+  display: inline-flex;
+  align-items: center;
 }
 
 .wordmark-stones {
   color: var(--gold-deep);
+}
+
+.wordmark-logo {
+  height: 80px;
+  width: auto;
+  display: block;
+  margin: 10px;
+  /* border: 2px solid red !important; */
+}
+
+
+@media (max-width:768px) {
+  .wordmark-logo {
+    height: 60px;
+  }
 }
 
 /* Primary nav — top-level links and Collections button share the same visual style */
@@ -2204,6 +2221,13 @@ h4 {
     opacity: 0;
     pointer-events: none;
     transition: transform .25s var(--ease), opacity .2s var(--ease);
+    /* Expanding every level (Category -> SubCategory -> CollectionType) can
+       make the menu taller than the viewport — scroll the menu itself
+       instead of letting the click fall through to the page behind it. */
+    max-height: calc(100vh - var(--mobile-nav-top, 100px));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 
   .primary-nav.open {

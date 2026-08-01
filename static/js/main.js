@@ -337,9 +337,24 @@
 
     function setNavTop() {
       if (header) {
-        // Position mobile nav below the full header (announcement bar + nav row)
+        // Position mobile nav below the full header (announcement bar + nav row),
+        // and cap its height to whatever viewport space remains so a fully
+        // expanded mega-menu scrolls within the nav instead of under it.
         nav.style.top = header.offsetHeight + "px";
+        nav.style.maxHeight = "calc(100vh - " + header.offsetHeight + "px)";
       }
+    }
+
+    // Expanding every mega-menu level can make the mobile nav taller than
+    // the viewport. Locking body scroll while it's open means that overflow
+    // scrolls the nav panel itself (see the max-height/overflow-y rules on
+    // .primary-nav) instead of the page behind it.
+    function closeMobileNav() {
+      nav.classList.remove("open");
+      toggle.setAttribute("aria-expanded", "false");
+      toggle.setAttribute("aria-label", "Open menu");
+      document.body.style.overflow = "";
+      collapseMegaMenu();
     }
 
     toggle.addEventListener("click", function () {
@@ -347,15 +362,15 @@
       var open = nav.classList.toggle("open");
       toggle.setAttribute("aria-expanded", open ? "true" : "false");
       toggle.setAttribute("aria-label", open ? "Close menu" : "Open menu");
-      if (!open) collapseMegaMenu();
-    });
-    nav.addEventListener("click", function (e) {
-      if (e.target.tagName === "A") {
-        nav.classList.remove("open");
-        toggle.setAttribute("aria-expanded", "false");
-        toggle.setAttribute("aria-label", "Open menu");
+      if (open) {
+        document.body.style.overflow = "hidden";
+      } else {
+        document.body.style.overflow = "";
         collapseMegaMenu();
       }
+    });
+    nav.addEventListener("click", function (e) {
+      if (e.target.tagName === "A") closeMobileNav();
     });
 
     // Close mobile nav when the user clicks/taps outside it (Issue 2).
@@ -366,10 +381,7 @@
       if (!nav.classList.contains("open")) return;
       if (toggle.contains(e.target)) return;
       if (nav.contains(e.target)) return;
-      nav.classList.remove("open");
-      toggle.setAttribute("aria-expanded", "false");
-      toggle.setAttribute("aria-label", "Open menu");
-      collapseMegaMenu();
+      closeMobileNav();
     }, true);
   }
 

@@ -1,3 +1,4 @@
+{% load static %}
 <header class="site-header" id="siteHeader" data-elevated="false">
   {% csrf_token %}
 
@@ -13,7 +14,7 @@
     </button>
 
     <a class="wordmark" href="{% url 'index' %}" aria-label="SoulStones home">
-      <span class="wordmark-mark">Soul</span><span class="wordmark-mark wordmark-stones">Stones</span>
+      <img class="wordmark-logo" src="{% static 'images/logo.png' %}" alt="SoulStones" />
     </a>
 
     <nav class="primary-nav" id="primaryNav" aria-label="Primary">

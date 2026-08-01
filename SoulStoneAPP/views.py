@@ -438,6 +438,85 @@ def _products_hero_title(selected_categories, selected_subcategories, selected_c
     return "Filtered Collection"
 
 
+# Category names don't literally say "gemstone" or "crystal" (they're specific
+# stone names like "Blue Saphire" or "Emerald"), so the hero accent/subtitle
+# family is inferred from keywords in the category name instead.
+_GEMSTONE_KEYWORDS = (
+    'gemstone', 'sapphire', 'saphire', 'ruby', 'emerald', 'pearl', 'coral',
+    'diamond', 'topaz', 'garnet', 'peridot', 'aquamarine', 'opal',
+    'hessonite', 'gomed', 'zircon', 'cat\'s eye', 'cats eye',
+)
+_CRYSTAL_KEYWORDS = (
+    'crystal', 'quartz', 'amethyst', 'citrine', 'tiger eye', 'tiger\'s eye',
+    'obsidian', 'selenite', 'moonstone', 'labradorite', 'malachite',
+    'turquoise', 'lapis', 'tourmaline', 'agate', 'jasper', 'fluorite',
+    'howlite', 'carnelian', 'onyx',
+)
+
+_HERO_CONTENT = {
+    'gemstone': (
+        "Curated Natural Gemstones",
+        "Explore our carefully selected certified natural gemstones, chosen for authenticity, beauty, and timeless significance.",
+    ),
+    'crystal': (
+        "Curated Natural Crystals",
+        "Explore our hand-selected natural crystals, chosen for their energy, beauty, and role in healing, meditation, and spiritual well-being.",
+    ),
+    None: (
+        "Curated Natural Gemstones & Crystals",
+        "Explore our carefully selected certified gemstones and natural crystals, chosen for authenticity, beauty, and lasting significance.",
+    ),
+}
+
+
+def _category_family(category):
+    name = category.name.lower()
+    if any(keyword in name for keyword in _CRYSTAL_KEYWORDS):
+        return 'crystal'
+    if any(keyword in name for keyword in _GEMSTONE_KEYWORDS):
+        return 'gemstone'
+    return None
+
+
+def _root_category(selected_categories, selected_subcategories, selected_collection_types):
+    """The single top-level Category behind whichever nav level is active, so
+    the hero accent/subtitle reflect the root family (Gemstone vs Crystal)
+    even when the user drilled into a SubCategory or CollectionType. Returns
+    None with no filter, or with more than one filter active at once.
+    """
+    total_selected = len(selected_categories) + len(selected_subcategories) + len(selected_collection_types)
+    if total_selected != 1:
+        return None
+
+    if selected_collection_types:
+        collection_type = (
+            CollectionType.objects.select_related('subcategory__category')
+            .filter(slug=selected_collection_types[0])
+            .first()
+        )
+        return collection_type.subcategory.category if collection_type else None
+
+    if selected_subcategories:
+        subcategory = (
+            SubCategory.objects.select_related('category')
+            .filter(slug=selected_subcategories[0])
+            .first()
+        )
+        return subcategory.category if subcategory else None
+
+    return Category.objects.filter(slug=selected_categories[0]).first()
+
+
+def _products_hero_content(selected_categories, selected_subcategories, selected_collection_types):
+    """Hero accent + subtitle: content matching the Gemstone/Crystal family of
+    the root Category behind the active filter, or the generic copy
+    mentioning both when no filter (or more than one) is active.
+    """
+    category = _root_category(selected_categories, selected_subcategories, selected_collection_types)
+    family = _category_family(category) if category else None
+    return _HERO_CONTENT[family]
+
+
 def products(request):
     search_query = request.GET.get('search', '').strip()
     selected_categories = request.GET.getlist('category')
@@ -511,12 +590,16 @@ def products(request):
         html = render_to_string('partials/product_grid.html', context, request=request)
         return JsonResponse({'html': html, 'count': paginator.count, 'hero_title': hero_title})
 
+    hero_accent, hero_subtitle = _products_hero_content(selected_categories, selected_subcategories, selected_collection_types)
+
     context.update({
         'search_query': search_query,
         'selected_categories': selected_categories,
         'selected_availability': selected_availability,
         'selected_price': selected_price,
         'hero_title': hero_title,
+        'hero_accent': hero_accent,
+        'hero_subtitle': hero_subtitle,
     })
     return render(request, 'product.html', context)
 
